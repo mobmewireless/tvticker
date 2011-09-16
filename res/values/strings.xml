@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, AwsomePagerActivity!</string>
+    <string name="app_name">AwsomePager</string>
+    <string-array name="list1">
+		<item>Item1</item>
+		<item>Item2</item>
+		<item>Item3</item>
+		<item>Item4</item>
+		<item>Item5</item>
+		<item>Item6</item>
+	</string-array>
+	<string-array name="list2">
+		<item>Item7</item>
+		<item>Item8</item>
+		<item>Item9</item>
+		<item>Item10</item>
+		<item>Item11</item>
+		<item>Item12</item>
+	</string-array>
+	<string-array name="list3">
+		<item>Item13</item>
+		<item>Item14</item>
+		<item>Item15</item>
+		<item>Item16</item>
+		<item>Item17</item>
+		<item>Item18</item>
+	</string-array>
+</resources>

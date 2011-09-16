@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomTitle" parent="TextAppearance.Widget.Title">
+    	<item name="android:textColor">#e0e3e9</item>
+    	<item name="android:textSize">6pt</item>
+    	<item name="android:paddingTop">20px</item>
+    </style>
+</resources>
