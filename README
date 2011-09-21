@@ -1,8 +1,12 @@
-IMPORTANT
+NOTE
 -----------------------
 Uses a Custom view page indicator [pleases see http://www.zylinc.com/blog-reader/items/viewpager-page-indicator.html].
 
 
-3rd party libraries required 
+Important: 3rd party libraries required 
 ------------------------------
-1 . Android_ActionBarSherlock, Please see https://github.com/JakeWharton/ActionBarSherlock and http://actionbarsherlock.com/ for more details.
+ 
+ Android_ActionBarSherlock, Please see https://github.com/JakeWharton/ActionBarSherlock and http://actionbarsherlock.com/ for more details.
+ 
+ -Requires this project as a library project in your workspace or project build path.
+
