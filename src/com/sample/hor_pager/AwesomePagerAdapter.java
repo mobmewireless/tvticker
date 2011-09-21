@@ -7,29 +7,42 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewStub;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.jakewharton.android.viewpagerindicator.TitleProvider;
+class AwesomePagerAdapter extends PagerAdapter {
 
-class AwesomePagerAdapter extends PagerAdapter implements TitleProvider {
+	private final int NOW_POSITION = 0;
+	private final int LATER_TODAY_POSITION = 1;
+	private final int FAVORITES_POSITION = 2;
 
-	private String[]pageTitles = null;
-	private int listviewid;
+	private String EMPTY[] = {};
+
+	private String[] pageTitles = null;
+	private int listViewId;
 	private int rowLayoutIdentifier;
+
+	private FrameLayout frame = null;
 	private ListView listView1;
+	private Button browseAllShowsButton;
+	// private View favListEmptyView;
 	private Context context = null;
 	private MyArrayAdapter dataAdapter = null;
-	
-	public AwesomePagerAdapter(int listViewIdentifier, int rowLayoutIdentifier, String[] titles, Context ctx){
+
+	public AwesomePagerAdapter(int listViewIdentifier, int rowLayoutIdentifier,
+			String[] titles, Context ctx) {
 		this.pageTitles = titles;
-		this.listviewid = listViewIdentifier;
+		this.listViewId = listViewIdentifier;
 		this.rowLayoutIdentifier = rowLayoutIdentifier;
 		this.context = ctx;
 	}
-	
+
 	@Override
 	public int getCount() {
 		return pageTitles.length;
@@ -51,36 +64,70 @@ class AwesomePagerAdapter extends PagerAdapter implements TitleProvider {
 	public Object instantiateItem(View collection, int position) {
 
 		LayoutInflater layoutInflater = ((Activity) context).getLayoutInflater();
-		listView1 = (ListView) layoutInflater.inflate(listviewid, null);
+		frame = (FrameLayout) layoutInflater.inflate(listViewId, null);
+		listView1 = (ListView) frame.findViewById(android.R.id.list);
+
+
 		String[] listData = null;
-		if (position == 0) {
+		if (position == this.NOW_POSITION) {
+			
 			listData = context.getResources().getStringArray(R.array.list1);
 			dataAdapter = new MyArrayAdapter((Activity) context,
 					rowLayoutIdentifier, listData);
-		} else if (position == 1) {
+			
+		} else if (position == this.LATER_TODAY_POSITION) {
+			
 			listData = context.getResources().getStringArray(R.array.list2);
 			dataAdapter = new MyArrayAdapter((Activity) context,
 					rowLayoutIdentifier, listData);
-		} else {
+			
+		} else if (position == this.FAVORITES_POSITION) {
+
 			listData = context.getResources().getStringArray(R.array.list3);
 			dataAdapter = new MyArrayAdapter((Activity) context,
-					rowLayoutIdentifier, listData);
+					rowLayoutIdentifier, EMPTY);
+
+			if (dataAdapter.getCount() <= 0) { //list view is empty
+				ViewStub emptyView = (ViewStub) frame.findViewById(android.R.id.empty);
+				//System.out.println("empty view activated");
+				View v = emptyView.inflate();
+				browseAllShowsButton = (Button) v
+						.findViewById(R.id.browseAllShowsButton);
+				browseAllShowsButton.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Toast.makeText(context, "Browse button clicked !", Toast.LENGTH_SHORT).show();
+					}
+				});
+				listView1.setEmptyView(v);
+				
+			} else { 
+				
+				System.out.println("empty view de-activated");
+			}
+
+		}
+		
+		listView1.setAdapter(dataAdapter);
+		listView1.setOnItemClickListener(new CustomOnItemClickListener());
+
+		((ViewPager) collection).addView(frame, 0);
+
+		return frame;
+	}
+
+	// handles list item click
+	private class CustomOnItemClickListener implements OnItemClickListener {
+
+		@Override
+		public void onItemClick(AdapterView<?> adapter, View view,
+				int position, long arg3) {
+			// TODO Auto-generated method stub
+			Toast.makeText(context,
+					adapter.getAdapter().getItem(position).toString(),
+					Toast.LENGTH_LONG).show();
 		}
 
-		listView1.setAdapter(dataAdapter);
-		listView1.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> adapter, View view,
-					int position, long arg3) {
-				Toast.makeText(context,
-						adapter.getAdapter().getItem(position).toString(),
-						Toast.LENGTH_LONG).show();
-			}
-		});
-
-		((ViewPager) collection).addView(listView1, 0);
-
-		return listView1;
 	}
 
 	/**
@@ -98,14 +145,14 @@ class AwesomePagerAdapter extends PagerAdapter implements TitleProvider {
 	 */
 	@Override
 	public void destroyItem(View collection, int position, Object view) {
-		System.out.println("on destroyItem()");
-		((ViewPager) collection).removeView((ListView) view);
+		//System.out.println("on destroyItem()");
+		((ViewPager) collection).removeView((View) view);
 	}
 
 	@Override
 	public boolean isViewFromObject(View view, Object object) {
-		System.out.println("on isViewFromObject()");
-		return view == ((ListView) object);
+		//System.out.println("on isViewFromObject()");
+		return view == ((View) object);
 	}
 
 	/**
@@ -119,28 +166,23 @@ class AwesomePagerAdapter extends PagerAdapter implements TitleProvider {
 	 */
 	@Override
 	public void finishUpdate(View arg0) {
-		System.out.println("on finishUpdate()");
+		//System.out.println("on finishUpdate()");
 	}
 
 	@Override
 	public void restoreState(Parcelable arg0, ClassLoader arg1) {
-		System.out.println("on restoreState()");
+		//System.out.println("on restoreState()");
 	}
 
 	@Override
 	public Parcelable saveState() {
-		System.out.println("on saveState()");
+		//System.out.println("on saveState()");
 		return null;
 	}
 
 	@Override
 	public void startUpdate(View arg0) {
-		System.out.println("on startUpdate()");
-	}
-
-	@Override
-	public String getTitle(int position) {
-		return pageTitles[position];
+		//System.out.println("on startUpdate()");
 	}
 
 }

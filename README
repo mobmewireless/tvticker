@@ -1,7 +1,8 @@
 IMPORTANT
 -----------------------
+Uses a Custom view page indicator [pleases see http://www.zylinc.com/blog-reader/items/viewpager-page-indicator.html].
+
 
 3rd party libraries required 
 ------------------------------
-1 . Android_viewpagerindicator, Please see https://github.com/JakeWharton/Android-ViewPagerIndicator on how to configure/import this widget into our app.
-2 . Android_ActionBarSherlock, Please see https://github.com/JakeWharton/ActionBarSherlock and http://actionbarsherlock.com/ for more details.
+1 . Android_ActionBarSherlock, Please see https://github.com/JakeWharton/ActionBarSherlock and http://actionbarsherlock.com/ for more details.

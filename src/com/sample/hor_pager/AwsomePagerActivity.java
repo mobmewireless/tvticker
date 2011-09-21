@@ -1,25 +1,27 @@
 package com.sample.hor_pager;
 
+import com.sample.hor_pager.ViewPagerIndicator.PageInfoProvider;
+
 import android.content.Context;
-import android.graphics.Color;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Toast;
 
-import com.jakewharton.android.viewpagerindicator.TitlePageIndicator;
-
-public class AwsomePagerActivity extends FragmentActivity {
+public class AwsomePagerActivity extends FragmentActivity implements PageInfoProvider {
 	private ViewPager awesomePager;
 	// private static int NUM_AWESOME_VIEWS = 3;
 	private Context cxt;
 	private AwesomePagerAdapter awesomeAdapter;
-	private TitlePageIndicator indicator = null;
-	private static final String[] titles = new String[] { "Page 1", "Page 2",
-			"Page 3" };
+	private ViewPagerIndicator indicator = null;
+	private static final String[] titles = new String[] { "Now", "Later Today",
+			"Favorites" };
 	private static final int SEARCH_MENU_ITEM = Menu.FIRST;
 	private static final int SETTINGS_MENU_ITEM = SEARCH_MENU_ITEM + 1;
 
@@ -45,23 +47,47 @@ public class AwsomePagerActivity extends FragmentActivity {
 		// Load partially transparent black background
 		getSupportActionBar().setBackgroundDrawable(
 				getResources().getDrawable(R.drawable.ab_bg_dark_gray));
-		awesomeAdapter = new AwesomePagerAdapter(R.layout.listview1,
+		awesomeAdapter = new AwesomePagerAdapter(R.layout.default_listview, 
 				R.layout.rowlayout, titles, cxt);
 		awesomePager = (ViewPager) findViewById(R.id.awesomepager);
-		indicator = (TitlePageIndicator) findViewById(R.id.indicator);
+		indicator = (ViewPagerIndicator) findViewById(R.id.indicator);
+
 		awesomePager.setAdapter(awesomeAdapter);
-		indicator.setBackgroundResource(R.drawable.indicator_background);
-		indicator.setTextColor(Color.GRAY);
-		indicator.setFooterIndicatorPadding(7.0f);
-		indicator.setTextSize(10f);
-		indicator.setSelectedTextSize(11.5f);
-		indicator.setSelectedColor(Color.WHITE);
-		indicator.setFooterIndicatorColor(Color.WHITE);
-		indicator.setFooterColor(Color.WHITE);
-		indicator.setFooterIndicatorHeight(5.0f);
-		indicator.setViewPager(awesomePager);
+		awesomePager.setOnPageChangeListener(indicator);
+
+		// zylinc way
+		indicator.init(0, awesomeAdapter.getCount(), this);
+		Resources res = getResources();
+		Drawable prev = res.getDrawable(R.drawable.indicator_prev_arrow);
+		Drawable next = res.getDrawable(R.drawable.indicator_next_arrow);
+
+		// Set images for previous and next arrows.
+		indicator.setArrows(prev, next);
+		indicator.setOnClickListener(new OnIndicatorClickListener());
 	}
 
+	//handle indicator click events !
+	private class OnIndicatorClickListener implements ViewPagerIndicator.OnClickListener{
+		@Override
+		public void onCurrentClicked(View v) {
+			// TODO Auto-generated method stub
+			showMsg("On same page !");
+		}
+
+		@Override
+		public void onNextClicked(View v) {
+			// TODO Auto-generated method stub
+			awesomePager.setCurrentItem(Math.min(awesomeAdapter.getCount() - 1, indicator.getCurrentPosition() + 1));
+		}
+
+		@Override
+		public void onPreviousClicked(View v) {
+			// TODO Auto-generated method stub
+			awesomePager.setCurrentItem(Math.max(0, indicator.getCurrentPosition() - 1));
+		}
+    	
+    }
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -69,17 +95,24 @@ public class AwsomePagerActivity extends FragmentActivity {
 			showMsg("Ok");
 			break;
 		case SETTINGS_MENU_ITEM:
-			showMsg("Save");
+			showMsg("Settings icon clicked");
 			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
+	//helper method to show toasts !
 	private void showMsg(String msg) {
-		Toast toast = Toast.makeText(getBaseContext(), msg, Toast.LENGTH_LONG);
+		Toast toast = Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.CENTER, toast.getXOffset() / 2, toast
 				.getYOffset() / 2);
 		toast.show();
+	}
+
+	@Override
+	public String getTitle(int pos) {
+		// TODO Auto-generated method stub
+		return titles[pos];
 	}
 
 }

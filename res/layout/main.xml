@@ -2,10 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-	 <com.jakewharton.android.viewpagerindicator.TitlePageIndicator
-        android:id="@+id/indicator"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+	<!--	 <com.jakewharton.android.viewpagerindicator.TitlePageIndicator-->
+	<!--        android:id="@+id/indicator"-->
+	<!--        android:layout_width="fill_parent"-->
+	<!--        android:layout_height="wrap_content" />-->
+	<com.sample.hor_pager.ViewPagerIndicator
+		android:id="@+id/indicator" android:layout_width="match_parent"
+		android:layout_height="wrap_content" android:background="#ffeaeaea"
+		android:paddingLeft="5dp" android:paddingRight="5dp" android:paddingTop="5dp"/>
+	<RelativeLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:background="#ffeaeaea">
+		<View android:layout_width="fill_parent" android:layout_height="1px"
+			android:layout_alignBottom="@+id/current" android:background="#ffbdbdbd" />
+		<ImageView android:id="@id/current" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:src="@drawable/indicator_current"
+			android:layout_centerInParent="true" android:layout_alignParentTop="true" />
+	</RelativeLayout>
 	<android.support.v4.view.ViewPager
 		android:layout_width="match_parent" android:layout_height="match_parent"
 		android:id="@+id/awesomepager">

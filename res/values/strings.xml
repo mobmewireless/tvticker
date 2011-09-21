@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, AwsomePagerActivity!</string>
-    <string name="app_name">AwsomePager</string>
-    <string-array name="list1">
+	<string name="hello">Hello World, AwsomePagerActivity!</string>
+	<string name="app_name">TVTicker</string>
+	<string name="favorites_empty_text">You haven\'t added any shows here yet. Why not
+		search below to add a show?</string>
+	<string name="default_empty_text">Error, couldn\'t fetch Data.</string>
+		
+	<string-array name="list1">
 		<item>Item1</item>
 		<item>Item2</item>
 		<item>Item3</item>
@@ -26,4 +30,5 @@
 		<item>Item17</item>
 		<item>Item18</item>
 	</string-array>
+
 </resources>
