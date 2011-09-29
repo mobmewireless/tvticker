@@ -2,6 +2,7 @@ package com.sample.hor_pager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -63,51 +64,53 @@ class AwesomePagerAdapter extends PagerAdapter {
 	@Override
 	public Object instantiateItem(View collection, int position) {
 
-		LayoutInflater layoutInflater = ((Activity) context).getLayoutInflater();
+		LayoutInflater layoutInflater = ((Activity) context)
+				.getLayoutInflater();
 		frame = (FrameLayout) layoutInflater.inflate(listViewId, null);
 		listView1 = (ListView) frame.findViewById(android.R.id.list);
 
-
 		String[] listData = null;
 		if (position == this.NOW_POSITION) {
-			
+
 			listData = context.getResources().getStringArray(R.array.list1);
 			dataAdapter = new MyArrayAdapter((Activity) context,
 					rowLayoutIdentifier, listData);
-			
+
 		} else if (position == this.LATER_TODAY_POSITION) {
-			
+
 			listData = context.getResources().getStringArray(R.array.list2);
 			dataAdapter = new MyArrayAdapter((Activity) context,
 					rowLayoutIdentifier, listData);
-			
+
 		} else if (position == this.FAVORITES_POSITION) {
 
 			listData = context.getResources().getStringArray(R.array.list3);
 			dataAdapter = new MyArrayAdapter((Activity) context,
 					rowLayoutIdentifier, EMPTY);
 
-			if (dataAdapter.getCount() <= 0) { //list view is empty
-				ViewStub emptyView = (ViewStub) frame.findViewById(android.R.id.empty);
-				//System.out.println("empty view activated");
+			if (dataAdapter.getCount() <= 0) { // list view is empty
+				ViewStub emptyView = (ViewStub) frame
+						.findViewById(android.R.id.empty);
+				// System.out.println("empty view activated");
 				View v = emptyView.inflate();
 				browseAllShowsButton = (Button) v
 						.findViewById(R.id.browseAllShowsButton);
 				browseAllShowsButton.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						Toast.makeText(context, "Browse button clicked !", Toast.LENGTH_SHORT).show();
+						Toast.makeText(context, "Browse button clicked !",
+								Toast.LENGTH_SHORT).show();
 					}
 				});
 				listView1.setEmptyView(v);
-				
-			} else { 
-				
+
+			} else {
+
 				System.out.println("empty view de-activated");
 			}
 
 		}
-		
+
 		listView1.setAdapter(dataAdapter);
 		listView1.setOnItemClickListener(new CustomOnItemClickListener());
 
@@ -122,12 +125,12 @@ class AwesomePagerAdapter extends PagerAdapter {
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view,
 				int position, long arg3) {
-			// TODO Auto-generated method stub
-			Toast.makeText(context,
-					adapter.getAdapter().getItem(position).toString(),
-					Toast.LENGTH_LONG).show();
+			String selectedItem = adapter.getAdapter().getItem(position).toString();
+			Toast.makeText(context,selectedItem,Toast.LENGTH_LONG).show();
+			Intent detailedViewIntent = new Intent(context, DetailedDescriptionActivity.class);
+			detailedViewIntent.putExtra("selectedItem", selectedItem);
+			context.startActivity(detailedViewIntent);
 		}
-
 	}
 
 	/**
@@ -145,13 +148,13 @@ class AwesomePagerAdapter extends PagerAdapter {
 	 */
 	@Override
 	public void destroyItem(View collection, int position, Object view) {
-		//System.out.println("on destroyItem()");
+		// System.out.println("on destroyItem()");
 		((ViewPager) collection).removeView((View) view);
 	}
 
 	@Override
 	public boolean isViewFromObject(View view, Object object) {
-		//System.out.println("on isViewFromObject()");
+		// System.out.println("on isViewFromObject()");
 		return view == ((View) object);
 	}
 
@@ -166,23 +169,23 @@ class AwesomePagerAdapter extends PagerAdapter {
 	 */
 	@Override
 	public void finishUpdate(View arg0) {
-		//System.out.println("on finishUpdate()");
+		// System.out.println("on finishUpdate()");
 	}
 
 	@Override
 	public void restoreState(Parcelable arg0, ClassLoader arg1) {
-		//System.out.println("on restoreState()");
+		// System.out.println("on restoreState()");
 	}
 
 	@Override
 	public Parcelable saveState() {
-		//System.out.println("on saveState()");
+		// System.out.println("on saveState()");
 		return null;
 	}
 
 	@Override
 	public void startUpdate(View arg0) {
-		//System.out.println("on startUpdate()");
+		// System.out.println("on startUpdate()");
 	}
 
 }

@@ -5,6 +5,13 @@
     	<item name="abIcon">@drawable/tv</item>
     	<item name="abTitle">"TICKER"</item>
     	<item name="abTitleTextStyle">@style/CustomTitle</item>
-    	<!-- z<item name="abSubtitle">100% set from the style attributes</item>-->
+    	<!-- <item name="abSubtitleTextStyle">@style/CustomTitle</item>-->
     </style>
+    
+    <style name="Theme.SherlockCustom.ItemDescription" parent="@style/Theme.Sherlock.Light">
+    	<item name="abIcon">@drawable/tv</item>
+   		<item name="abTitleTextStyle">@style/MainTitle</item>
+    	<item name="abSubtitleTextStyle">@style/SubTitle</item>
+    </style>
+
 </resources>
