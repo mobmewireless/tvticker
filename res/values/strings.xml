@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="hello">Hello World, AwsomePagerActivity!</string>
 	<string name="app_name">TVTicker</string>
+	<string name="home_page_title">TICKER</string>
+	<string name="browse_all_shows_title">Browse All Shows</string>
+	<string name="imdb_button_text">Read Reviews</string>
+
 	<string name="favorites_empty_text">You haven\'t added any shows here yet. Why not
 		search below to add a show?</string>
 	<string name="default_empty_text">Error, couldn\'t fetch Data.</string>
+	
+	<!-- Test strings -->
 	<string name="sample_description">Jason Bourne dodges a ruthless CIA official and his
 		agents from a new assassination program while searching for the
 		origins of his life as a trained killer. </string>
-	<string name="imdb_button_text">Read Reviews</string>
+	<string name="sample_imdb_url">http://www.imdb.com/title/tt0440963/reviews/</string>	
 
 	<string-array name="list1">
 		<item>Item1</item>

@@ -5,5 +5,6 @@
 	<drawable name="indicator_background">#656972</drawable>
 	<drawable name="light_gray">#999999</drawable>
 	<drawable name="dark_gray">#606060</drawable>
-	<drawable name="white">#EEE</drawable>
+	<drawable name="pale_white">#EEE</drawable>
+	<drawable name="white">#FFF</drawable>
 </resources>
