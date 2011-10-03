@@ -1,7 +1,7 @@
 package in.mobme.tvticker;
 
-import in.mobme.customwidget.ViewPagerIndicator;
-import in.mobme.customwidget.ViewPagerIndicator.PageInfoProvider;
+import in.mobme.tvticker.customwidget.ViewPagerIndicator;
+import in.mobme.tvticker.customwidget.ViewPagerIndicator.PageInfoProvider;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;

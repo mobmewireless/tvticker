@@ -6,7 +6,7 @@
 	<!--        android:id="@+id/indicator"-->
 	<!--        android:layout_width="fill_parent"-->
 	<!--        android:layout_height="wrap_content" />-->
-	<in.mobme.customwidget.ViewPagerIndicator
+	<in.mobme.tvticker.customwidget.ViewPagerIndicator
 		android:id="@+id/indicator" android:layout_width="match_parent"
 		android:layout_height="wrap_content" android:background="#ffeaeaea"
 		android:paddingLeft="5dp" android:paddingRight="5dp" android:paddingTop="5dp"/>

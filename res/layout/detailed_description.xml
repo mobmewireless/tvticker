@@ -8,8 +8,8 @@
 	<RelativeLayout android:layout_width="match_parent"
 		android:layout_marginRight="10dp" android:layout_marginTop="20dp"
 		android:layout_height="wrap_content" android:id="@+id/relativeLayoutMovieMeta">
-		<ImageView android:layout_height="wrap_content" android:id="@+id/movie_thumb"
-			android:src="@drawable/ic_launcher" android:layout_width="60px"
+		<ImageView android:layout_height="80px" android:id="@+id/movie_thumb"
+			android:src="@drawable/thumb_bu" android:layout_width="60px"
 			android:layout_alignParentTop="true" android:layout_alignParentLeft="true" />
 
 		<TextView android:layout_height="wrap_content" android:text=""
@@ -29,7 +29,8 @@
 		<Button android:id="@+id/button_go_imdb" android:background="@xml/custom_blue_button"
 			android:layout_height="wrap_content" android:text="@string/imdb_button_text"
 			android:layout_width="wrap_content" android:layout_alignParentLeft="true"
-			android:layout_centerVertical="true" android:textColor="@drawable/white" />
+			android:layout_centerVertical="true" android:textColor="@drawable/white"
+			android:paddingLeft="8dp" android:paddingRight="8dp" />
 
 		<LinearLayout android:layout_height="wrap_content"
 			android:layout_alignParentRight="true" android:id="@+id/linearLayoutImdbRating"
@@ -47,19 +48,22 @@
 
 	</RelativeLayout>
 
-
 	<SlidingDrawer android:id="@+id/slidingDrawer1"
-		android:layout_alignParentBottom="true" android:layout_height="150dp"
+		android:layout_alignParentBottom="true" android:layout_height="100dp"
 		android:handle="@+id/handle" android:content="@+id/content"
-		android:layout_marginTop="5dp" android:layout_width="match_parent">
+		android:layout_marginBottom="2dp" android:layout_marginTop="5dp"
+		android:layout_width="match_parent">
 
 		<Button android:text="Share with your friends"
 			android:background="@xml/custom_blue_button" android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:id="@+id/handle"
-			android:textColor="@drawable/white" />
+			android:textColor="@drawable/white" android:paddingLeft="8dp"
+			android:paddingRight="8dp" />
+
 		<LinearLayout android:id="@+id/content" android:gravity="center"
 			android:background="@xml/rounded_border" android:layout_width="match_parent"
-			android:layout_height="wrap_content">
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true" android:padding="3dp">
 
 			<ImageButton android:src="@xml/facebook_button"
 				android:background="@android:color/transparent" android:id="@+id/go_facebook_button"
@@ -69,7 +73,6 @@
 				android:layout_width="wrap_content" android:layout_height="wrap_content" />
 
 		</LinearLayout>
-
 	</SlidingDrawer>
 
 </RelativeLayout>

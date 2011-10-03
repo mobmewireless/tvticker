@@ -49,6 +49,7 @@ public class MyArrayAdapter extends ArrayAdapter<String>{
 		}
 
 		holder.textView.setText(names[position]);
+		holder.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.thumb_bu));
 		
 		return rowView;
 	}

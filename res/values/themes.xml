@@ -9,11 +9,13 @@
 	<style name="Theme.SherlockCustom.HomeTitle" parent="@style/Theme.SherlockCustom">
 		<item name="abTitle">"TICKER"</item>
 		<item name="abTitleTextStyle">@style/MainHeaderTitle</item>
+		<item name="abHeight">40dp</item>
 	</style>
 
 	<style name="Theme.SherlockCustom.ItemTitleAndSubTitle" parent="@style/Theme.SherlockCustom">
 		<item name="abTitleTextStyle">@style/MainTitle</item>
 		<item name="abSubtitleTextStyle">@style/SubTitle</item>
+		<item name="abHeight">55dp</item>
 	</style>
 
 </resources>

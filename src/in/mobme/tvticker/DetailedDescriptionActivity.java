@@ -63,7 +63,7 @@ public class DetailedDescriptionActivity extends FragmentActivity{
 		//set up IMDB rating got from web api, here
 		createIMDBRatingIndicator(8.5f);
 		
-		movieThumb.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
+		movieThumb.setImageDrawable(getResources().getDrawable(R.drawable.thumb_bu));
 		movieDescription.setText(R.string.sample_description);
 		
 		//button click listeners
