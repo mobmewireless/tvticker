@@ -35,6 +35,7 @@ class ViewPagerAdapter extends PagerAdapter {
 	// private View favListEmptyView;
 	private Context context = null;
 	private MyArrayAdapter dataAdapter = null;
+	private SeparatedListAdapter seperatedAdapter;
 
 	public ViewPagerAdapter(int listViewIdentifier, int rowLayoutIdentifier,
 			String[] titles, Context ctx) {
@@ -69,18 +70,23 @@ class ViewPagerAdapter extends PagerAdapter {
 		frame = (FrameLayout) layoutInflater.inflate(listViewId, null);
 		listView1 = (ListView) frame.findViewById(android.R.id.list);
 
+		 // create our list and custom adapter  
+		seperatedAdapter = new SeparatedListAdapter(context); 
+        
 		String[] listData = null;
 		if (position == this.NOW_POSITION) {
 
 			listData = context.getResources().getStringArray(R.array.list1);
 			dataAdapter = new MyArrayAdapter((Activity) context,
 					rowLayoutIdentifier, listData);
+			seperatedAdapter.addSection("Movies", dataAdapter);
 
 		} else if (position == this.LATER_TODAY_POSITION) {
 
 			listData = context.getResources().getStringArray(R.array.list2);
 			dataAdapter = new MyArrayAdapter((Activity) context,
 					rowLayoutIdentifier, listData);
+			seperatedAdapter.addSection("Later Movies", dataAdapter);
 
 		} else if (position == this.FAVORITES_POSITION) {
 
@@ -105,13 +111,13 @@ class ViewPagerAdapter extends PagerAdapter {
 				listView1.setEmptyView(v);
 
 			} else {
-
+				seperatedAdapter.addSection("Favorites", dataAdapter);
 				System.out.println("empty view de-activated");
 			}
 
 		}
 
-		listView1.setAdapter(dataAdapter);
+		listView1.setAdapter(seperatedAdapter);
 		listView1.setOnItemClickListener(new CustomOnItemClickListener());
 
 		((ViewPager) collection).addView(frame, 0);

@@ -7,4 +7,5 @@
 	<drawable name="dark_gray">#606060</drawable>
 	<drawable name="pale_white">#EEE</drawable>
 	<drawable name="white">#FFF</drawable>
+	<drawable name="pale_gray">#BBB</drawable>
 </resources>
