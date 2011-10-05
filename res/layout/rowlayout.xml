@@ -3,33 +3,52 @@
 	android:orientation="horizontal" android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<ImageView android:layout_width="42px" android:layout_height="66px"
+	<ImageView android:layout_width="45px" android:layout_height="72px"
 		android:src="@android:drawable/btn_star_big_on" android:id="@+id/left_icon"
 		android:layout_alignParentTop="true" android:layout_alignParentLeft="true" />
 
-	<RelativeLayout android:id="@+id/relativeLayout1"
-		android:layout_toRightOf="@+id/left_icon" android:layout_height="wrap_content"
+	<RelativeLayout android:id="@+id/relativeLayout1" android:gravity="center_vertical"
+		android:layout_toRightOf="@+id/left_icon" android:layout_height="match_parent"
 		android:layout_width="match_parent" android:layout_alignBottom="@+id/left_icon"
-		android:layout_marginLeft="1dp" android:padding="13px">
+		android:layout_marginLeft="1dp" android:paddingTop="10px"
+		android:paddingLeft="5px" android:paddingRight="5px"
+		android:paddingBottom="3px">
 
-		<TextView android:layout_height="match_parent" android:id="@+id/label"
-			android:text="TextView" android:textAppearance="?android:attr/textAppearanceMedium"
-			android:layout_alignParentLeft="true" android:layout_width="160dp" />
 
-		<RatingBar android:layout_height="wrap_content" android:id="@+id/imdb_rating_bar_main"
-			style="?android:attr/ratingBarStyleSmall" android:layout_width="wrap_content"
-			android:numStars="10" android:layout_alignBottom="@id/label"
-			android:layout_alignParentLeft="true" />
+		<RelativeLayout android:id="@+id/linearLayout1"
+			android:layout_height="wrap_content" android:layout_width="match_parent">
 
-		<TextView android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:text="Channel_ID"
-			android:id="@+id/channel_id" android:textSize="6pt"
-			android:layout_alignParentTop="true" android:layout_alignParentRight="true" />
+			<TextView android:layout_height="wrap_content" android:id="@+id/label"
+				android:text="TextView" android:textAppearance="?android:attr/textAppearanceMedium"
+				android:layout_alignParentLeft="true" android:layout_width="160dp" />
 
-		<TextView android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:text="show_timing"
-			android:id="@+id/show_time" android:textSize="5pt"
-			android:layout_alignParentRight="true" android:layout_alignBottom="@id/imdb_rating_bar_main" />
+			<TextView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:text="Channel_ID"
+				android:id="@+id/channel_id" android:textSize="6pt"
+				android:layout_alignParentTop="true"
+				android:layout_alignParentRight="true" />
+
+
+		</RelativeLayout>
+
+		<RelativeLayout android:id="@+id/linearLayout2"
+			android:layout_marginTop="2dp" android:layout_below="@id/linearLayout1"
+			android:layout_height="wrap_content" android:layout_width="match_parent">
+
+			<RatingBar android:layout_height="30dp" android:layout_marginTop="1dp"
+				android:id="@+id/imdb_rating_bar_main" style="?android:attr/ratingBarStyleSmall"
+				android:layout_width="wrap_content" android:numStars="10"
+				android:layout_alignBottom="@id/label"
+				android:layout_alignParentLeft="true" />
+
+
+			<TextView android:layout_height="wrap_content" 
+				android:layout_width="wrap_content" android:text="show_timing"
+				android:id="@+id/show_time" android:textSize="5pt"
+				android:layout_alignParentRight="true" />
+
+		</RelativeLayout>
 
 	</RelativeLayout>
+	
 </RelativeLayout>
