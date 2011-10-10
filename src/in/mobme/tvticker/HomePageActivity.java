@@ -22,6 +22,7 @@ public class HomePageActivity extends FragmentActivity implements
 	private Context cxt;
 	private ViewPagerAdapter awesomeAdapter;
 	private ViewPagerIndicator indicator = null;
+	private int indicator_position = 0;
 	private static final String[] titles = new String[] { "Now", "Later Today",
 			"Favorites" };
 
@@ -54,9 +55,10 @@ public class HomePageActivity extends FragmentActivity implements
 
 		awesomePager.setAdapter(awesomeAdapter);
 		awesomePager.setOnPageChangeListener(indicator);
+		
 
 		// zylinc way
-		indicator.init(0, awesomeAdapter.getCount(), this);
+		indicator.init(indicator_position, awesomeAdapter.getCount(), this);
 		Resources res = getResources();
 		Drawable prev = res.getDrawable(R.drawable.indicator_prev_arrow);
 		Drawable next = res.getDrawable(R.drawable.indicator_next_arrow);
@@ -65,6 +67,28 @@ public class HomePageActivity extends FragmentActivity implements
 		indicator.setArrows(prev, next);
 		indicator.setOnClickListener(new OnIndicatorClickListener());
 	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	  // Save UI state changes to the savedInstanceState.
+	  // This bundle will be passed to onCreate if the process is
+	  // killed and restarted.
+	  savedInstanceState.putInt("indicator_pointer", indicator.getCurrentPosition());
+	  super.onSaveInstanceState(savedInstanceState);
+	}
+
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	  super.onRestoreInstanceState(savedInstanceState);
+	  // Restore UI state from the savedInstanceState.
+	  // This bundle has also been passed to onCreate.
+	  indicator_position = savedInstanceState.getInt("indicator_pointer");
+	  indicator.setCurrentPostion(indicator_position);
+	  
+	}
+
+
+
 
 	// handle indicator click events !
 	private class OnIndicatorClickListener implements

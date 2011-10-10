@@ -8,8 +8,8 @@
 	<RelativeLayout android:layout_width="match_parent"
 		android:layout_marginRight="10dp" android:layout_marginTop="20dp"
 		android:layout_height="wrap_content" android:id="@+id/relativeLayoutMovieMeta">
-		<ImageView android:layout_height="80px" android:id="@+id/movie_thumb"
-			android:src="@drawable/thumb_bu" android:layout_width="60px"
+		<ImageView android:layout_height="80dp" android:id="@+id/movie_thumb"
+			android:src="@drawable/thumb_bu" android:layout_width="60dp"
 			android:layout_alignParentTop="true" android:layout_alignParentLeft="true" />
 
 		<TextView android:layout_height="wrap_content" android:text=""
@@ -30,7 +30,7 @@
 			android:layout_height="40dp" android:text="@string/imdb_button_text"
 			android:layout_width="wrap_content" android:layout_alignParentLeft="true"
 			android:layout_centerVertical="true" android:textColor="@drawable/white"
-			android:paddingLeft="8dp" android:paddingRight="8dp" />
+			android:paddingLeft="10dp" android:paddingRight="10dp" />
 
 		<LinearLayout android:layout_height="wrap_content"
 			android:layout_alignParentRight="true" android:id="@+id/linearLayoutImdbRating"
@@ -40,9 +40,9 @@
 				android:layout_marginLeft="10dp" android:id="@+id/imdb_rating_text"
 				android:layout_width="wrap_content" android:textStyle="bold" />
 
-			<RatingBar android:layout_height="30dp" android:id="@+id/imdb_ratingBar"
-				style="?android:attr/ratingBarStyleSmall" android:layout_width="wrap_content"
-				android:numStars="10" />
+			<RatingBar android:layout_height="wrap_content" android:id="@+id/imdb_ratingBar"
+				style="@style/yellowRatingBarSmall" android:layout_width="wrap_content"
+				android:numStars="10" android:isIndicator="true"/>
 
 		</LinearLayout>
 
@@ -57,8 +57,8 @@
 		<Button android:text="Share with your friends"
 			android:background="@xml/custom_blue_button" android:layout_height="40dp"
 			android:layout_width="wrap_content" android:id="@+id/handle"
-			android:textColor="@drawable/white" android:paddingLeft="8dp"
-			android:paddingRight="8dp" />
+			android:textColor="@drawable/white" android:paddingLeft="10dp"
+			android:paddingRight="10dp" />
 
 		<LinearLayout android:id="@+id/content" android:gravity="center"
 			android:background="@xml/rounded_border" android:layout_width="match_parent"

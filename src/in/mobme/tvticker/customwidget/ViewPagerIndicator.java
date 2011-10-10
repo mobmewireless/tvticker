@@ -64,6 +64,13 @@ public class ViewPagerIndicator extends RelativeLayout implements OnPageChangeLi
 		return mCurItem;
 	}
 	
+	public void setCurrentPostion(int startPos){
+		setText(startPos - 1);
+		mCurItem = startPos;
+		updateArrows(mCurItem);
+	}
+	
+	
 	PageInfoProvider mPageInfoProvider;
 	public void setPageInfoProvider(PageInfoProvider pageInfoProvider){
 		this.mPageInfoProvider = pageInfoProvider;
