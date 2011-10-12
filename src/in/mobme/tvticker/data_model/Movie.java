@@ -2,9 +2,10 @@ package in.mobme.tvticker.data_model;
 
 import in.mobme.tvticker.data_model.rules.Category;
 import in.mobme.tvticker.data_model.rules.Channel;
+import in.mobme.tvticker.data_model.rules.IMDB;
 import in.mobme.tvticker.data_model.rules.Media;
 
-public class Movie implements Media, Category, Channel {
+public class Movie implements Media, Category, Channel, IMDB {
 
 	String movieTitle;
 	String[] movieThumb;
@@ -78,19 +79,23 @@ public class Movie implements Media, Category, Channel {
 		this.onChannels = onChannels;
 	}
 	
-	//Movie specific methods
+	//Imdb specific
+	@Override
 	public String getImdbLink() {
 		return imdbLink;
 	}
 
+	@Override
 	public void setImdbLink(String imdbLink) {
 		this.imdbLink = imdbLink;
 	}
 
+	@Override
 	public float getImdbRating() {
 		return imdbRating;
 	}
 
+	@Override
 	public void setImdbRating(float imdbRating) {
 		this.imdbRating = imdbRating;
 	}
