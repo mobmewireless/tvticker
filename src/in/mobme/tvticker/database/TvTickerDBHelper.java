@@ -10,15 +10,10 @@ public class TvTickerDBHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "TvTickerDataBaseTest";
 	private static final int DATABASE_VERSION = 1;
-	private Mediainfo mediaInfo;
-	private ChannelsInfo channelsInfo;
-	private CategoriesInfo categoryInfo;
-	private ImdbInfo imdbInfo;
-	private FavoritesInfo favoritesInfo;
+
 
 	public TvTickerDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		getTableHelpers(new Models());
 	}
 
 	@Override
@@ -37,27 +32,19 @@ public class TvTickerDBHelper extends SQLiteOpenHelper {
 	}
 	
 	private void createTables(SQLiteDatabase database){
-		database.execSQL(mediaInfo.MEDIA_TABLE_CREATE);
-		database.execSQL(channelsInfo.CHANNEL_TABLE_CREATE);
-		database.execSQL(categoryInfo.CATEGORY_TABLE_CREATE);
-		database.execSQL(imdbInfo.IMDB_TABLE_CREATE);
-		database.execSQL(favoritesInfo.FAVORITES_TABLE_CREATE);
+		database.execSQL(Mediainfo.MEDIA_TABLE_CREATE);
+		database.execSQL(ChannelsInfo.CHANNEL_TABLE_CREATE);
+		database.execSQL(CategoriesInfo.CATEGORY_TABLE_CREATE);
+		database.execSQL(ImdbInfo.IMDB_TABLE_CREATE);
+		database.execSQL(FavoritesInfo.FAVORITES_TABLE_CREATE);
 	}
 	
 	private void dropTables( SQLiteDatabase database){
-		database.execSQL(mediaInfo.MEDIA_TABLE_DROP);
-		database.execSQL(channelsInfo.CHANNEL_TABLE_DROP);
-		database.execSQL(categoryInfo.CATEGORY_TABLE_DROP);
-		database.execSQL(imdbInfo.IMDB_TABLE_DROP);
-		database.execSQL(favoritesInfo.FAVORITES_TABLE_DROP);
-	}
-	
-	private void  getTableHelpers(Models model){
-		mediaInfo = model.getMediaTableHelper();
-		channelsInfo = model.getChannelTableHelper();
-		categoryInfo = model.getCatagoriesTableHelper();
-		imdbInfo = model.getImdbTableHelper();
-		favoritesInfo = model.getFavoritesTableHelper();
+		database.execSQL(Mediainfo.MEDIA_TABLE_DROP);
+		database.execSQL(ChannelsInfo.CHANNEL_TABLE_DROP);
+		database.execSQL(CategoriesInfo.CATEGORY_TABLE_DROP);
+		database.execSQL(ImdbInfo.IMDB_TABLE_DROP);
+		database.execSQL(FavoritesInfo.FAVORITES_TABLE_DROP);
 	}
 
 }

@@ -8,4 +8,5 @@
 	<drawable name="pale_white">#EEE</drawable>
 	<drawable name="white">#FFF</drawable>
 	<drawable name="pale_gray">#BBB</drawable>
+	<drawable name="transparent_ab_bg_dark_gray">#DD373b44</drawable>
 </resources>

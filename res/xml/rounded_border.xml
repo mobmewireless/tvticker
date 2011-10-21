@@ -11,6 +11,6 @@
 		android:startColor="@drawable/dark_gray"
 		android:endColor="@drawable/light_gray" />
 	-->
-	<solid android:color="@drawable/ab_bg_dark_gray" />
+	<solid android:color="@drawable/transparent_ab_bg_dark_gray" />
 
 </shape> 

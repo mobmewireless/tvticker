@@ -2,7 +2,6 @@ package in.mobme.tvticker;
 
 import in.mobme.tvticker.customwidget.ViewPagerIndicator;
 import in.mobme.tvticker.customwidget.ViewPagerIndicator.PageInfoProvider;
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -17,14 +16,13 @@ import android.widget.Toast;
 
 public class HomePageActivity extends FragmentActivity implements
 		PageInfoProvider {
-	
+
 	private ViewPager awesomePager;
-	private Context cxt;
 	private ViewPagerAdapter awesomeAdapter;
 	private ViewPagerIndicator indicator = null;
-	private int indicator_position = 0;
-	private static final String[] titles = new String[] { "Now", "Later Today",
-			"Favorites" };
+	private int indicator_position = ViewPagerAdapter.NOW_POSITION;
+	private static final String[] titles = new String[] { "Favorites", "Now",
+			"Later Today", };
 
 	private static final int SETTINGS_MENU_ITEM = Menu.FIRST;
 	private static final int SEARCH_MENU_ITEM = SETTINGS_MENU_ITEM + 1;
@@ -37,6 +35,7 @@ public class HomePageActivity extends FragmentActivity implements
 		// menu.add(0, SEARCH_MENU_ITEM, 0, "").setIcon(
 		// R.drawable.ic_action_search).setShowAsAction(
 		// MenuItem.SHOW_AS_ACTION_ALWAYS);
+		
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -45,17 +44,18 @@ public class HomePageActivity extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		cxt = this;
-		// Load ActionBar
-		configureActionbarWith(getSupportActionBar(), getResources().getString(R.string.home_page_title));
+		// Load ActionBar - private method - see below 
+		configureActionbarWith(getSupportActionBar(), getResources().getString(
+				R.string.home_page_title));
+		
 		awesomeAdapter = new ViewPagerAdapter(R.layout.default_listview,
-				R.layout.rowlayout, titles, cxt);
+				titles, this);
 		awesomePager = (ViewPager) findViewById(R.id.awesomepager);
 		indicator = (ViewPagerIndicator) findViewById(R.id.indicator);
 
 		awesomePager.setAdapter(awesomeAdapter);
 		awesomePager.setOnPageChangeListener(indicator);
-		
+		awesomePager.setCurrentItem(indicator_position);
 
 		// zylinc way
 		indicator.init(indicator_position, awesomeAdapter.getCount(), this);
@@ -67,28 +67,28 @@ public class HomePageActivity extends FragmentActivity implements
 		indicator.setArrows(prev, next);
 		indicator.setOnClickListener(new OnIndicatorClickListener());
 	}
-	
+
+	//need to remember indicator position, if app is on pause
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
-	  // Save UI state changes to the savedInstanceState.
-	  // This bundle will be passed to onCreate if the process is
-	  // killed and restarted.
-	  savedInstanceState.putInt("indicator_pointer", indicator.getCurrentPosition());
-	  super.onSaveInstanceState(savedInstanceState);
+		// Save UI state changes to the savedInstanceState.
+		// This bundle will be passed to onCreate if the process is
+		// killed and restarted.
+		savedInstanceState.putInt("indicator_pointer", indicator
+				.getCurrentPosition());
+		super.onSaveInstanceState(savedInstanceState);
 	}
 
+	//restore indicator position, if on resume
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
-	  super.onRestoreInstanceState(savedInstanceState);
-	  // Restore UI state from the savedInstanceState.
-	  // This bundle has also been passed to onCreate.
-	  indicator_position = savedInstanceState.getInt("indicator_pointer");
-	  indicator.setCurrentPostion(indicator_position);
-	  
+		super.onRestoreInstanceState(savedInstanceState);
+		// Restore UI state from the savedInstanceState.
+		// This bundle has also been passed to onCreate.
+		indicator_position = savedInstanceState.getInt("indicator_pointer");
+		indicator.setCurrentPostion(indicator_position);
+
 	}
-
-
-
 
 	// handle indicator click events !
 	private class OnIndicatorClickListener implements
@@ -114,7 +114,8 @@ public class HomePageActivity extends FragmentActivity implements
 		}
 
 	}
-
+	
+	//Action Bar menu item click events 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -128,6 +129,7 @@ public class HomePageActivity extends FragmentActivity implements
 		return super.onOptionsItemSelected(item);
 	}
 
+	
 	private void configureActionbarWith(ActionBar actionBar, String title) {
 		actionBar.setTitle(title);
 	}
@@ -142,7 +144,6 @@ public class HomePageActivity extends FragmentActivity implements
 
 	@Override
 	public String getTitle(int pos) {
-		// TODO Auto-generated method stub
 		return titles[pos];
 	}
 

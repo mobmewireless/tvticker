@@ -1,6 +1,8 @@
 package in.mobme.tvticker;
 
 
+import java.util.List;
+
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +15,12 @@ import android.widget.TextView;
 public class MyArrayAdapter extends ArrayAdapter<String>{
 
 	private Activity context = null;
-	private String[] names = null;
+	private List<String> names = null;
 	private int rowLayoutId;
-	public MyArrayAdapter(Activity context, int textViewResourceId, String[] names) {
-		super(context, textViewResourceId, names);
+	public MyArrayAdapter(Activity context, int textViewResourceId, List<String> list2) {
+		super(context, textViewResourceId, list2);
 		this.context = context;
-		this.names = names;
+		this.names = list2;
 		this.rowLayoutId =textViewResourceId;
 	}
 
@@ -28,6 +30,7 @@ public class MyArrayAdapter extends ArrayAdapter<String>{
 		protected ImageView imageView;
 		protected TextView movieTitle;
 		protected TextView channelID;
+		protected TextView categoryTag;
 		protected RatingBar imdbRatingBar;
 		protected TextView show_timing;
 	}
@@ -50,6 +53,7 @@ public class MyArrayAdapter extends ArrayAdapter<String>{
 			holder.movieTitle = (TextView) rowView.findViewById(R.id.label);
 			holder.imageView = (ImageView) rowView.findViewById(R.id.left_icon);
 			holder.channelID = (TextView) rowView.findViewById(R.id.channel_id);
+			holder.categoryTag = (TextView) rowView.findViewById(R.id.category_tag);
 			holder.imdbRatingBar = (RatingBar) rowView.findViewById(R.id.imdb_rating_bar_main);
 			holder.show_timing = (TextView) rowView.findViewById(R.id.show_time);
 			rowView.setTag(holder);
@@ -57,10 +61,15 @@ public class MyArrayAdapter extends ArrayAdapter<String>{
 			holder = (ViewHolder) rowView.getTag();
 		}
 
-		holder.movieTitle.setText(names[position]);
+		holder.movieTitle.setText(names.get(position));
 		holder.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.thumb_bu));
+		holder.imdbRatingBar.setRating(sanitizeRatingValue(9f));
 		
 		return rowView;
+	}
+
+	private float sanitizeRatingValue(float floatValue){
+		return floatValue/2;
 	}
 
 }

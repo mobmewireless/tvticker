@@ -34,12 +34,16 @@
 		<RelativeLayout android:id="@+id/linearLayout2"
 			android:layout_marginTop="2dp" android:layout_below="@id/linearLayout1"
 			android:layout_height="wrap_content" android:layout_width="match_parent">
+			
+			<TextView android:layout_height="wrap_content" android:id="@+id/category_tag"
+				android:text="category_tag" android:textSize="6pt" android:layout_marginRight="6dp"
+				android:layout_alignParentLeft="true" android:layout_width="wrap_content" />
 
 			<RatingBar android:layout_height="wrap_content"
 				android:layout_marginTop="1dp" android:id="@+id/imdb_rating_bar_main"
 				style="@style/yellowRatingBarSmall" android:layout_width="wrap_content"
-				android:numStars="10" android:layout_alignBottom="@id/label"
-				android:layout_alignParentLeft="true" android:isIndicator="true"/>
+				android:numStars="5" android:layout_alignBottom="@id/label"
+				android:layout_toRightOf="@id/category_tag" android:isIndicator="true" android:max="5"/>
 
 
 			<TextView android:layout_height="wrap_content"

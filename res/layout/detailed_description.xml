@@ -2,12 +2,13 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent" android:background="@xml/custom_bg">
 
 	<!-- Movie thumb and description -->
 	<RelativeLayout android:layout_width="match_parent"
-		android:layout_marginRight="10dp" android:layout_marginTop="20dp"
-		android:layout_height="wrap_content" android:id="@+id/relativeLayoutMovieMeta">
+		android:background="@xml/rounded_border_white"
+		android:layout_marginTop="20dp" android:layout_height="wrap_content"
+		android:id="@+id/relativeLayoutMovieMeta">
 		<ImageView android:layout_height="80dp" android:id="@+id/movie_thumb"
 			android:src="@drawable/thumb_bu" android:layout_width="60dp"
 			android:layout_alignParentTop="true" android:layout_alignParentLeft="true" />
@@ -21,8 +22,8 @@
 
 	<!-- IMDB Rating and reviews -->
 	<RelativeLayout android:layout_width="match_parent"
+		android:paddingLeft="4dp" android:paddingRight="4dp"
 		android:layout_below="@id/relativeLayoutMovieMeta"
-		android:layout_marginRight="10dp" android:layout_marginLeft="10dp"
 		android:layout_marginTop="30dp" android:layout_height="wrap_content"
 		android:id="@+id/relativeLayoutImdb">
 
@@ -34,7 +35,7 @@
 
 		<LinearLayout android:layout_height="wrap_content"
 			android:layout_alignParentRight="true" android:id="@+id/linearLayoutImdbRating"
-			android:orientation="vertical" android:layout_width="wrap_content" >
+			android:orientation="vertical" android:layout_width="wrap_content">
 
 			<TextView android:layout_height="wrap_content" android:text="TextView"
 				android:layout_marginLeft="10dp" android:id="@+id/imdb_rating_text"
@@ -42,7 +43,7 @@
 
 			<RatingBar android:layout_height="wrap_content" android:id="@+id/imdb_ratingBar"
 				style="@style/yellowRatingBarSmall" android:layout_width="wrap_content"
-				android:numStars="10" android:isIndicator="true"/>
+				android:numStars="10" android:isIndicator="true" />
 
 		</LinearLayout>
 
@@ -51,14 +52,14 @@
 	<SlidingDrawer android:id="@+id/slidingDrawer1"
 		android:layout_alignParentBottom="true" android:layout_height="100dp"
 		android:handle="@+id/handle" android:content="@+id/content"
-		android:layout_marginBottom="2dp" android:layout_marginTop="5dp"
-		android:layout_width="match_parent">
+		android:layout_marginTop="5dp" android:layout_width="match_parent">
 
 		<Button android:text="Share with your friends"
 			android:background="@xml/custom_blue_button" android:layout_height="40dp"
 			android:layout_width="wrap_content" android:id="@+id/handle"
 			android:textColor="@drawable/white" android:paddingLeft="10dp"
-			android:paddingRight="10dp" />
+			android:paddingRight="10dp" android:drawableLeft="@drawable/ic_dots"
+			android:drawableRight="@drawable/ic_dots" />
 
 		<LinearLayout android:id="@+id/content" android:gravity="center"
 			android:background="@xml/rounded_border" android:layout_width="match_parent"
