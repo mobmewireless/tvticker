@@ -22,11 +22,11 @@ import android.widget.AdapterView.OnItemClickListener;
 
 class ViewPagerAdapter extends PagerAdapter {
 
+	final static int FAVORITES_POSITION = 0;
 	final static int NOW_POSITION = 1;
 	final static int LATER_TODAY_POSITION = 2;
-	final static int FAVORITES_POSITION = 0;
-
-	//private String EMPTY[] = {};
+	
+	private String EMPTY[] = {};
 
 	private String[] pageTitles = null;
 	private int listViewId;
@@ -38,6 +38,7 @@ class ViewPagerAdapter extends PagerAdapter {
 	// private View favListEmptyView;
 	private Context context = null;
 	private LazyAdapter lazyAdapter = null;
+	private MyArrayAdapter favoritesAdapter = null;
 
 	public ViewPagerAdapter(int listViewIdentifier, String[] titles, Context ctx) {
 		this.pageTitles = titles;
@@ -76,20 +77,22 @@ class ViewPagerAdapter extends PagerAdapter {
 			listData = context.getResources().getStringArray(R.array.list1);
 			list = convertToList(listData);
 			lazyAdapter = new LazyAdapter((Activity) context, list);
+			listView1.setAdapter(lazyAdapter);
 
 		} else if (position == LATER_TODAY_POSITION) {
 
 			listData = context.getResources().getStringArray(R.array.list2);
 			list = convertToList(listData);
 			lazyAdapter = new LazyAdapter((Activity) context, list);
+			listView1.setAdapter(lazyAdapter);
 
 		} else if (position == FAVORITES_POSITION) {
 
 			listData = context.getResources().getStringArray(R.array.list3);
-			list = convertToList(listData);
-			lazyAdapter = new LazyAdapter((Activity) context, list);
+			list = convertToList(EMPTY);
+			favoritesAdapter = new MyArrayAdapter((Activity) context, R.layout.rowlayout, list);
 
-			if (lazyAdapter.getCount() <= 0) { // list view is empty
+			if (favoritesAdapter.getCount() <= 0) { // list view is empty
 				ViewStub emptyView = (ViewStub) frame
 						.findViewById(android.R.id.empty);
 				// System.out.println("empty view activated");
@@ -107,12 +110,12 @@ class ViewPagerAdapter extends PagerAdapter {
 				listView1.setEmptyView(v);
 
 			} else {
+				listView1.setAdapter(lazyAdapter);
 				System.out.println("empty view de-activated");
 			}
 
 		}
-
-		listView1.setAdapter(lazyAdapter);
+		
 		listView1.setOnItemClickListener(new CustomOnItemClickListener());
 
 		((ViewPager) collection).addView(frame, 0);
