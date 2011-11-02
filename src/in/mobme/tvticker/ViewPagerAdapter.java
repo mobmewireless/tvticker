@@ -117,6 +117,8 @@ class ViewPagerAdapter extends PagerAdapter {
 		}
 		
 		listView1.setOnItemClickListener(new CustomOnItemClickListener());
+		listView1.setTextFilterEnabled(true);
+
 
 		((ViewPager) collection).addView(frame, 0);
 

@@ -3,9 +3,11 @@
 	android:orientation="horizontal" android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<ImageView android:layout_width="45dp" android:layout_height="72dp"
+	<in.mobme.tvticker.customwidget.WebImageView
+		android:layout_width="45dp" android:layout_height="72dp"
 		android:src="@android:drawable/btn_star_big_on" android:id="@+id/left_icon"
-		android:layout_alignParentTop="true" android:layout_alignParentLeft="true" />
+		android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+		android:background="#00000000" />
 
 	<RelativeLayout android:id="@+id/relativeLayout1"
 		android:gravity="center_vertical" android:layout_toRightOf="@+id/left_icon"
@@ -19,8 +21,10 @@
 			android:layout_height="wrap_content" android:layout_width="match_parent">
 
 			<TextView android:layout_height="wrap_content" android:id="@+id/label"
-				android:text="TextView" android:textAppearance="?android:attr/textAppearanceMedium"
-				android:layout_alignParentLeft="true" android:layout_width="160dp" />
+				android:ellipsize="marquee" android:text="TextView"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:layout_alignParentLeft="true" android:layout_width="160dp"
+				android:singleLine="true" />
 
 			<TextView android:layout_height="wrap_content"
 				android:layout_width="wrap_content" android:text="Channel_ID"
@@ -34,16 +38,18 @@
 		<RelativeLayout android:id="@+id/linearLayout2"
 			android:layout_marginTop="2dp" android:layout_below="@id/linearLayout1"
 			android:layout_height="wrap_content" android:layout_width="match_parent">
-			
+
 			<TextView android:layout_height="wrap_content" android:id="@+id/category_tag"
-				android:text="category_tag" android:textSize="6pt" android:layout_marginRight="6dp"
-				android:layout_alignParentLeft="true" android:layout_width="wrap_content" />
+				android:text="category_tag" android:textSize="6pt"
+				android:layout_marginRight="6dp" android:layout_alignParentLeft="true"
+				android:layout_width="wrap_content" />
 
 			<RatingBar android:layout_height="wrap_content"
 				android:layout_marginTop="1dp" android:id="@+id/imdb_rating_bar_main"
 				style="@style/yellowRatingBarSmall" android:layout_width="wrap_content"
-				android:numStars="5" android:layout_alignBottom="@id/label"
-				android:layout_toRightOf="@id/category_tag" android:isIndicator="true" android:max="5"/>
+				android:numStars="3" android:layout_alignBottom="@id/label"
+				android:layout_toRightOf="@id/category_tag" android:isIndicator="true"
+				android:max="5" />
 
 
 			<TextView android:layout_height="wrap_content"
