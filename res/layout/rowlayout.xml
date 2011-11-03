@@ -4,8 +4,7 @@
 	android:layout_height="match_parent">
 
 	<in.mobme.tvticker.customwidget.WebImageView
-		android:layout_width="45dp" android:layout_height="72dp"
-		android:src="@android:drawable/btn_star_big_on" android:id="@+id/left_icon"
+		android:layout_width="45dp" android:layout_height="72dp" android:id="@+id/left_icon"
 		android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
 		android:background="#00000000" />
 

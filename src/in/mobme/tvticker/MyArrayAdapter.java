@@ -5,6 +5,7 @@ import in.mobme.tvticker.customwidget.WebImageView;
 import java.util.List;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ public class MyArrayAdapter extends ArrayAdapter<String> implements Filterable {
 	private Activity context = null;
 	private List<String> names = null;
 	private int rowLayoutId;
+	private Drawable placeHolder = null;
 
 	public MyArrayAdapter(Activity context, int textViewResourceId,
 			List<String> list2) {
@@ -25,6 +27,8 @@ public class MyArrayAdapter extends ArrayAdapter<String> implements Filterable {
 		this.context = context;
 		this.names = list2;
 		this.rowLayoutId = textViewResourceId;
+		placeHolder = context.getResources().getDrawable(
+				R.drawable.ic_placehoder);
 	}
 
 	// static to save the reference to the outer class and to avoid access to
@@ -73,7 +77,7 @@ public class MyArrayAdapter extends ArrayAdapter<String> implements Filterable {
 				.setImageWithURL(
 						context,
 						"http://www.movieposterdb.com/posters/09_11/2007/440963/l_440963_40b30439.jpg",
-						R.drawable.ic_placehoder);
+						placeHolder);
 		holder.imdbRatingBar.setRating(sanitizeRatingValue(9f));
 		return rowView;
 	}

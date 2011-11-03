@@ -5,7 +5,6 @@ import in.mobme.tvticker.customwidget.ViewPagerIndicator.PageInfoProvider;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
@@ -44,12 +43,8 @@ public class HomePageActivity extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		// Load ActionBar - private method - see below 
-		configureActionbarWith(getSupportActionBar(), getResources().getString(
-				R.string.home_page_title));
-		
-		awesomeAdapter = new ViewPagerAdapter(R.layout.default_listview,
-				titles, this);
+		getSupportActionBar().setTitle(getResources().getString(R.string.home_page_title));
+		awesomeAdapter = new ViewPagerAdapter(R.layout.default_listview, titles, this);
 		awesomePager = (ViewPager) findViewById(R.id.awesomepager);
 		indicator = (ViewPagerIndicator) findViewById(R.id.indicator);
 
@@ -90,7 +85,7 @@ public class HomePageActivity extends FragmentActivity implements
 
 	}
 
-	// handle indicator click events !
+	// handles indicator click events !
 	private class OnIndicatorClickListener implements
 			ViewPagerIndicator.OnClickListener {
 		@Override
@@ -127,11 +122,6 @@ public class HomePageActivity extends FragmentActivity implements
 			break;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	
-	private void configureActionbarWith(ActionBar actionBar, String title) {
-		actionBar.setTitle(title);
 	}
 
 	// helper method to show toasts !
