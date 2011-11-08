@@ -10,15 +10,15 @@ public class Media implements MediaBase, Category, Channel, IMDB {
 	String mediaTitle;
 	String mediaThumb;
 	String mediaDescription;
-	String[] showTime;
+	String showTime;
 	String imdbLink;
 	float imdbRating;
-	int categoryType;
-	int[] onChannels;
+	String categoryType;
+	String onChannel;
 
 	//media specific methods
 	@Override
-	public String[] getShowTime() {
+	public String getShowTime() {
 		return showTime;
 	}
 
@@ -38,7 +38,7 @@ public class Media implements MediaBase, Category, Channel, IMDB {
 	}
 
 	@Override
-	public void setShowTime(String[] showTime) {
+	public void setShowTime(String showTime) {
 		this.showTime = showTime;
 	}
 
@@ -59,24 +59,24 @@ public class Media implements MediaBase, Category, Channel, IMDB {
 
 	//Category specific
 	@Override
-	public int getCategoryType() {
+	public String getCategoryType() {
 		return categoryType;
 	}
 
 	@Override
-	public void setCategoryType(int type) {
+	public void setCategoryType(String type) {
 		this.categoryType = type;
 	}
 
 	//Channel specific
 	@Override
-	public int[] getChannels() {
-		return onChannels;
+	public String getChannel() {
+		return onChannel;
 	}
 
 	@Override
-	public void setChannels(int[] onChannels) {
-		this.onChannels = onChannels;
+	public void setChannel(String onChannel) {
+		this.onChannel = onChannel;
 	}
 	
 	//Imdb specific

@@ -21,9 +21,9 @@ public class LazyAdapter extends EndlessAdapter {
 	private Activity context;
 	
 
-	LazyAdapter(Activity ctx, List<String> list2) {
+	LazyAdapter(Activity ctx, List<String> list2, boolean displayThumb) {
 		super(ctx, new MyArrayAdapter((Activity) ctx, R.layout.rowlayout,
-				list2), R.layout.pending);
+				list2, displayThumb), R.layout.pending);
 		context = ctx;
 		pendingViewId = R.layout.pending;
 		rotate = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF,

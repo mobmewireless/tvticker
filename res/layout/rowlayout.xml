@@ -6,7 +6,7 @@
 	<in.mobme.tvticker.customwidget.WebImageView
 		android:layout_width="45dp" android:layout_height="72dp" android:id="@+id/left_icon"
 		android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-		android:background="#00000000" />
+		android:background="#00000000" android:visibility="gone"/>
 
 	<RelativeLayout android:id="@+id/relativeLayout1"
 		android:gravity="center_vertical" android:layout_toRightOf="@+id/left_icon"

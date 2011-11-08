@@ -18,7 +18,7 @@ public class TvTickerDBHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase database) {
-		createTables(database);
+		createTablesIn(database);
 	}
 
 	@Override
@@ -27,24 +27,22 @@ public class TvTickerDBHelper extends SQLiteOpenHelper {
 		Log.w(TvTickerDBHelper.class.getName(),
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
-		dropTables(database);
+		dropTablesFrom(database);
 		onCreate(database);
 	}
 	
-	private void createTables(SQLiteDatabase database){
+	private void createTablesIn(SQLiteDatabase database){
 		database.execSQL(Mediainfo.MEDIA_TABLE_CREATE);
 		database.execSQL(ChannelsInfo.CHANNEL_TABLE_CREATE);
 		database.execSQL(CategoriesInfo.CATEGORY_TABLE_CREATE);
 		database.execSQL(ImdbInfo.IMDB_TABLE_CREATE);
-		database.execSQL(FavoritesInfo.FAVORITES_TABLE_CREATE);
 	}
 	
-	private void dropTables( SQLiteDatabase database){
+	private void dropTablesFrom( SQLiteDatabase database){
 		database.execSQL(Mediainfo.MEDIA_TABLE_DROP);
 		database.execSQL(ChannelsInfo.CHANNEL_TABLE_DROP);
 		database.execSQL(CategoriesInfo.CATEGORY_TABLE_DROP);
 		database.execSQL(ImdbInfo.IMDB_TABLE_DROP);
-		database.execSQL(FavoritesInfo.FAVORITES_TABLE_DROP);
 	}
 
 }

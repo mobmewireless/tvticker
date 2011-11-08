@@ -5,9 +5,9 @@ package in.mobme.tvticker.data_model.rules;
  **/
 public interface MediaBase {
 
-	String[] getShowTime();
+	String getShowTime();
 
-	void setShowTime(String[] showTime);
+	void setShowTime(String showTime);
 
 	String getMediaTitle();
 

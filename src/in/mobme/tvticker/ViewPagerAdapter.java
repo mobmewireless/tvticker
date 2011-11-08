@@ -17,7 +17,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.Toast;
+//import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 class ViewPagerAdapter extends PagerAdapter {
@@ -25,19 +25,22 @@ class ViewPagerAdapter extends PagerAdapter {
 	final static int FAVORITES_POSITION = 0;
 	final static int NOW_POSITION = 1;
 	final static int LATER_TODAY_POSITION = 2;
-	
-	private String EMPTY[] = {};
+
+	//private String EMPTY[] = {};
 
 	private String[] pageTitles = null;
 	private int listViewId;
 	private static List<String> list = new ArrayList<String>();
 
 	private FrameLayout frame = null;
-	private ListView listView1;
+	private ListView now_listView;
+	private ListView later_listView;
+	private ListView fav_listView;
 	private Button browseAllShowsButton;
 	// private View favListEmptyView;
 	private Context context = null;
-	private LazyAdapter lazyAdapter = null;
+	private LazyAdapter now_lazyAdapter = null;
+	private LazyAdapter later_lazyAdapter = null;
 	private MyArrayAdapter favoritesAdapter = null;
 
 	public ViewPagerAdapter(int listViewIdentifier, String[] titles, Context ctx) {
@@ -69,30 +72,35 @@ class ViewPagerAdapter extends PagerAdapter {
 		LayoutInflater layoutInflater = ((Activity) context)
 				.getLayoutInflater();
 		frame = (FrameLayout) layoutInflater.inflate(listViewId, null);
-		listView1 = (ListView) frame.findViewById(android.R.id.list);
+		now_listView = later_listView = fav_listView = (ListView) frame
+				.findViewById(android.R.id.list);
 
 		String[] listData = null;
 		if (position == NOW_POSITION) {
 
 			listData = context.getResources().getStringArray(R.array.list1);
 			list = convertToList(listData);
-			lazyAdapter = new LazyAdapter((Activity) context, list);
-			listView1.setAdapter(lazyAdapter);
+			now_lazyAdapter = new LazyAdapter((Activity) context, list, true);
+			now_listView.setAdapter(now_lazyAdapter);
 
 		} else if (position == LATER_TODAY_POSITION) {
 
 			listData = context.getResources().getStringArray(R.array.list2);
 			list = convertToList(listData);
-			lazyAdapter = new LazyAdapter((Activity) context, list);
-			listView1.setAdapter(lazyAdapter);
+			if (later_lazyAdapter == null)
+				later_lazyAdapter = new LazyAdapter((Activity) context, list,
+						false);
+			later_listView.setAdapter(later_lazyAdapter);
 
 		} else if (position == FAVORITES_POSITION) {
 
 			listData = context.getResources().getStringArray(R.array.list3);
-			list = convertToList(EMPTY);
-			favoritesAdapter = new MyArrayAdapter((Activity) context, R.layout.rowlayout, list);
+			list = convertToList(listData);
+			if (favoritesAdapter == null)
+				favoritesAdapter = new MyArrayAdapter((Activity) context,
+						R.layout.rowlayout, list, true);
 
-			if (favoritesAdapter.getCount() <= 0) { // list view is empty
+			if (favoritesAdapter.getCount() <=  0) { // list view is empty
 				ViewStub emptyView = (ViewStub) frame
 						.findViewById(android.R.id.empty);
 				// System.out.println("empty view activated");
@@ -107,19 +115,19 @@ class ViewPagerAdapter extends PagerAdapter {
 						context.startActivity(browseShowsIntent);
 					}
 				});
-				listView1.setEmptyView(v);
+				fav_listView.setEmptyView(v);
 
 			} else {
-				listView1.setAdapter(lazyAdapter);
+				fav_listView.setAdapter(favoritesAdapter);
+				fav_listView
+						.setOnItemClickListener(new CustomOnItemClickListener());
 				System.out.println("empty view de-activated");
 			}
 
 		}
-		
-		listView1.setOnItemClickListener(new CustomOnItemClickListener());
-		listView1.setTextFilterEnabled(true);
 
-
+		now_listView.setOnItemClickListener(new CustomOnItemClickListener());
+		later_listView.setOnItemClickListener(new CustomOnItemClickListener());
 		((ViewPager) collection).addView(frame, 0);
 
 		return frame;
@@ -141,7 +149,7 @@ class ViewPagerAdapter extends PagerAdapter {
 				int position, long arg3) {
 			String selectedItem = adapter.getAdapter().getItem(position)
 					.toString();
-			Toast.makeText(context, selectedItem, Toast.LENGTH_LONG).show();
+			//Toast.makeText(context, selectedItem, Toast.LENGTH_LONG).show();
 			Intent detailedViewIntent = new Intent(context,
 					DetailedDescriptionActivity.class);
 			detailedViewIntent.putExtra("selectedItem", selectedItem);
@@ -164,7 +172,7 @@ class ViewPagerAdapter extends PagerAdapter {
 	 */
 	@Override
 	public void destroyItem(View collection, int position, Object view) {
-		// System.out.println("on destroyItem()");
+		System.out.println("on destroyItem() for page at " + position);
 		((ViewPager) collection).removeView((View) view);
 	}
 

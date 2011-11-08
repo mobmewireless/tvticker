@@ -20,15 +20,17 @@ public class MyArrayAdapter extends ArrayAdapter<String> implements Filterable {
 	private List<String> names = null;
 	private int rowLayoutId;
 	private Drawable placeHolder = null;
+	private boolean showThumb = true;
 
 	public MyArrayAdapter(Activity context, int textViewResourceId,
-			List<String> list2) {
+			List<String> list2, boolean displayThumb) {
 		super(context, textViewResourceId, list2);
 		this.context = context;
 		this.names = list2;
 		this.rowLayoutId = textViewResourceId;
 		placeHolder = context.getResources().getDrawable(
 				R.drawable.ic_placehoder);
+		this.showThumb = displayThumb;
 	}
 
 	// static to save the reference to the outer class and to avoid access to
@@ -58,8 +60,11 @@ public class MyArrayAdapter extends ArrayAdapter<String> implements Filterable {
 
 			holder = new ViewHolder();
 			holder.movieTitle = (TextView) rowView.findViewById(R.id.label);
-			holder.imageView = (WebImageView) rowView
-					.findViewById(R.id.left_icon);
+			if (showThumb) {
+				holder.imageView = (WebImageView) rowView
+						.findViewById(R.id.left_icon);
+				holder.imageView.setVisibility(View.VISIBLE);
+			}
 			holder.channelID = (TextView) rowView.findViewById(R.id.channel_id);
 			holder.categoryTag = (TextView) rowView
 					.findViewById(R.id.category_tag);
@@ -73,11 +78,13 @@ public class MyArrayAdapter extends ArrayAdapter<String> implements Filterable {
 		}
 
 		holder.movieTitle.setText(names.get(position));
-		holder.imageView
-				.setImageWithURL(
-						context,
-						"http://www.movieposterdb.com/posters/09_11/2007/440963/l_440963_40b30439.jpg",
-						placeHolder);
+		if (showThumb) {
+			holder.imageView
+					.setImageWithURL(
+							context,
+							"http://www.movieposterdb.com/posters/09_11/2007/440963/l_440963_40b30439.jpg",
+							placeHolder);
+		}
 		holder.imdbRatingBar.setRating(sanitizeRatingValue(9f));
 		return rowView;
 	}
