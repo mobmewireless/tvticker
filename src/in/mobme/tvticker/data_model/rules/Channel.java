@@ -2,7 +2,7 @@ package in.mobme.tvticker.data_model.rules;
 
 public interface Channel{
 
-	void setChannel(String onChannels);
+	void setChannel(int onChannel);
 
-	String getChannel();
+	int getChannel();
 }

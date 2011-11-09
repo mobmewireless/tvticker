@@ -26,17 +26,17 @@ public class Models {
 		final static String MEDIA_THUMB = "thumbnail_path";
 		final static String MEDIA_IMDB_ID = KEY_IMDB_ROW_ID;
 		final static String MEDIA_CAT_ID = KEY_CATEGORY_ROW_ID;
-		final static String IS_FAVORITE = "is_favorite?";
+		final static String IS_FAVORITE_FLAG = "is_favorite";
 
-		final static int TRUE = 1;
-		final static int FALSE = 0;
+		final static int IS_FAVORITE = 1;
+		final static int IS_NOT_FAVORITE = 0;
 
 		/* media_table create query */
 		final static String MEDIA_TABLE_CREATE = "create table if not exists " + TABLE_NAME
 				+ "(" + ROW_ID + " integer primary key autoincrement, "
 				+ MEDIA_TITLE + " text, " + MEDIA_DESCRIPTION + " text, "
 				+ MEDIA_THUMB + " text, " + MEDIA_IMDB_ID + " integer, "
-				+ IS_FAVORITE + " integer, " + MEDIA_CAT_ID + " integer)";
+				+ IS_FAVORITE_FLAG + " integer, " + MEDIA_CAT_ID + " integer)";
 
 		/* media_table drop query */
 		final static String MEDIA_TABLE_DROP = "DROP TABLE IF EXISTS "

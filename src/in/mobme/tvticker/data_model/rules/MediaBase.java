@@ -20,5 +20,9 @@ public interface MediaBase {
 	String getMediaThumb();
 
 	void setMediaThumb(String mediaThumb);
+	
+	boolean isFavorite();
+	
+	void setIsFavorite(boolean isFav);
 
 }
