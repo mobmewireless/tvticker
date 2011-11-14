@@ -11,13 +11,10 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewStub;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ListView;
-//import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 class ViewPagerAdapter extends PagerAdapter {
@@ -26,21 +23,17 @@ class ViewPagerAdapter extends PagerAdapter {
 	final static int NOW_POSITION = 1;
 	final static int LATER_TODAY_POSITION = 2;
 
-	//private String EMPTY[] = {};
+	private String EMPTY[] = {};
 
 	private String[] pageTitles = null;
 	private int listViewId;
 	private static List<String> list = new ArrayList<String>();
-
-	private FrameLayout frame = null;
-	private ListView now_listView;
-	private ListView later_listView;
-	private ListView fav_listView;
+	
+	private ListView listView;
 	private Button browseAllShowsButton;
 	// private View favListEmptyView;
 	private Context context = null;
-	private LazyAdapter now_lazyAdapter = null;
-	private LazyAdapter later_lazyAdapter = null;
+	private LazyAdapter lazyAdapter = null;
 	private MyArrayAdapter favoritesAdapter = null;
 
 	public ViewPagerAdapter(int listViewIdentifier, String[] titles, Context ctx) {
@@ -71,68 +64,57 @@ class ViewPagerAdapter extends PagerAdapter {
 
 		LayoutInflater layoutInflater = ((Activity) context)
 				.getLayoutInflater();
-		frame = (FrameLayout) layoutInflater.inflate(listViewId, null);
-		now_listView = later_listView = fav_listView = (ListView) frame
-				.findViewById(android.R.id.list);
+		listView = (ListView) layoutInflater.inflate(listViewId, null);
 
 		String[] listData = null;
 		if (position == NOW_POSITION) {
 
 			listData = context.getResources().getStringArray(R.array.list1);
 			list = convertToList(listData);
-			now_lazyAdapter = new LazyAdapter((Activity) context, list, true);
-			now_listView.setAdapter(now_lazyAdapter);
+			lazyAdapter = new LazyAdapter((Activity) context, list, true);
+			listView.setAdapter(lazyAdapter);
 
 		} else if (position == LATER_TODAY_POSITION) {
 
 			listData = context.getResources().getStringArray(R.array.list2);
 			list = convertToList(listData);
-			if (later_lazyAdapter == null)
-				later_lazyAdapter = new LazyAdapter((Activity) context, list,
-						false);
-			later_listView.setAdapter(later_lazyAdapter);
+			lazyAdapter = new LazyAdapter((Activity) context, list, true);
+			listView.setAdapter(lazyAdapter);
 
 		} else if (position == FAVORITES_POSITION) {
 
 			listData = context.getResources().getStringArray(R.array.list3);
-			list = convertToList(listData);
-			if (favoritesAdapter == null)
-				favoritesAdapter = new MyArrayAdapter((Activity) context,
-						R.layout.rowlayout, list, true);
+			list = convertToList(EMPTY);
 
-			if (favoritesAdapter.getCount() <=  0) { // list view is empty
-				ViewStub emptyView = (ViewStub) frame
-						.findViewById(android.R.id.empty);
-				// System.out.println("empty view activated");
-				View v = emptyView.inflate();
-				browseAllShowsButton = (Button) v
-						.findViewById(R.id.browseAllShowsButton);
-				browseAllShowsButton.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Intent browseShowsIntent = new Intent(context,
-								BrowseAllShowsActivity.class);
-						context.startActivity(browseShowsIntent);
-					}
-				});
-				fav_listView.setEmptyView(v);
+			favoritesAdapter = new MyArrayAdapter((Activity) context,
+					R.layout.rowlayout, list, true);
 
-			} else {
-				fav_listView.setAdapter(favoritesAdapter);
-				fav_listView
-						.setOnItemClickListener(new CustomOnItemClickListener());
-				System.out.println("empty view de-activated");
-			}
+			View v = ((LayoutInflater) context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+					.inflate(R.layout.favorites_inflated_empty_view, null, false);
+			browseAllShowsButton = (Button) v
+					.findViewById(R.id.browseAllShowsButton);
+			browseAllShowsButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent browseShowsIntent = new Intent(context,
+							BrowseAllShowsActivity.class);
+					context.startActivity(browseShowsIntent);
+				}
+			});
+			
+			listView.addFooterView(v);
+			listView.setAdapter(favoritesAdapter);
 
 		}
 
-		now_listView.setOnItemClickListener(new CustomOnItemClickListener());
-		later_listView.setOnItemClickListener(new CustomOnItemClickListener());
-		((ViewPager) collection).addView(frame, 0);
+		listView.setOnItemClickListener(new CustomOnItemClickListener());
+		((ViewPager) collection).addView(listView, 0);
 
-		return frame;
+		return listView;
 	}
 
+	// mock helper
 	private List<String> convertToList(String[] items) {
 		List<String> list = new ArrayList<String>();
 		for (String item : items) {
@@ -149,7 +131,7 @@ class ViewPagerAdapter extends PagerAdapter {
 				int position, long arg3) {
 			String selectedItem = adapter.getAdapter().getItem(position)
 					.toString();
-			//Toast.makeText(context, selectedItem, Toast.LENGTH_LONG).show();
+			// Toast.makeText(context, selectedItem, Toast.LENGTH_LONG).show();
 			Intent detailedViewIntent = new Intent(context,
 					DetailedDescriptionActivity.class);
 			detailedViewIntent.putExtra("selectedItem", selectedItem);

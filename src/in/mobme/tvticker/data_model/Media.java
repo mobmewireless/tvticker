@@ -111,6 +111,4 @@ public class Media implements MediaBase, Category, Channel, IMDB {
 		this.imdbRating = imdbRating;
 	}
 
-	
-
 }
