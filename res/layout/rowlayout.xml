@@ -53,7 +53,7 @@
 
 			<TextView android:layout_height="wrap_content"
 				android:layout_width="wrap_content" android:text="show_timing"
-				android:id="@+id/show_time" android:textSize="5pt"
+				android:id="@+id/show_time" android:textSize="6pt"
 				android:layout_alignParentRight="true" />
 
 		</RelativeLayout>

@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@android:id/empty" android:orientation="vertical"
 	android:layout_width="match_parent" android:layout_height="match_parent"
-	android:background="@drawable/white" android:gravity="center_horizontal">
+	 android:gravity="center_horizontal" android:background="@xml/custom_bg">
 
 	<TextView android:text="@string/favorites_empty_text"
-		android:padding="15dp" android:id="@+id/textView1"
-		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:padding="10dp" android:id="@+id/textView1"
+		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
 		android:textStyle="italic" />
 	<Button android:text="Browse all shows" android:background="@xml/custom_blue_button"

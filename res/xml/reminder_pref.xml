@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<Preference android:title="TV Ticker India"
+		android:defaultValue="@string/ReminderPref_summary" android:key="Pref_summary_text"
+		android:selectable="false" android:summary="@string/ReminderPref_summary"/>
+		
+	<PreferenceCategory android:title="Set Reminders">
+		<ListPreference android:title="First Reminder"
+			android:summary="Tap to set reminder" android:key="first_reminder_pref"
+			android:entries="@array/first_pref" android:entryValues="@array/first_pref_values"
+			android:defaultValue="0" />
+		<ListPreference android:title="Second Reminder"
+			android:summary="Tap to set reminders" android:key="second_reminder_pref"
+			android:defaultValue="0" android:entries="@array/second_pref"
+			android:entryValues="@array/second_pref_values" />
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="Remind Shows">
+		<Preference android:title="Edit Shows" android:summary="Tap to edit my show reminders"
+			android:key="show_current_reminders" />
+	</PreferenceCategory>
+</PreferenceScreen>

@@ -28,9 +28,10 @@ class ViewPagerAdapter extends PagerAdapter {
 	private String[] pageTitles = null;
 	private int listViewId;
 	private static List<String> list = new ArrayList<String>();
-	
+
 	private ListView listView;
 	private Button browseAllShowsButton;
+	private Button customizeReminders = null;
 	// private View favListEmptyView;
 	private Context context = null;
 	private LazyAdapter lazyAdapter = null;
@@ -84,34 +85,59 @@ class ViewPagerAdapter extends PagerAdapter {
 		} else if (position == FAVORITES_POSITION) {
 
 			listData = context.getResources().getStringArray(R.array.list3);
-			list = convertToList(EMPTY);
-
+			list = convertToList(listData);
 			favoritesAdapter = new MyArrayAdapter((Activity) context,
 					R.layout.rowlayout, list, true);
-
-			View v = ((LayoutInflater) context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-					.inflate(R.layout.favorites_inflated_empty_view, null, false);
-			browseAllShowsButton = (Button) v
-					.findViewById(R.id.browseAllShowsButton);
-			browseAllShowsButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Intent browseShowsIntent = new Intent(context,
-							BrowseAllShowsActivity.class);
-					context.startActivity(browseShowsIntent);
-				}
-			});
-			
-			listView.addFooterView(v);
+			boolean isEmpty = favoritesAdapter.getCount() <= 0 ? true : false;
+			listView.addFooterView(getFooterView(isEmpty));
 			listView.setAdapter(favoritesAdapter);
-
 		}
 
 		listView.setOnItemClickListener(new CustomOnItemClickListener());
 		((ViewPager) collection).addView(listView, 0);
 
 		return listView;
+	}
+
+	/**
+	 * Inflates a view to be appended, as the footer.
+	 * 
+	 * @param isEmptyView, either true or false
+	 * @return view
+	 */
+	private View getFooterView(boolean isEmptyView) {
+		View v = null;
+		if (isEmptyView) {
+			v = ((LayoutInflater) context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+					.inflate(R.layout.favorites_inflated_empty_view, null,
+							false);
+		} else {
+			v = ((LayoutInflater) context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+					.inflate(R.layout.favorites_normal_footer, null, false);
+			customizeReminders = (Button) v
+					.findViewById(R.id.customizeReminders);
+			customizeReminders.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent reminderIntent = new Intent(context, ReminderPreferenceActivity.class);
+					context.startActivity(reminderIntent);
+				}
+			});
+		}
+
+		browseAllShowsButton = (Button) v
+				.findViewById(R.id.browseAllShowsButton);
+		browseAllShowsButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent browseShowsIntent = new Intent(context,
+						BrowseAllShowsActivity.class);
+				context.startActivity(browseShowsIntent);
+			}
+		});
+		return v;
 	}
 
 	// mock helper

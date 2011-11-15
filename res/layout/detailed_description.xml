@@ -64,7 +64,7 @@
 		<LinearLayout android:id="@+id/content" android:gravity="center"
 			android:background="@xml/rounded_border" android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_alignParentBottom="true" android:padding="3dp">
+			android:layout_alignParentBottom="true">
 
 			<ImageButton android:src="@xml/facebook_button"
 				android:background="@android:color/transparent" android:id="@+id/go_facebook_button"
@@ -74,6 +74,7 @@
 				android:layout_width="wrap_content" android:layout_height="wrap_content" />
 
 		</LinearLayout>
+		
 	</SlidingDrawer>
 
 </RelativeLayout>

@@ -18,5 +18,6 @@
 
 		<activity android:name=".DetailedDescriptionActivity" />
 		<activity android:name=".BrowseAllShowsActivity" />
+		<activity android:name=".ReminderPreferenceActivity"/>
 	</application>
 </manifest>
