@@ -2,6 +2,7 @@ package in.mobme.tvticker;
 
 import in.mobme.tvticker.customwidget.ViewPagerIndicator;
 import in.mobme.tvticker.customwidget.ViewPagerIndicator.PageInfoProvider;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -90,20 +91,17 @@ public class HomePageActivity extends FragmentActivity implements
 			ViewPagerIndicator.OnClickListener {
 		@Override
 		public void onCurrentClicked(View v) {
-			// TODO Auto-generated method stub
 			showMsg("On same page !");
 		}
 
 		@Override
 		public void onNextClicked(View v) {
-			// TODO Auto-generated method stub
 			awesomePager.setCurrentItem(Math.min(awesomeAdapter.getCount() - 1,
 					indicator.getCurrentPosition() + 1));
 		}
 
 		@Override
 		public void onPreviousClicked(View v) {
-			// TODO Auto-generated method stub
 			awesomePager.setCurrentItem(Math.max(0, indicator
 					.getCurrentPosition() - 1));
 		}
@@ -118,12 +116,17 @@ public class HomePageActivity extends FragmentActivity implements
 			showMsg("Ok");
 			break;
 		case SETTINGS_MENU_ITEM:
-			showMsg("Settings icon clicked");
+			showSettingsPage();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
+	private void showSettingsPage(){
+		Intent settingsIntent = new Intent(getBaseContext(), SettingsPreferenceActivity.class);
+		startActivity(settingsIntent);
+	}
+	
 	// helper method to show toasts !
 	private void showMsg(String msg) {
 		Toast toast = Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT);

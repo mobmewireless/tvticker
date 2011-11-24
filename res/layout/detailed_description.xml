@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="match_parent"
-	android:layout_height="match_parent" android:background="@xml/custom_bg">
+	android:layout_height="match_parent" android:background="@xml/custom_background">
 
 	<!-- Movie thumb and description -->
 	<RelativeLayout android:layout_width="match_parent"
@@ -49,32 +49,42 @@
 
 	</RelativeLayout>
 
+	<!-- Sliding drawer -->
 	<SlidingDrawer android:id="@+id/slidingDrawer1"
 		android:layout_alignParentBottom="true" android:layout_height="100dp"
 		android:handle="@+id/handle" android:content="@+id/content"
-		android:layout_marginTop="5dp" android:layout_width="match_parent">
+		android:layout_width="match_parent">
 
-		<Button android:text="Share with your friends"
-			android:background="@xml/custom_blue_button" android:layout_height="40dp"
-			android:layout_width="fill_parent" android:id="@+id/handle"
-			android:textColor="@drawable/white" android:paddingLeft="10dp"
-			android:paddingRight="10dp" android:drawableLeft="@drawable/ic_dots"
-			android:drawableRight="@drawable/ic_dots" />
+		<RelativeLayout android:id="@+id/handle"
+			android:padding="1dp" android:background="@xml/rounded_border"
+			android:layout_width="match_parent" android:layout_height="wrap_content">
 
+			<ImageView android:layout_height="wrap_content" android:id="@+id/left_handle"
+				android:layout_width="wrap_content" android:src="@drawable/ic_dots"
+				android:layout_alignParentLeft="true" />
+
+			<TextView android:layout_height="wrap_content" android:text="Share with your friends"
+				android:layout_centerInParent="true" android:id="@+id/handle_text"
+				android:textColor="@drawable/white" android:layout_width="wrap_content"
+				android:textStyle="bold" />
+
+			<ImageView android:layout_height="wrap_content" android:id="@+id/right_handle"
+				android:layout_width="wrap_content" android:src="@drawable/ic_dots"
+				android:layout_alignParentRight="true" />
+
+		</RelativeLayout>
 		<LinearLayout android:id="@+id/content" android:gravity="center"
-			android:background="@xml/rounded_border" android:layout_width="match_parent"
+			android:background="#999" android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true">
-
 			<ImageButton android:src="@xml/facebook_button"
 				android:background="@android:color/transparent" android:id="@+id/go_facebook_button"
 				android:layout_width="wrap_content" android:layout_height="wrap_content" />
 			<ImageButton android:src="@xml/twitter_button"
 				android:background="@android:color/transparent" android:id="@+id/go_twitter_button"
 				android:layout_width="wrap_content" android:layout_height="wrap_content" />
-
 		</LinearLayout>
-		
+
 	</SlidingDrawer>
 
 </RelativeLayout>

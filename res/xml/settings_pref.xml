@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="Reminder Settings">
+		<CheckBoxPreference android:key="enable_reminders"
+			android:title="Enable Reminders" />
+		<Preference android:dependency="enable_reminders"
+			android:title="Customize Reminders" android:summary="Advanced Settings"
+			android:key="customize_reminders" />
+	</PreferenceCategory>
+
+</PreferenceScreen>

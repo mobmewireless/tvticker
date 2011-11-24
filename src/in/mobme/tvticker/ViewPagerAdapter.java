@@ -23,7 +23,7 @@ class ViewPagerAdapter extends PagerAdapter {
 	final static int NOW_POSITION = 1;
 	final static int LATER_TODAY_POSITION = 2;
 
-	private String EMPTY[] = {};
+	//private String EMPTY[] = {};
 
 	private String[] pageTitles = null;
 	private int listViewId;
@@ -31,7 +31,6 @@ class ViewPagerAdapter extends PagerAdapter {
 
 	private ListView listView;
 	private Button browseAllShowsButton;
-	private Button customizeReminders = null;
 	// private View favListEmptyView;
 	private Context context = null;
 	private LazyAdapter lazyAdapter = null;
@@ -102,31 +101,17 @@ class ViewPagerAdapter extends PagerAdapter {
 	/**
 	 * Inflates a view to be appended, as the footer.
 	 * 
-	 * @param isEmptyView, either true or false
+	 * @param isEmptyView
+	 *            , either true or false
 	 * @return view
 	 */
 	private View getFooterView(boolean isEmptyView) {
 		View v = null;
-		if (isEmptyView) {
-			v = ((LayoutInflater) context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-					.inflate(R.layout.favorites_inflated_empty_view, null,
-							false);
-		} else {
-			v = ((LayoutInflater) context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-					.inflate(R.layout.favorites_normal_footer, null, false);
-			customizeReminders = (Button) v
-					.findViewById(R.id.customizeReminders);
-			customizeReminders.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Intent reminderIntent = new Intent(context, ReminderPreferenceActivity.class);
-					context.startActivity(reminderIntent);
-				}
-			});
-		}
+		v = ((LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
+				R.layout.favorites_inflated_empty_view, null, false);
 
+		//change text on textview and button based on isEmptyView here.. PENDING
 		browseAllShowsButton = (Button) v
 				.findViewById(R.id.browseAllShowsButton);
 		browseAllShowsButton.setOnClickListener(new OnClickListener() {

@@ -37,6 +37,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		menu.add(0, MENU_ADD_TO_FAVORITES, 0, "fav").setIcon(
 				R.drawable.ic_action_fav).setShowAsAction(
 				MenuItem.SHOW_AS_ACTION_ALWAYS);
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -49,7 +50,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		subTitle = "channel_name, Time";
 		imdbURL = getResources().getString(R.string.sample_imdb_url);
 
-		//configure action bar - private method
+		// configure action bar - private method
 		configureActionbarWith(getSupportActionBar(), title, subTitle);
 
 		movieThumb = (ImageView) findViewById(R.id.movie_thumb);
@@ -68,10 +69,10 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		movieThumb.setImageDrawable(getResources().getDrawable(
 				R.drawable.thumb_bu));
 		movieDescription.setText(R.string.sample_description);
-		
-		//adjust sliding drawer's handle opacity
-		adjustAlphaOf(R.id.handle,220);
-		
+
+		// adjust sliding drawer's handle opacity
+		adjustAlphaOf(R.id.handle, 220);
+
 		// button click listeners
 		readReviewsButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -98,7 +99,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		});
 	}
 
-	//Action bar menu item click listener.
+	// Action bar menu item click listener.
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -123,7 +124,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		actionBar.setSubtitle(subTitle);
 	}
 
-	//helpers for Imdb Rating bar
+	// helpers for Imdb Rating bar
 	private String getFormattedImdbTextRatingFor(float rating) {
 		return "IMDB " + rating + "/10";
 	}
@@ -133,8 +134,8 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		imdbRating.setRating(rating);
 
 	}
-	
-	private void adjustAlphaOf(int resId, int alpha){
+
+	private void adjustAlphaOf(int resId, int alpha) {
 		this.findViewById(resId).getBackground().setAlpha(alpha);
 	}
 

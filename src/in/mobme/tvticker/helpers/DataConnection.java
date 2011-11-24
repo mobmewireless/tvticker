@@ -13,7 +13,7 @@ public class DataConnection {
 	final static int TYPE_3G = TelephonyManager.NETWORK_TYPE_UMTS;
 	final static int TYPE_HSDPA = TelephonyManager.NETWORK_TYPE_HSDPA;
 	final static int TYPE_EDGE = TelephonyManager.NETWORK_TYPE_EDGE;
-	final static int TYPE_WIFI = ConnectivityManager.TYPE_WIFI;
+	final static int TYPE_WIFI = ConnectivityManager.TYPE_WIFI + 100;
 
 	private ConnectivityManager cManager;
 

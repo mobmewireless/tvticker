@@ -14,6 +14,9 @@ public class Models {
 	private final static String KEY_CHANNEL_ROW_ID = "channel_id";
 	private final static String KEY_CATEGORY_ROW_ID = "category_id";
 	private final static String KEY_IMDB_ROW_ID = "imdb_id";
+	
+	final static int IS_TRUE = 1;
+	final static int IS_FALSE = 0;
 
 	/* Media Info table */
 	class Mediainfo {
@@ -28,15 +31,13 @@ public class Models {
 		final static String MEDIA_CAT_ID = KEY_CATEGORY_ROW_ID;
 		final static String IS_FAVORITE_FLAG = "is_favorite";
 
-		final static int IS_FAVORITE = 1;
-		final static int IS_NOT_FAVORITE = 0;
-
 		/* media_table create query */
-		final static String MEDIA_TABLE_CREATE = "create table if not exists " + TABLE_NAME
-				+ "(" + ROW_ID + " integer primary key autoincrement, "
-				+ MEDIA_TITLE + " text, " + MEDIA_DESCRIPTION + " text, "
-				+ MEDIA_THUMB + " text, " + MEDIA_IMDB_ID + " integer, "
-				+ IS_FAVORITE_FLAG + " integer, " + MEDIA_CAT_ID + " integer)";
+		final static String MEDIA_TABLE_CREATE = "create table if not exists "
+				+ TABLE_NAME + "(" + ROW_ID
+				+ " integer primary key autoincrement, " + MEDIA_TITLE
+				+ " text, " + MEDIA_DESCRIPTION + " text, " + MEDIA_THUMB
+				+ " text, " + MEDIA_IMDB_ID + " integer, " + IS_FAVORITE_FLAG
+				+ " integer, " + MEDIA_CAT_ID + " integer)";
 
 		/* media_table drop query */
 		final static String MEDIA_TABLE_DROP = "DROP TABLE IF EXISTS "
@@ -54,9 +55,13 @@ public class Models {
 		final static String CHANNEL_NAME = "channel_name";
 
 		/* channel_table create query */
-		final static String CHANNEL_TABLE_CREATE = "create table if not exists " + TABLE_NAME
-				+ "(" + ROW_ID + " integer primary key autoincrement, "
-				+ CHANNEL_NAME + " text )";
+		final static String CHANNEL_TABLE_CREATE = "create table if not exists "
+				+ TABLE_NAME
+				+ "("
+				+ ROW_ID
+				+ " integer primary key autoincrement, "
+				+ CHANNEL_NAME
+				+ " text )";
 
 		/* channel_table drop query */
 		final static String CHANNEL_TABLE_DROP = "DROP TABLE IF EXISTS "
@@ -69,16 +74,22 @@ public class Models {
 		final static String TABLE_NAME = "channel_media_info";
 
 		/* columns */
-		final static String ROW_ID = KEY_MEDIA_ROW_ID;
-		final static String MEDIA_ID = KEY_ROW_ID;
+		final static String ROW_ID = KEY_ROW_ID;
+		final static String MEDIA_ID = KEY_MEDIA_ROW_ID;
 		final static String CHANNEL_ID = KEY_CHANNEL_ROW_ID;
 		final static String AIR_TIME = "show_time";
 
 		/* channel_media_table create query */
 		final static String CHANNEL_MEDIA_TABLE_CREATE = "create table if not exists "
-				+ TABLE_NAME + "(" + ROW_ID
-				+ " integer primary key autoincrement, " + MEDIA_ID
-				+ " integer, " + CHANNEL_ID + " integer, " + AIR_TIME
+				+ TABLE_NAME
+				+ "("
+				+ ROW_ID
+				+ " integer primary key autoincrement, "
+				+ MEDIA_ID
+				+ " integer, "
+				+ CHANNEL_ID
+				+ " integer, "
+				+ AIR_TIME
 				+ " text)";
 
 		/* channel_media_table drop query */
@@ -98,8 +109,11 @@ public class Models {
 
 		/* category_table create query */
 		final static String CATEGORY_TABLE_CREATE = "create table if not exists "
-				+ TABLE_NAME + "(" + ROW_ID
-				+ " integer primary key autoincrement, " + CATAGORY_TYPE
+				+ TABLE_NAME
+				+ "("
+				+ ROW_ID
+				+ " integer primary key autoincrement, "
+				+ CATAGORY_TYPE
 				+ " text )";
 
 		/* category_table drop query */
@@ -118,12 +132,38 @@ public class Models {
 		final static String IMDB_LINK = "link";
 
 		/* imdb_table create query */
-		final static String IMDB_TABLE_CREATE = "create table if not exists " + TABLE_NAME
-				+ "(" + ROW_ID + " integer primary key autoincrement, "
-				+ IMDB_RATING + " real, " + IMDB_LINK + " text )";
+		final static String IMDB_TABLE_CREATE = "create table if not exists "
+				+ TABLE_NAME + "(" + ROW_ID
+				+ " integer primary key autoincrement, " + IMDB_RATING
+				+ " real, " + IMDB_LINK + " text )";
 
 		/* imdb_table drop query */
 		final static String IMDB_TABLE_DROP = "DROP TABLE IF EXISTS "
+				+ TABLE_NAME;
+	}
+
+	/* Reminders Info table */
+	class Remindersinfo {
+		/* table name */
+		final static String TABLE_NAME = "reminders_info";
+
+		/* columns */
+		final static String ROW_ID = KEY_ROW_ID;
+		final static String MEDIA_ID = KEY_MEDIA_ROW_ID;
+		final static String REMINDER_ENABLED = "reminder_flag";
+
+		/* reminders_table create query */
+		final static String REMINDER_TABLE_CREATE = "create table if not exists "
+				+ TABLE_NAME
+				+ "("
+				+ ROW_ID
+				+ " integer primary key autoincrement, "
+				+ MEDIA_ID
+				+ " integer, "
+				+ REMINDER_ENABLED + " integer)";
+		
+		/* reminder_table drop query */
+		final static String REMINDER_TABLE_DROP = "DROP TABLE IF EXISTS "
 				+ TABLE_NAME;
 	}
 
