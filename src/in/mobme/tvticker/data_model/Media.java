@@ -12,9 +12,12 @@ public class Media implements MediaBase, Category, Channel, IMDB {
 	String mediaDescription;
 	String showTime;
 	String imdbLink;
+	String showEndTime;
+	String showDuration;
 	float imdbRating;
 	int categoryType;
 	int onChannel;
+	int seriesId;
 	boolean isFavorite = false;
 
 	//media specific methods
@@ -67,6 +70,36 @@ public class Media implements MediaBase, Category, Channel, IMDB {
 	public void setIsFavorite(boolean isFav) {
 		this.isFavorite = isFav;
 	}
+	
+	@Override
+	public String getShowDuration() {
+		return showDuration;
+	}
+	
+	@Override
+	public void setShowDuration(String showDuration) {
+		this.showDuration = showDuration;
+	}
+
+	@Override
+	public String getShowEndTime() {
+		return showEndTime;
+	}
+	
+	@Override
+	public void setShowEndTime(String showEndTime) {
+		this.showEndTime = showEndTime;
+	}
+	
+	@Override
+	public int getSeriesID() {
+		return seriesId;
+	}
+
+	@Override
+	public void setSeriesID(int seriesId) {
+		this.seriesId = seriesId;
+	}
 
 	//Category specific
 	@Override
@@ -79,6 +112,7 @@ public class Media implements MediaBase, Category, Channel, IMDB {
 		this.categoryType = type;
 	}
 
+	
 	//Channel specific
 	@Override
 	public int getChannel() {
@@ -89,6 +123,7 @@ public class Media implements MediaBase, Category, Channel, IMDB {
 	public void setChannel(int onChannel) {
 		this.onChannel = onChannel;
 	}
+	
 	
 	//Imdb specific
 	@Override
