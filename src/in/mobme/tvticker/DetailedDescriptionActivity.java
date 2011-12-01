@@ -1,5 +1,12 @@
 package in.mobme.tvticker;
 
+import in.mobme.tvticker.customwidget.WebImageView;
+import in.mobme.tvticker.data_model.Media;
+import in.mobme.tvticker.database.TvTickerDBAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,7 +19,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,14 +26,18 @@ import android.widget.Toast;
 public class DetailedDescriptionActivity extends FragmentActivity {
 
 	private final int MENU_ADD_TO_FAVORITES = 1;
-	private ImageView movieThumb = null;
+	private WebImageView movieThumb = null;
 	private TextView movieDescription = null;
 	private Button readReviewsButton = null;
 	private TextView imdbRatingText = null;
 	private RatingBar imdbRating = null;
 	private ImageButton faceBookButton = null;
 	private ImageButton twitterButton = null;
+	private TvTickerDBAdapter tvDataAdapter = null;
+	private static List<Media> mediaList = new ArrayList<Media>();
 
+	
+	int mediaPos = 0;
 	String title;
 	String subTitle;
 	String imdbURL;
@@ -45,15 +55,21 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.detailed_description);
+		mediaPos = getIntent().getExtras().getInt("selectedItem");
+		tvDataAdapter = new TvTickerDBAdapter(this);
+		tvDataAdapter.open();
+		mediaList = tvDataAdapter.fetchAllMediaInfo();
+		tvDataAdapter.close();
+		Media media = mediaList.get(mediaPos);
 
-		title = getIntent().getExtras().getString("selectedItem");
-		subTitle = "channel_name, Time";
-		imdbURL = getResources().getString(R.string.sample_imdb_url);
+		title = media.getMediaTitle();
+		subTitle = "channel_name, " + media.getShowTime();
+		imdbURL = media.getImdbLink();
 
 		// configure action bar - private method
 		configureActionbarWith(getSupportActionBar(), title, subTitle);
 
-		movieThumb = (ImageView) findViewById(R.id.movie_thumb);
+		movieThumb = (WebImageView) findViewById(R.id.movie_thumb);
 		movieDescription = (TextView) findViewById(R.id.movie_description);
 		readReviewsButton = (Button) findViewById(R.id.button_go_imdb);
 
@@ -64,11 +80,10 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		imdbRating = (RatingBar) findViewById(R.id.imdb_ratingBar);
 
 		// set up IMDB rating got from web api, here
-		createIMDBRatingIndicator(8.5f);
+		createIMDBRatingIndicator(media.getImdbRating());
 
-		movieThumb.setImageDrawable(getResources().getDrawable(
-				R.drawable.thumb_bu));
-		movieDescription.setText(R.string.sample_description);
+		movieThumb.setImageWithURL(this, media.getMediaThumb());
+		movieDescription.setText(media.getMediaDescription());
 
 		// adjust sliding drawer's handle opacity
 		adjustAlphaOf(R.id.handle, 220);

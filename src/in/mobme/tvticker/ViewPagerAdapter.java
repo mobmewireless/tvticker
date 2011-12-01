@@ -1,5 +1,8 @@
 package in.mobme.tvticker;
 
+import in.mobme.tvticker.data_model.Media;
+import in.mobme.tvticker.database.TvTickerDBAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +12,7 @@ import android.content.Intent;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +31,8 @@ class ViewPagerAdapter extends PagerAdapter {
 
 	private String[] pageTitles = null;
 	private int listViewId;
-	private static List<String> list = new ArrayList<String>();
+	//private static List<String> list = new ArrayList<String>();
+	private static List<Media> mediaList = new ArrayList<Media>();
 
 	private ListView listView;
 	private Button browseAllShowsButton;
@@ -35,11 +40,17 @@ class ViewPagerAdapter extends PagerAdapter {
 	private Context context = null;
 	private LazyAdapter lazyAdapter = null;
 	private MyArrayAdapter favoritesAdapter = null;
+	private TvTickerDBAdapter tvDataAdapter = null;
 
 	public ViewPagerAdapter(int listViewIdentifier, String[] titles, Context ctx) {
 		this.pageTitles = titles;
 		this.listViewId = listViewIdentifier;
 		this.context = ctx;
+		this.tvDataAdapter = new TvTickerDBAdapter(context);
+		tvDataAdapter.open();
+		mediaList = tvDataAdapter.fetchAllMediaInfo();
+		Log.i("Hello say, ", "" +mediaList.size());
+		tvDataAdapter.close();
 	}
 
 	@Override
@@ -66,27 +77,29 @@ class ViewPagerAdapter extends PagerAdapter {
 				.getLayoutInflater();
 		listView = (ListView) layoutInflater.inflate(listViewId, null);
 
-		String[] listData = null;
+		//String[] listData = null;
+		
+		
 		if (position == NOW_POSITION) {
 
-			listData = context.getResources().getStringArray(R.array.list1);
-			list = convertToList(listData);
-			lazyAdapter = new LazyAdapter((Activity) context, list, true);
+			//listData = context.getResources().getStringArray(R.array.list1);
+			//list = convertToList(listData);
+			lazyAdapter = new LazyAdapter((Activity) context, mediaList, true);
 			listView.setAdapter(lazyAdapter);
 
 		} else if (position == LATER_TODAY_POSITION) {
 
-			listData = context.getResources().getStringArray(R.array.list2);
-			list = convertToList(listData);
-			lazyAdapter = new LazyAdapter((Activity) context, list, true);
+			//listData = context.getResources().getStringArray(R.array.list2);
+			//list = convertToList(listData);
+			lazyAdapter = new LazyAdapter((Activity) context, mediaList, true);
 			listView.setAdapter(lazyAdapter);
 
 		} else if (position == FAVORITES_POSITION) {
 
-			listData = context.getResources().getStringArray(R.array.list3);
-			list = convertToList(listData);
+			//listData = context.getResources().getStringArray(R.array.list3);
+			//list = convertToList(listData);
 			favoritesAdapter = new MyArrayAdapter((Activity) context,
-					R.layout.rowlayout, list, true);
+					R.layout.rowlayout, mediaList, true);
 			boolean isEmpty = favoritesAdapter.getCount() <= 0 ? true : false;
 			listView.addFooterView(getFooterView(isEmpty));
 			listView.setAdapter(favoritesAdapter);
@@ -126,13 +139,13 @@ class ViewPagerAdapter extends PagerAdapter {
 	}
 
 	// mock helper
-	private List<String> convertToList(String[] items) {
-		List<String> list = new ArrayList<String>();
-		for (String item : items) {
-			list.add(item);
-		}
-		return list;
-	}
+//	private List<String> convertToList(String[] items) {
+//		List<String> list = new ArrayList<String>();
+//		for (String item : items) {
+//			list.add(item);
+//		}
+//		return list;
+//	}
 
 	// handles list item click
 	private class CustomOnItemClickListener implements OnItemClickListener {
@@ -145,7 +158,7 @@ class ViewPagerAdapter extends PagerAdapter {
 			// Toast.makeText(context, selectedItem, Toast.LENGTH_LONG).show();
 			Intent detailedViewIntent = new Intent(context,
 					DetailedDescriptionActivity.class);
-			detailedViewIntent.putExtra("selectedItem", selectedItem);
+			detailedViewIntent.putExtra("selectedItem", position);
 			context.startActivity(detailedViewIntent);
 		}
 	}

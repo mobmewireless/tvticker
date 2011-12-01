@@ -70,11 +70,12 @@ public class TvTickerDBAdapter {
 	 * @return Returns affected row id.
 	 */
 	public long createNewMediaInfo(Media media) {
-		initialValues.clear();
 		long mediaId = insertMedia(media);
+		initialValues.clear();
 		initialValues.put(ChannelMediaInfo.MEDIA_ID, mediaId);
 		initialValues.put(ChannelMediaInfo.CHANNEL_ID, media.getChannel());
 		initialValues.put(ChannelMediaInfo.AIR_TIME, media.getShowTime());
+		initialValues.put(ChannelMediaInfo.END_TIME, media.getShowEndTime());
 		return mDb.insert(ChannelMediaInfo.TABLE_NAME, null, initialValues);
 	}
 
@@ -87,8 +88,8 @@ public class TvTickerDBAdapter {
 		Media media = null;
 		mCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
 				ChannelMediaInfo.ROW_ID, ChannelMediaInfo.MEDIA_ID,
-				ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME }, null,
-				null, null, null, null);
+				ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME,
+				ChannelMediaInfo.END_TIME }, null, null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 			while (mCursor.isAfterLast() == false) {
@@ -99,6 +100,8 @@ public class TvTickerDBAdapter {
 						.getColumnIndexOrThrow(ChannelMediaInfo.CHANNEL_ID)));
 				media.setShowTime(mCursor.getString(mCursor
 						.getColumnIndexOrThrow(ChannelMediaInfo.AIR_TIME)));
+				media.setShowEndTime(mCursor.getString(mCursor
+						.getColumnIndexOrThrow(ChannelMediaInfo.END_TIME)));
 				mediaList.add(media);
 				mCursor.moveToNext();
 			}
@@ -113,6 +116,8 @@ public class TvTickerDBAdapter {
 	 * @return Returns affected row id.
 	 */
 	private long insertMedia(Media media) {
+		long imdbId = insertImdbEntryFor(media.getImdbRating(), media
+				.getImdbLink());
 		initialValues.clear();
 		initialValues.put(Mediainfo.MEDIA_TITLE, media.getMediaTitle());
 		initialValues.put(Mediainfo.MEDIA_DESCRIPTION, media
@@ -121,8 +126,8 @@ public class TvTickerDBAdapter {
 		initialValues.put(Mediainfo.IS_FAVORITE_FLAG,
 				sanitiseBooleanToInteger(media.isFavorite()));
 		initialValues.put(Mediainfo.MEDIA_CAT_ID, media.getCategoryType());
-		long imdbId = insertImdbEntryFor(media.getImdbRating(), media
-				.getImdbLink());
+		initialValues.put(Mediainfo.MEDIA_DURATION, media.getShowDuration());
+		initialValues.put(Mediainfo.SERIES_ID, media.getSeriesID());
 		initialValues.put(Mediainfo.MEDIA_IMDB_ID, imdbId);
 		return mDb.insert(Mediainfo.TABLE_NAME, null, initialValues);
 	}
@@ -134,14 +139,16 @@ public class TvTickerDBAdapter {
 	 */
 	private Media fetchMediaFor(long this_id) {
 		Media media = null;
-		mCursor = mDb.query(true, Mediainfo.TABLE_NAME, new String[] {
+		Cursor tmpCursor = mDb.query(true, Mediainfo.TABLE_NAME, new String[] {
 				Mediainfo.ROW_ID, Mediainfo.MEDIA_TITLE,
 				Mediainfo.MEDIA_DESCRIPTION, Mediainfo.MEDIA_THUMB,
 				Mediainfo.IS_FAVORITE_FLAG, Mediainfo.MEDIA_CAT_ID,
-				Mediainfo.MEDIA_IMDB_ID }, Mediainfo.ROW_ID + "=" + this_id,
-				null, null, null, null, null);
-		if (mCursor != null) {
-			media = getMediaFromCursor(mCursor);
+				Mediainfo.MEDIA_IMDB_ID, Mediainfo.MEDIA_DURATION,
+				Mediainfo.SERIES_ID }, Mediainfo.ROW_ID + "=" + this_id, null,
+				null, null, null, null);
+		if (tmpCursor != null) {
+			media = getMediaFromCursor(tmpCursor);
+			tmpCursor.close();
 		}
 		return media;
 	}
@@ -165,15 +172,21 @@ public class TvTickerDBAdapter {
 				.getColumnIndexOrThrow(Mediainfo.IS_FAVORITE_FLAG))));
 		media.setCategoryType(cursor.getInt(cursor
 				.getColumnIndexOrThrow(Mediainfo.MEDIA_CAT_ID)));
+		media.setShowDuration(cursor.getString(cursor
+				.getColumnIndexOrThrow(Mediainfo.MEDIA_DURATION)));
+		media.setSeriesID(cursor.getInt(cursor
+				.getColumnIndexOrThrow(Mediainfo.SERIES_ID)));
 
 		// get imdb details of this media from IMDBInfo table.
 		Cursor tmpCursor = getImdbDetailsFor(cursor.getInt(cursor
 				.getColumnIndexOrThrow(Mediainfo.MEDIA_IMDB_ID)));
+		tmpCursor.moveToFirst();
 		media.setImdbRating(tmpCursor.getFloat(tmpCursor
 				.getColumnIndexOrThrow(ImdbInfo.IMDB_RATING)));
 		media.setImdbLink(tmpCursor.getString(tmpCursor
 				.getColumnIndexOrThrow(ImdbInfo.IMDB_LINK)));
 		tmpCursor.close();
+		cursor.close();
 		return media;
 	}
 
@@ -217,11 +230,10 @@ public class TvTickerDBAdapter {
 	 * @return Returns cursor over Imdb details.
 	 */
 	public Cursor getImdbDetailsFor(long this_id) {
-		mCursor = mDb.query(true, ImdbInfo.TABLE_NAME, new String[] {
+		return mDb.query(true, ImdbInfo.TABLE_NAME, new String[] {
 				ImdbInfo.ROW_ID, ImdbInfo.IMDB_RATING, ImdbInfo.IMDB_LINK },
 				Mediainfo.ROW_ID + "=" + this_id, null, null, null, null, null);
 
-		return mCursor;
 	}
 
 	/**
@@ -286,10 +298,9 @@ public class TvTickerDBAdapter {
 	 * @return Cursor over all channels
 	 * */
 	public Cursor fetchAllChannels() {
-		mCursor = mDb.query(ChannelsInfo.TABLE_NAME, new String[] {
+		return mDb.query(ChannelsInfo.TABLE_NAME, new String[] {
 				ChannelsInfo.ROW_ID, ChannelsInfo.CHANNEL_NAME }, null, null,
 				null, null, null);
-		return mCursor;
 	}
 
 	/**
@@ -299,10 +310,10 @@ public class TvTickerDBAdapter {
 	 * @return Cursor over all Categories.
 	 * */
 	public Cursor fetchAllCategories() {
-		mCursor = mDb.query(CategoriesInfo.TABLE_NAME, new String[] {
+		return mDb.query(CategoriesInfo.TABLE_NAME, new String[] {
 				CategoriesInfo.ROW_ID, CategoriesInfo.CATAGORY_TYPE }, null,
 				null, null, null, null);
-		return mCursor;
+
 	}
 
 	/**

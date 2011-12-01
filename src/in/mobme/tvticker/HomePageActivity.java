@@ -35,7 +35,7 @@ public class HomePageActivity extends FragmentActivity implements
 		// menu.add(0, SEARCH_MENU_ITEM, 0, "").setIcon(
 		// R.drawable.ic_action_search).setShowAsAction(
 		// MenuItem.SHOW_AS_ACTION_ALWAYS);
-		
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -44,8 +44,10 @@ public class HomePageActivity extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		getSupportActionBar().setTitle(getResources().getString(R.string.home_page_title));
-		awesomeAdapter = new ViewPagerAdapter(R.layout.default_listview, titles, this);
+		getSupportActionBar().setTitle(
+				getResources().getString(R.string.home_page_title));
+		awesomeAdapter = new ViewPagerAdapter(R.layout.default_listview,
+				titles, this);
 		awesomePager = (ViewPager) findViewById(R.id.awesomepager);
 		indicator = (ViewPagerIndicator) findViewById(R.id.indicator);
 
@@ -62,9 +64,10 @@ public class HomePageActivity extends FragmentActivity implements
 		// Set images for previous and next arrows.
 		indicator.setArrows(prev, next);
 		indicator.setOnClickListener(new OnIndicatorClickListener());
+
 	}
 
-	//need to remember indicator position, if app is on pause
+	// need to remember indicator position, if app is on pause
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		// Save UI state changes to the savedInstanceState.
@@ -75,7 +78,7 @@ public class HomePageActivity extends FragmentActivity implements
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
-	//restore indicator position, if on resume
+	// restore indicator position, if on resume
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
@@ -107,8 +110,8 @@ public class HomePageActivity extends FragmentActivity implements
 		}
 
 	}
-	
-	//Action Bar menu item click events 
+
+	// Action Bar menu item click events
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -122,11 +125,12 @@ public class HomePageActivity extends FragmentActivity implements
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void showSettingsPage(){
-		Intent settingsIntent = new Intent(getBaseContext(), SettingsPreferenceActivity.class);
+	private void showSettingsPage() {
+		Intent settingsIntent = new Intent(getBaseContext(),
+				SettingsPreferenceActivity.class);
 		startActivity(settingsIntent);
 	}
-	
+
 	// helper method to show toasts !
 	private void showMsg(String msg) {
 		Toast toast = Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT);

@@ -9,9 +9,11 @@
 		android:background="@xml/rounded_border_white"
 		android:layout_marginTop="20dp" android:layout_height="wrap_content"
 		android:id="@+id/relativeLayoutMovieMeta">
-		<ImageView android:layout_height="80dp" android:id="@+id/movie_thumb"
+		<in.mobme.tvticker.customwidget.WebImageView
+			android:layout_height="80dp" android:id="@+id/movie_thumb"
 			android:src="@drawable/thumb_bu" android:layout_width="60dp"
-			android:layout_alignParentTop="true" android:layout_alignParentLeft="true" />
+			android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+			android:background="#00000000" />
 
 		<TextView android:layout_height="wrap_content" android:text=""
 			android:textSize="6.8pt" android:id="@+id/movie_description"

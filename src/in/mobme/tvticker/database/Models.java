@@ -57,6 +57,7 @@ public class Models {
 		/* columns */
 		final static String ROW_ID = KEY_ROW_ID;
 		final static String CHANNEL_NAME = "channel_name";
+		final static String IS_FAVORITE_CHANNEL = "is_favorite";
 
 		/* channel_table create query */
 		final static String CHANNEL_TABLE_CREATE = "create table if not exists "
@@ -64,6 +65,8 @@ public class Models {
 				+ "("
 				+ ROW_ID
 				+ " integer primary key autoincrement, "
+				+ IS_FAVORITE_CHANNEL
+				+ " integer, "
 				+ CHANNEL_NAME
 				+ " text )";
 
@@ -188,7 +191,7 @@ public class Models {
 				+ " text)";
 
 		/* series_table drop query */
-		final static String REMINDER_TABLE_DROP = "DROP TABLE IF EXISTS "
+		final static String SERIES_TABLE_DROP = "DROP TABLE IF EXISTS "
 				+ TABLE_NAME;
 
 	}

@@ -1,6 +1,7 @@
 package in.mobme.tvticker;
 
 import in.mobme.tvticker.customwidget.WebImageView;
+import in.mobme.tvticker.data_model.Media;
 
 import java.util.List;
 
@@ -13,19 +14,19 @@ import android.widget.ArrayAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-public class MyArrayAdapter extends ArrayAdapter<String>{
+public class MyArrayAdapter extends ArrayAdapter<Media> {
 
 	private Activity context = null;
-	private List<String> names = null;
+	private List<Media> mediaList = null;
 	private int rowLayoutId;
 	private Drawable placeHolder = null;
 	private boolean showThumb = true;
 
 	public MyArrayAdapter(Activity context, int textViewResourceId,
-			List<String> list2, boolean displayThumb) {
+			List<Media> list2, boolean displayThumb) {
 		super(context, textViewResourceId, list2);
 		this.context = context;
-		this.names = list2;
+		this.mediaList = list2;
 		this.rowLayoutId = textViewResourceId;
 		placeHolder = context.getResources().getDrawable(
 				R.drawable.ic_placehoder);
@@ -76,15 +77,13 @@ public class MyArrayAdapter extends ArrayAdapter<String>{
 			holder = (ViewHolder) rowView.getTag();
 		}
 
-		holder.movieTitle.setText(names.get(position));
+		Media media = mediaList.get(position);
+
+		holder.movieTitle.setText(media.getMediaTitle());
 		if (showThumb) {
-			holder.imageView
-					.setImageWithURL(
-							context,
-							"http://www.movieposterdb.com/posters/09_11/2007/440963/l_440963_40b30439.jpg",
-							placeHolder);
+			holder.imageView.setImageWithURL(context, media.getMediaThumb());
 		}
-		holder.imdbRatingBar.setRating(sanitizeRatingValue(9f));
+		holder.imdbRatingBar.setRating(sanitizeRatingValue(media.getImdbRating()));
 		return rowView;
 	}
 

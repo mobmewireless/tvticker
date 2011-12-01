@@ -37,6 +37,9 @@ public class TvTickerDBHelper extends SQLiteOpenHelper {
 		database.execSQL(CategoriesInfo.CATEGORY_TABLE_CREATE);
 		database.execSQL(ImdbInfo.IMDB_TABLE_CREATE);
 		database.execSQL(Remindersinfo.REMINDER_TABLE_CREATE);
+		database.execSQL(SeriesInfo.SERIES_TABLE_CREATE);
+		database.execSQL(ChannelMediaInfo.CHANNEL_MEDIA_TABLE_CREATE);
+		Log.i(TvTickerDBHelper.class.getName(), "Successfully Created tables !");
 	}
 	
 	private void dropTablesFrom( SQLiteDatabase database){
@@ -45,6 +48,9 @@ public class TvTickerDBHelper extends SQLiteOpenHelper {
 		database.execSQL(CategoriesInfo.CATEGORY_TABLE_DROP);
 		database.execSQL(ImdbInfo.IMDB_TABLE_DROP);
 		database.execSQL(Remindersinfo.REMINDER_TABLE_DROP);
+		database.execSQL(SeriesInfo.SERIES_TABLE_DROP);
+		database.execSQL(ChannelMediaInfo.CHANNEL_MEDIA_TABLE_DROP);
+		Log.i(TvTickerDBHelper.class.getName(), "Successfully dropped tables !");
 	}
 
 }

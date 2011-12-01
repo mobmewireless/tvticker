@@ -1,5 +1,6 @@
 package in.mobme.tvticker;
 
+import in.mobme.tvticker.helpers.DataMocker;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,38 +10,52 @@ import android.view.KeyEvent;
 public class SplashActivity extends Activity {
 
 	protected boolean _active = true;
-	protected int _splashTime = 2000; // time to display the splash screen in ms
+	protected int _splashTime = 1000; // time to display the splash screen in ms
+	protected boolean isDisabled = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splashscreen);
 
-		// thread for displaying the SplashScreen
-		Thread splashTread = new Thread() {
-			@Override
-			public void run() {
-				try {
-					int waited = 0;
-					while (_active && (waited < _splashTime)) {
-						//will need to do something usefull here. Right now just sleeping..
-						sleep(100);
+		if (isDisabled) {
+			finish();
+			startActivity(new Intent(getBaseContext(), HomePageActivity.class));
+		} else {
+			// thread for displaying the SplashScreen
+			Thread splashTread = new Thread() {
+				@Override
+				public void run() {
+					try {
+						int waited = 0;
+						while (_active && (waited < _splashTime)) {
+							// will need to do something useful here. Right now
+							// just sleeping..
+							sleep(100);
+							// Experiment
+//							DataMocker dataMocker = new DataMocker(getBaseContext());
+//							try {
+//								dataMocker.startMocking();
+//							} catch (Exception e) {
+//								Log.e("TvTicker_data_mocker", e.toString());
+//							}
+							if (_active) {
+								waited += 100;
+							}
+						}
+					} catch (InterruptedException e) {
+						// do nothing
+					} finally {
+						finish();
 						if (_active) {
-							waited += 100;
+							startActivity(new Intent(getBaseContext(),
+									HomePageActivity.class));
 						}
 					}
-				} catch (InterruptedException e) {
-					// do nothing
-				} finally {
-					finish();
-					if (_active) {
-						startActivity(new Intent(getBaseContext(),
-								HomePageActivity.class));
-					}
 				}
-			}
-		};
-		splashTread.start();
+			};
+			splashTread.start();
+		}
 	}
 
 	@Override

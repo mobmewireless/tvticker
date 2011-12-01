@@ -1,10 +1,10 @@
 package in.mobme.tvticker;
 
-import java.util.ArrayList;
+import in.mobme.tvticker.data_model.Media;
+
 import java.util.List;
 
 import android.app.Activity;
-import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -21,7 +21,7 @@ public class LazyAdapter extends EndlessAdapter {
 	private Activity context;
 	
 
-	LazyAdapter(Activity ctx, List<String> list2, boolean displayThumb) {
+	LazyAdapter(Activity ctx, List<Media> list2, boolean displayThumb) {
 		super(ctx, new MyArrayAdapter((Activity) ctx, R.layout.rowlayout,
 				list2, displayThumb), R.layout.pending);
 		context = ctx;
@@ -45,11 +45,11 @@ public class LazyAdapter extends EndlessAdapter {
 	//do network calls or time consuming process here.
 	@Override
 	protected boolean cacheInBackground() throws Exception {
-		SystemClock.sleep(10000); // pretend to do work
-		System.out.println(getWrappedAdapter().getCount());
-		if (getWrappedAdapter().getCount() < 50) {
-			return (true);
-		}
+//		SystemClock.sleep(10000); // pretend to do work
+//		System.out.println(getWrappedAdapter().getCount());
+//		if (getWrappedAdapter().getCount() < 50) {
+//			return (true);
+//		}
 		throw new Exception("Gadzooks!");
 	}
 
@@ -57,9 +57,9 @@ public class LazyAdapter extends EndlessAdapter {
 	@Override
 	protected void appendCachedData() {
 		if (getWrappedAdapter().getCount() < 50) {
-			MyArrayAdapter a = (MyArrayAdapter) getWrappedAdapter();
-			List<String> list = new ArrayList<String>();
-			for (int i=0;i<25;i++) { a.add(""+list.size() + 1);}
+//			MyArrayAdapter a = (MyArrayAdapter) getWrappedAdapter();
+//			List<String> list = new ArrayList<String>();
+//			for (int i=0;i<25;i++) { a.add(""+list.size() + 1);}
 		}
 	}
 }
