@@ -81,7 +81,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 
 		holder.movieTitle.setText(media.getMediaTitle());
 		if (showThumb) {
-			holder.imageView.setImageWithURL(context, media.getMediaThumb());
+			holder.imageView.setImageWithURL(context, media.getMediaThumb(),placeHolder);
 		}
 		holder.imdbRatingBar.setRating(sanitizeRatingValue(media.getImdbRating()));
 		return rowView;

@@ -96,6 +96,7 @@ public class TvTickerDBAdapter {
 				long media_id = mCursor.getLong(mCursor
 						.getColumnIndexOrThrow(ChannelMediaInfo.MEDIA_ID));
 				media = fetchMediaFor(media_id);
+				media.setId(media_id);
 				media.setChannel(mCursor.getInt(mCursor
 						.getColumnIndexOrThrow(ChannelMediaInfo.CHANNEL_ID)));
 				media.setShowTime(mCursor.getString(mCursor
@@ -237,19 +238,19 @@ public class TvTickerDBAdapter {
 	}
 
 	/**
-	 * Update isFavorite, set to Mediainfo.IS_FAVORITE or
+	 * Update isFavorite under MediaInfo table, set to Mediainfo.IS_FAVORITE or
 	 * Mediainfo.IS_NOT_FAVORITE
 	 * 
 	 * @return Returns true or false, status of update
 	 * */
 	public boolean setIsFavorite(long mediaId, boolean isFavorite,
 			boolean isReminderEnabled) {
+		// isReminderEnabled == true => user wants it to be
+		// reminded. so..
+		setReminderFor(mediaId, isReminderEnabled);
 		updateValues.clear();
 		updateValues.put(Mediainfo.IS_FAVORITE_FLAG,
 				sanitiseBooleanToInteger(isFavorite));
-		// isFavorite and isReminderEnabled == true => user wants it to be
-		// reminded. so..
-		setReminderFor(mediaId, isReminderEnabled);
 		return mDb.update(Mediainfo.TABLE_NAME, updateValues, Mediainfo.ROW_ID
 				+ "=" + mediaId, null) > 0;
 	}
@@ -264,7 +265,7 @@ public class TvTickerDBAdapter {
 		updateValues.put(Remindersinfo.MEDIA_ID, mediaId);
 		updateValues.put(Remindersinfo.REMINDER_ENABLED,
 				sanitiseBooleanToInteger(reminderEnabled));
-		return mDb.insert(Remindersinfo.TABLE_NAME, null, initialValues);
+		return mDb.insert(Remindersinfo.TABLE_NAME, null, updateValues);
 	}
 
 	/**

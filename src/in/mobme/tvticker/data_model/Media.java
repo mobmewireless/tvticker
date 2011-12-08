@@ -5,8 +5,12 @@ import in.mobme.tvticker.data_model.rules.Channel;
 import in.mobme.tvticker.data_model.rules.IMDB;
 import in.mobme.tvticker.data_model.rules.MediaBase;
 
-public class Media implements MediaBase, Category, Channel, IMDB {
+import java.io.Serializable;
 
+@SuppressWarnings("serial")
+public class Media implements MediaBase, Category, Channel, IMDB, Serializable {
+
+	long _id;
 	String mediaTitle;
 	String mediaThumb;
 	String mediaDescription;
@@ -20,6 +24,14 @@ public class Media implements MediaBase, Category, Channel, IMDB {
 	int seriesId;
 	boolean isFavorite = false;
 
+	public void setId(long _id){
+		this._id = _id;
+	}
+	
+	public long getId(){
+		return _id;
+	}
+	
 	//media specific methods
 	@Override
 	public String getShowTime() {

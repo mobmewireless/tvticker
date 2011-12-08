@@ -119,7 +119,7 @@ public class DataMocker {
 		media.setShowDuration(duration);
 		media.setShowEndTime(show_end);
 		media.setShowTime(showTime);
-		media.setIsFavorite(true);
+		media.setIsFavorite(false);
 		return media;
 	}
 

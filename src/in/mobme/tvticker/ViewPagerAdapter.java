@@ -9,6 +9,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -27,12 +28,13 @@ class ViewPagerAdapter extends PagerAdapter {
 	final static int NOW_POSITION = 1;
 	final static int LATER_TODAY_POSITION = 2;
 
-	//private String EMPTY[] = {};
+	// private String EMPTY[] = {};
 
 	private String[] pageTitles = null;
 	private int listViewId;
-	//private static List<String> list = new ArrayList<String>();
+
 	private static List<Media> mediaList = new ArrayList<Media>();
+	private static List<Media> favmediaList = new ArrayList<Media>();
 
 	private ListView listView;
 	private Button browseAllShowsButton;
@@ -41,6 +43,7 @@ class ViewPagerAdapter extends PagerAdapter {
 	private LazyAdapter lazyAdapter = null;
 	private MyArrayAdapter favoritesAdapter = null;
 	private TvTickerDBAdapter tvDataAdapter = null;
+	public static ViewPagerAdapter staticAdapterObj;
 
 	public ViewPagerAdapter(int listViewIdentifier, String[] titles, Context ctx) {
 		this.pageTitles = titles;
@@ -49,13 +52,26 @@ class ViewPagerAdapter extends PagerAdapter {
 		this.tvDataAdapter = new TvTickerDBAdapter(context);
 		tvDataAdapter.open();
 		mediaList = tvDataAdapter.fetchAllMediaInfo();
-		Log.i("Hello say, ", "" +mediaList.size());
+		favmediaList = getFavoriteMediaFrom(mediaList);
+		// Log.i("MediaList says, ", "" + mediaList.size());
+		// Log.i("FavList say, ", "" + favmediaList.size());
 		tvDataAdapter.close();
+		staticAdapterObj = this;
 	}
 
 	@Override
 	public int getCount() {
 		return pageTitles.length;
+	}
+
+	private List<Media> getFavoriteMediaFrom(List<Media> list) {
+		List<Media> fav_list = new ArrayList<Media>();
+		for (Media media : list) {
+			if (media.isFavorite() == true) {
+				fav_list.add(media);
+			}
+		}
+		return fav_list;
 	}
 
 	/**
@@ -77,29 +93,20 @@ class ViewPagerAdapter extends PagerAdapter {
 				.getLayoutInflater();
 		listView = (ListView) layoutInflater.inflate(listViewId, null);
 
-		//String[] listData = null;
-		
-		
 		if (position == NOW_POSITION) {
 
-			//listData = context.getResources().getStringArray(R.array.list1);
-			//list = convertToList(listData);
 			lazyAdapter = new LazyAdapter((Activity) context, mediaList, true);
 			listView.setAdapter(lazyAdapter);
 
 		} else if (position == LATER_TODAY_POSITION) {
 
-			//listData = context.getResources().getStringArray(R.array.list2);
-			//list = convertToList(listData);
 			lazyAdapter = new LazyAdapter((Activity) context, mediaList, true);
 			listView.setAdapter(lazyAdapter);
 
 		} else if (position == FAVORITES_POSITION) {
 
-			//listData = context.getResources().getStringArray(R.array.list3);
-			//list = convertToList(listData);
 			favoritesAdapter = new MyArrayAdapter((Activity) context,
-					R.layout.rowlayout, mediaList, true);
+					R.layout.rowlayout, favmediaList, true);
 			boolean isEmpty = favoritesAdapter.getCount() <= 0 ? true : false;
 			listView.addFooterView(getFooterView(isEmpty));
 			listView.setAdapter(favoritesAdapter);
@@ -124,7 +131,8 @@ class ViewPagerAdapter extends PagerAdapter {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
 				R.layout.favorites_inflated_empty_view, null, false);
 
-		//change text on textview and button based on isEmptyView here.. PENDING
+		// change text on textview and button based on isEmptyView here..
+		// PENDING
 		browseAllShowsButton = (Button) v
 				.findViewById(R.id.browseAllShowsButton);
 		browseAllShowsButton.setOnClickListener(new OnClickListener() {
@@ -138,27 +146,18 @@ class ViewPagerAdapter extends PagerAdapter {
 		return v;
 	}
 
-	// mock helper
-//	private List<String> convertToList(String[] items) {
-//		List<String> list = new ArrayList<String>();
-//		for (String item : items) {
-//			list.add(item);
-//		}
-//		return list;
-//	}
-
 	// handles list item click
 	private class CustomOnItemClickListener implements OnItemClickListener {
 
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view,
 				int position, long arg3) {
-			String selectedItem = adapter.getAdapter().getItem(position)
-					.toString();
-			// Toast.makeText(context, selectedItem, Toast.LENGTH_LONG).show();
+			Media selectedMedia = mediaList.get(position);
 			Intent detailedViewIntent = new Intent(context,
 					DetailedDescriptionActivity.class);
-			detailedViewIntent.putExtra("selectedItem", position);
+			Bundle b = new Bundle();
+			b.putSerializable(Constants.MEDIA_OBJECT, selectedMedia);
+			detailedViewIntent.putExtras(b);
 			context.startActivity(detailedViewIntent);
 		}
 	}
@@ -178,7 +177,7 @@ class ViewPagerAdapter extends PagerAdapter {
 	 */
 	@Override
 	public void destroyItem(View collection, int position, Object view) {
-		System.out.println("on destroyItem() for page at " + position);
+		// System.out.println("on destroyItem() for page at " + position);
 		((ViewPager) collection).removeView((View) view);
 	}
 
@@ -199,7 +198,7 @@ class ViewPagerAdapter extends PagerAdapter {
 	 */
 	@Override
 	public void finishUpdate(View arg0) {
-		// System.out.println("on finishUpdate()");
+		// System.out.println("on finishUpdate()" + arg0.getId());
 	}
 
 	@Override
@@ -215,7 +214,42 @@ class ViewPagerAdapter extends PagerAdapter {
 
 	@Override
 	public void startUpdate(View arg0) {
-		// System.out.println("on startUpdate()");
+		// System.out.println("on startUpdate() for " + arg0.getId());
+	}
+
+	@Override
+	public int getItemPosition(Object object) {
+		// System.out.println("on getItemPosition()");
+		return POSITION_NONE;
+	}
+
+	@Override
+	public void notifyDataSetChanged() {
+		// System.out.println("on notifyDataSetChanged()");
+		super.notifyDataSetChanged();
+	}
+
+	public void refreshFavAdapter(Media media) {
+		if (!checkIfListContains(media)) {
+			System.out.println("New Entry, Adding..");
+			favmediaList.add(media);
+			favoritesAdapter = new MyArrayAdapter((Activity) context,
+					R.layout.rowlayout, favmediaList, true);
+			notifyDataSetChanged();
+		} else {
+			System.out.println("Duplicate Entry.., Skipping");
+		}
+	}
+
+	private boolean checkIfListContains(Media thisMedia) {
+		boolean hasMedia = false;
+		for (Media media : favmediaList) {
+			if (media.getId() == thisMedia.getId()) {
+				hasMedia = true;
+				break;
+			}
+		}
+		return hasMedia;
 	}
 
 }

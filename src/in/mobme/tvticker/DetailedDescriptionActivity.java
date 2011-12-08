@@ -3,10 +3,6 @@ package in.mobme.tvticker;
 import in.mobme.tvticker.customwidget.WebImageView;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,7 +15,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,15 +24,12 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	private WebImageView movieThumb = null;
 	private TextView movieDescription = null;
 	private Button readReviewsButton = null;
-	private TextView imdbRatingText = null;
-	private RatingBar imdbRating = null;
 	private ImageButton faceBookButton = null;
 	private ImageButton twitterButton = null;
-	private TvTickerDBAdapter tvDataAdapter = null;
-	private static List<Media> mediaList = new ArrayList<Media>();
-
+	private Button imdbRatingButton = null;
+	private Media media = null;
+	TvTickerDBAdapter dataAdapter;
 	
-	int mediaPos = 0;
 	String title;
 	String subTitle;
 	String imdbURL;
@@ -55,13 +47,8 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.detailed_description);
-		mediaPos = getIntent().getExtras().getInt("selectedItem");
-		tvDataAdapter = new TvTickerDBAdapter(this);
-		tvDataAdapter.open();
-		mediaList = tvDataAdapter.fetchAllMediaInfo();
-		tvDataAdapter.close();
-		Media media = mediaList.get(mediaPos);
-
+		dataAdapter = new TvTickerDBAdapter(this);
+		media = (Media) this.getIntent().getExtras().getSerializable(Constants.MEDIA_OBJECT);
 		title = media.getMediaTitle();
 		subTitle = "channel_name, " + media.getShowTime();
 		imdbURL = media.getImdbLink();
@@ -76,11 +63,10 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		faceBookButton = (ImageButton) findViewById(R.id.go_facebook_button);
 		twitterButton = (ImageButton) findViewById(R.id.go_twitter_button);
 		// non_interactive fields
-		imdbRatingText = (TextView) findViewById(R.id.imdb_rating_text);
-		imdbRating = (RatingBar) findViewById(R.id.imdb_ratingBar);
+		imdbRatingButton = (Button) findViewById(R.id.rating_non_interactive_button);
 
 		// set up IMDB rating got from web api, here
-		createIMDBRatingIndicator(media.getImdbRating());
+		imdbRatingButton.setText(getFormattedImdbTextRatingFor(media.getImdbRating()));
 
 		movieThumb.setImageWithURL(this, media.getMediaThumb());
 		movieDescription.setText(media.getMediaDescription());
@@ -119,7 +105,12 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case MENU_ADD_TO_FAVORITES:
-			showMsg("Add to favorites");
+			showMsg(media.getId() + "Added to favorites");
+			dataAdapter.open();
+			dataAdapter.setIsFavorite(media.getId(), true, true);
+			dataAdapter.close();
+			//not recommended !
+			ViewPagerAdapter.staticAdapterObj.refreshFavAdapter(media);
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -141,13 +132,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 
 	// helpers for Imdb Rating bar
 	private String getFormattedImdbTextRatingFor(float rating) {
-		return "IMDB " + rating + "/10";
-	}
-
-	private void createIMDBRatingIndicator(float rating) {
-		imdbRatingText.setText(getFormattedImdbTextRatingFor(rating));
-		imdbRating.setRating(rating);
-
+		return "" + rating;
 	}
 
 	private void adjustAlphaOf(int resId, int alpha) {

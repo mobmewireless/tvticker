@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 public class SplashActivity extends Activity {
-
+	
 	protected boolean _active = true;
 	protected int _splashTime = 1000; // time to display the splash screen in ms
 	protected boolean isDisabled = false;
@@ -27,24 +27,27 @@ public class SplashActivity extends Activity {
 				@Override
 				public void run() {
 					try {
+						// Wait for _splashTime
 						int waited = 0;
 						while (_active && (waited < _splashTime)) {
 							// will need to do something useful here. Right now
 							// just sleeping..
 							sleep(100);
-							// Experiment
-//							DataMocker dataMocker = new DataMocker(getBaseContext());
-//							try {
-//								dataMocker.startMocking();
-//							} catch (Exception e) {
-//								Log.e("TvTicker_data_mocker", e.toString());
-//							}
+
 							if (_active) {
 								waited += 100;
 							}
 						}
+						// Useful code here..
+						// Experiment..
+						// DataMocker dataMocker =
+						// newDataMocker(getBaseContext());
+						// dataMocker.startMocking();
+						// Check connection here..
+
 					} catch (InterruptedException e) {
 						// do nothing
+						Log.e(Constants.TAG, e.toString());
 					} finally {
 						finish();
 						if (_active) {
@@ -62,7 +65,7 @@ public class SplashActivity extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			_active = false;
-			Log.v("TvTicker", "App launch cancelled. Exiting..");
+			Log.v(Constants.TAG, "App launch cancelled. Exiting..");
 		}
 		return true;
 	}

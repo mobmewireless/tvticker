@@ -1,94 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="match_parent"
-	android:layout_height="match_parent" android:background="@xml/custom_background">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@xml/custom_background"
+    android:orientation="vertical" >
 
-	<!-- Movie thumb and description -->
-	<RelativeLayout android:layout_width="match_parent"
-		android:background="@xml/rounded_border_white"
-		android:layout_marginTop="20dp" android:layout_height="wrap_content"
-		android:id="@+id/relativeLayoutMovieMeta">
-		<in.mobme.tvticker.customwidget.WebImageView
-			android:layout_height="80dp" android:id="@+id/movie_thumb"
-			android:src="@drawable/thumb_bu" android:layout_width="60dp"
-			android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-			android:background="#00000000" />
+    <!-- Movie thumb and description -->
 
-		<TextView android:layout_height="wrap_content" android:text=""
-			android:textSize="6.8pt" android:id="@+id/movie_description"
-			android:layout_width="match_parent" android:layout_centerVertical="true"
-			android:layout_toRightOf="@id/movie_thumb" android:layout_marginLeft="10dp" />
+    <RelativeLayout
+        android:id="@+id/relativeLayoutMovieMeta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" >
 
-	</RelativeLayout>
+        <in.mobme.tvticker.customwidget.WebImageView
+            android:id="@+id/movie_thumb"
+            android:layout_width="96dp"
+            android:layout_height="128dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="#00000000"
+            android:src="@drawable/thumb_bu" />
 
-	<!-- IMDB Rating and reviews -->
-	<RelativeLayout android:layout_width="match_parent"
-		android:paddingLeft="4dp" android:paddingRight="4dp"
-		android:layout_below="@id/relativeLayoutMovieMeta"
-		android:layout_marginTop="30dp" android:layout_height="wrap_content"
-		android:id="@+id/relativeLayoutImdb">
+        <LinearLayout
+            android:id="@+id/linearLayoutImdbRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:orientation="vertical" >
 
-		<Button android:id="@+id/button_go_imdb" android:background="@xml/custom_blue_button"
-			android:layout_height="40dp" android:text="@string/imdb_button_text"
-			android:layout_width="wrap_content" android:layout_alignParentLeft="true"
-			android:layout_centerVertical="true" android:textColor="@drawable/white"
-			android:paddingLeft="10dp" android:paddingRight="10dp" />
+            <Button
+                android:id="@+id/rating_non_interactive_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_rating_star_big"
+                android:clickable="false"
+                android:paddingTop="6dp"
+                android:text="8.8" />
 
-		<LinearLayout android:layout_height="wrap_content"
-			android:layout_alignParentRight="true" android:id="@+id/linearLayoutImdbRating"
-			android:orientation="vertical" android:layout_width="wrap_content">
+            <Button
+                android:id="@+id/button_go_imdb"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:background="@xml/custom_blue_button"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/imdb_button_text"
+                android:textColor="@drawable/white" />
+        </LinearLayout>
+    </RelativeLayout>
 
-			<TextView android:layout_height="wrap_content" android:text="TextView"
-				android:layout_marginLeft="10dp" android:id="@+id/imdb_rating_text"
-				android:layout_width="wrap_content" android:textStyle="bold" />
+    <!-- Description -->
 
-			<RatingBar android:layout_height="wrap_content" android:id="@+id/imdb_ratingBar"
-				style="@style/yellowRatingBarSmall" android:layout_width="wrap_content"
-				android:numStars="10" android:isIndicator="true" />
+    <RelativeLayout
+        android:id="@+id/relativeLayoutImdb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relativeLayoutMovieMeta"
+        android:layout_marginTop="30dp"
+        android:background="@xml/rounded_border_white"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp" >
 
-		</LinearLayout>
+        <TextView
+            android:id="@+id/movie_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/movie_thumb"
+            android:text=""
+            android:textSize="6.8pt" />
+    </RelativeLayout>
 
-	</RelativeLayout>
+    <!-- Sliding drawer -->
 
-	<!-- Sliding drawer -->
-	<SlidingDrawer android:id="@+id/slidingDrawer1"
-		android:layout_alignParentBottom="true" android:layout_height="100dp"
-		android:handle="@+id/handle" android:content="@+id/content"
-		android:layout_width="match_parent">
+    <SlidingDrawer
+        android:id="@+id/slidingDrawer1"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:content="@+id/content"
+        android:handle="@+id/handle" >
 
-		<RelativeLayout android:id="@+id/handle"
-			android:padding="1dp" android:background="@xml/rounded_border"
-			android:layout_width="match_parent" android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/handle"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@xml/rounded_border"
+            android:padding="1dp" >
 
-			<ImageView android:layout_height="wrap_content" android:id="@+id/left_handle"
-				android:layout_width="wrap_content" android:src="@drawable/ic_dots"
-				android:layout_alignParentLeft="true" />
+            <ImageView
+                android:id="@+id/left_handle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_dots" />
 
-			<TextView android:layout_height="wrap_content" android:text="Share with your friends"
-				android:layout_centerInParent="true" android:id="@+id/handle_text"
-				android:textColor="@drawable/white" android:layout_width="wrap_content"
-				android:textStyle="bold" />
+            <TextView
+                android:id="@+id/handle_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Share with your friends"
+                android:textColor="@drawable/white"
+                android:textStyle="bold" />
 
-			<ImageView android:layout_height="wrap_content" android:id="@+id/right_handle"
-				android:layout_width="wrap_content" android:src="@drawable/ic_dots"
-				android:layout_alignParentRight="true" />
+            <ImageView
+                android:id="@+id/right_handle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_dots" />
+        </RelativeLayout>
 
-		</RelativeLayout>
-		<LinearLayout android:id="@+id/content" android:gravity="center"
-			android:background="#999" android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_alignParentBottom="true">
-			<ImageButton android:src="@xml/facebook_button"
-				android:background="@android:color/transparent" android:id="@+id/go_facebook_button"
-				android:layout_width="wrap_content" android:layout_height="wrap_content" />
-			<ImageButton android:src="@xml/twitter_button"
-				android:background="@android:color/transparent" android:id="@+id/go_twitter_button"
-				android:layout_width="wrap_content" android:layout_height="wrap_content" />
-		</LinearLayout>
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#999"
+            android:gravity="center" >
 
-	</SlidingDrawer>
+            <ImageButton
+                android:id="@+id/go_facebook_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@xml/facebook_button" />
+
+            <ImageButton
+                android:id="@+id/go_twitter_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@xml/twitter_button" />
+        </LinearLayout>
+    </SlidingDrawer>
 
 </RelativeLayout>
-
-
