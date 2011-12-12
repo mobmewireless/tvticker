@@ -1,76 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">TVTicker</string>
-	<string name="home_page_title">TICKER</string>
-	<string name="browse_all_shows_title">Browse All Shows</string>
-	<string name="imdb_button_text">Read Reviews</string>
 
-	<string name="favorites_empty_text">You haven\'t added any shows here yet. Why not
+    <string name="app_name">TVTicker</string>
+    <string name="home_page_title">TICKER</string>
+    <string name="browse_all_shows_title">Browse All Shows</string>
+    <string name="imdb_button_text">Read Reviews</string>
+    <string name="search_hint">Search TvTicker</string>
+    <string name="favorites_empty_text">You haven\'t added any shows here yet. Why not
 		search below to add a show?</string>
-	<string name="favorites_normal_text">We will send you two reminders, half an
+    <string name="favorites_normal_text">We will send you two reminders, half an
 		hour and ten
 		minutes before every show.
 	</string>
-	<string name="default_empty_text">Error, couldn\'t fetch Data.</string>
+    <string name="default_empty_text">Error, couldn\'t fetch Data.</string>
 
-	<!-- Test strings -->
-	<string name="sample_description">Jason Bourne dodges a ruthless CIA official and his
+    <!-- Test strings -->
+    <string name="sample_description">Jason Bourne dodges a ruthless CIA official and his
 		agents from a new assassination program while searching for the
 		origins of his life as a trained killer. </string>
-	<string name="sample_imdb_url">http://www.imdb.com/title/tt0440963/reviews/
+    <string name="sample_imdb_url">http://www.imdb.com/title/tt0440963/reviews/
 	</string>
 
-	<string-array name="list1">
-		<item>Item1</item>
-		<item>A Very Long Item2, Should be displayed as marquee</item>
-		<item>Another long Item3. Well I mean it</item>
-		<item>Item4, I\'m also huge.ehhhhhhhhhh</item>
-		<item>Item5, Count me in too</item>
-		<item>Item6.. Say what ??? Amigo</item>
-	</string-array>
-	<string-array name="list2">
-		<item>Item7</item>
-		<item>Item8</item>
-		<item>Item9</item>
-		<item>Item10</item>
-		<item>Item11</item>
-		<item>Item12</item>
-	</string-array>
-	<string-array name="list3">
-		<item>Item13</item>
-		<item>Item14</item>
-		<item>Item15</item>
-		<item>Item16</item>
-		<item>Item17</item>
-		<item>Item18</item>
-	</string-array>
+    <!-- General instructions in the main activity. -->
+    <string name="search_instructions">Use the search box in the Action Bar to look up a word</string>
 
-	<!-- Reminder Pref list  -->
-	<string name="ReminderPref_summary">TV Ticker can remind you (twice!) so that you
+    <!-- Search failure message. -->
+    <string name="no_results">No results found for \"%s\"</string>
+
+    <string-array name="list1">
+        <item>Item1</item>
+        <item>A Very Long Item2, Should be displayed as marquee</item>
+        <item>Another long Item3. Well I mean it</item>
+        <item>Item4, I\'m also huge.ehhhhhhhhhh</item>
+        <item>Item5, Count me in too</item>
+        <item>Item6.. Say what ??? Amigo</item>
+    </string-array>
+    <string-array name="list2">
+        <item>Item7</item>
+        <item>Item8</item>
+        <item>Item9</item>
+        <item>Item10</item>
+        <item>Item11</item>
+        <item>Item12</item>
+    </string-array>
+    <string-array name="list3">
+        <item>Item13</item>
+        <item>Item14</item>
+        <item>Item15</item>
+        <item>Item16</item>
+        <item>Item17</item>
+        <item>Item18</item>
+    </string-array>
+
+    <!-- Reminder Pref list -->
+    <string name="ReminderPref_summary">TV Ticker can remind you (twice!) so that you
 		never miss your favorite show. If you\'d like to
 		turn off reminders, you can do that here.
 	</string>
 
-	<string-array name="first_pref">
-		<item>OFF</item>
-		<item>1 hour</item>
-		<item>30 min</item>
-	</string-array>
-	<string-array name="first_pref_values">
-		<item>0</item>
-		<item>1</item>
-		<item>2</item>
-	</string-array>
-	<string-array name="second_pref">
-		<item>OFF</item>
-		<item>15 min</item>
-		<item>5 min</item>
-	</string-array>
-	<string-array name="second_pref_values">
-		<item>0</item>
-		<item>1</item>
-		<item>2</item>
-	</string-array>
-
+    <string-array name="first_pref">
+        <item>OFF</item>
+        <item>1 hour</item>
+        <item>30 min</item>
+    </string-array>
+    <string-array name="first_pref_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="second_pref">
+        <item>OFF</item>
+        <item>15 min</item>
+        <item>5 min</item>
+    </string-array>
+    <string-array name="second_pref_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 
 </resources>
