@@ -1,6 +1,7 @@
 package in.mobme.tvticker.database;
 
 import in.mobme.tvticker.data_model.Media;
+import in.mobme.tvticker.data_model.SearchableMedia;
 import in.mobme.tvticker.database.Models.CategoriesInfo;
 import in.mobme.tvticker.database.Models.ChannelMediaInfo;
 import in.mobme.tvticker.database.Models.ChannelsInfo;
@@ -56,6 +57,7 @@ public class TvTickerDBAdapter {
 		return this;
 	}
 
+	// clean everything !
 	public void close() {
 		initialValues.clear();
 		if (mCursor != null) {
@@ -63,6 +65,10 @@ public class TvTickerDBAdapter {
 		}
 		mDbHelper.close();
 	}
+
+	/**************************
+	 * Channel Media table
+	 */
 
 	/**
 	 * Insert a new Channel_wise_Media Entry.
@@ -84,30 +90,78 @@ public class TvTickerDBAdapter {
 	 * 
 	 * @return List of all media
 	 * */
-	public ArrayList<Media> fetchAllMediaInfo() {
-		Media media = null;
+	public ArrayList<Media> fetchAllShowsInfo() {
+
 		mCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
 				ChannelMediaInfo.ROW_ID, ChannelMediaInfo.MEDIA_ID,
 				ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME,
 				ChannelMediaInfo.END_TIME }, null, null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
-			while (mCursor.isAfterLast() == false) {
-				long media_id = mCursor.getLong(mCursor
-						.getColumnIndexOrThrow(ChannelMediaInfo.MEDIA_ID));
-				media = fetchMediaFor(media_id);
-				media.setId(media_id);
-				media.setChannel(mCursor.getInt(mCursor
-						.getColumnIndexOrThrow(ChannelMediaInfo.CHANNEL_ID)));
-				media.setShowTime(mCursor.getString(mCursor
-						.getColumnIndexOrThrow(ChannelMediaInfo.AIR_TIME)));
-				media.setShowEndTime(mCursor.getString(mCursor
-						.getColumnIndexOrThrow(ChannelMediaInfo.END_TIME)));
-				mediaList.add(media);
+			while (!mCursor.isAfterLast()) {
+				mediaList.add(unWrapShowDataFrom(mCursor));
 				mCursor.moveToNext();
 			}
 		}
 		return mediaList;
+
+	}
+
+	/**
+	 * Return a list of all media in the ChannelMediaInfoTable for given
+	 * media_id.
+	 * 
+	 * @return media
+	 * */
+	public Media FetchShowsInfoFor(long this_media_id) {
+		Media media = null;
+		mCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
+				ChannelMediaInfo.ROW_ID, ChannelMediaInfo.MEDIA_ID,
+				ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME,
+				ChannelMediaInfo.END_TIME }, ChannelMediaInfo.MEDIA_ID + "="
+				+ this_media_id, null, null, null, null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+			media = unWrapShowDataFrom(mCursor);
+
+		}
+		return media;
+	}
+
+	/************************
+	 * Media Table
+	 */
+
+	/**
+	 * Looks up media table for movies of given pattern.
+	 * 
+	 * @return List of all media title matching.
+	 * */
+	public ArrayList<SearchableMedia> getMoviesLike(String pattern) {
+		SearchableMedia searcchableMedia;
+		ArrayList<SearchableMedia> matchedList = new ArrayList<SearchableMedia>();
+		Cursor tmpCursor = mDb.query(Mediainfo.TABLE_NAME, new String[] {
+				Mediainfo.ROW_ID, Mediainfo.MEDIA_TITLE },
+				Mediainfo.MEDIA_TITLE + " like '" + pattern + "%'", null, null,
+				null, null);
+
+		if (tmpCursor == null) {
+			return null;
+		} else {
+			tmpCursor.moveToFirst();
+			while (!tmpCursor.isAfterLast()) {
+				searcchableMedia = new SearchableMedia();
+				searcchableMedia.setMedia_id(tmpCursor.getInt(tmpCursor
+						.getColumnIndexOrThrow(Mediainfo.ROW_ID)));
+				searcchableMedia.setMedia_title(tmpCursor.getString(tmpCursor
+						.getColumnIndexOrThrow(Mediainfo.MEDIA_TITLE)));
+				searcchableMedia.setType(SearchableMedia.TYPE_MOVIE);
+				matchedList.add(searcchableMedia);
+				tmpCursor.moveToNext();
+			}
+			tmpCursor.close();
+			return matchedList;
+		}
 
 	}
 
@@ -124,8 +178,6 @@ public class TvTickerDBAdapter {
 		initialValues.put(Mediainfo.MEDIA_DESCRIPTION, media
 				.getMediaDescription());
 		initialValues.put(Mediainfo.MEDIA_THUMB, media.getMediaThumb());
-		initialValues.put(Mediainfo.IS_FAVORITE_FLAG,
-				sanitiseBooleanToInteger(media.isFavorite()));
 		initialValues.put(Mediainfo.MEDIA_CAT_ID, media.getCategoryType());
 		initialValues.put(Mediainfo.MEDIA_DURATION, media.getShowDuration());
 		initialValues.put(Mediainfo.SERIES_ID, media.getSeriesID());
@@ -143,10 +195,9 @@ public class TvTickerDBAdapter {
 		Cursor tmpCursor = mDb.query(true, Mediainfo.TABLE_NAME, new String[] {
 				Mediainfo.ROW_ID, Mediainfo.MEDIA_TITLE,
 				Mediainfo.MEDIA_DESCRIPTION, Mediainfo.MEDIA_THUMB,
-				Mediainfo.IS_FAVORITE_FLAG, Mediainfo.MEDIA_CAT_ID,
-				Mediainfo.MEDIA_IMDB_ID, Mediainfo.MEDIA_DURATION,
-				Mediainfo.SERIES_ID }, Mediainfo.ROW_ID + "=" + this_id, null,
-				null, null, null, null);
+				Mediainfo.MEDIA_CAT_ID, Mediainfo.MEDIA_IMDB_ID,
+				Mediainfo.MEDIA_DURATION, Mediainfo.SERIES_ID },
+				Mediainfo.ROW_ID + "=" + this_id, null, null, null, null, null);
 		if (tmpCursor != null) {
 			media = getMediaFromCursor(tmpCursor);
 			tmpCursor.close();
@@ -154,10 +205,242 @@ public class TvTickerDBAdapter {
 		return media;
 	}
 
+	/***************************
+	 * Channels Table
+	 */
+
+	/**
+	 * Insert a new Channel.
+	 * 
+	 * @return Returns affected row id.
+	 */
+	public long insertNewChannel(String channelName) {
+		initialValues.clear();
+		initialValues.put(ChannelsInfo.CHANNEL_NAME, channelName);
+		return mDb.insert(ChannelsInfo.TABLE_NAME, null, initialValues);
+	}
+
+	/**
+	 * Return a Cursor over the list of all Channels from the Channels Table.
+	 * 
+	 * @return Cursor over all channels
+	 * */
+	public Cursor fetchAllChannels() {
+		return mDb.query(ChannelsInfo.TABLE_NAME, new String[] {
+				ChannelsInfo.ROW_ID, ChannelsInfo.CHANNEL_NAME }, null, null,
+				null, null, null);
+	}
+
+	/**
+	 * Fetch Channel Name for a particular ID.
+	 * 
+	 * @return Returns channel name.
+	 */
+	public String getChannelNameFor(long this_id) {
+		String channelName = null;
+		mCursor = mDb.query(true, ChannelsInfo.TABLE_NAME, new String[] {
+				ChannelsInfo.ROW_ID, ChannelsInfo.CHANNEL_NAME },
+				ChannelsInfo.ROW_ID + "=" + this_id, null, null, null, null,
+				null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+			channelName = mCursor.getString(mCursor
+					.getColumnIndexOrThrow(ChannelsInfo.CHANNEL_NAME));
+			mCursor.close();
+		}
+		
+		return channelName;
+	}
+
+	/**************************
+	 * Category table
+	 */
+
+	/**
+	 * Insert a new Category.
+	 * 
+	 * @return Returns affected row id.
+	 */
+	public long insertNewCategory(String category) {
+		initialValues.clear();
+		initialValues.put(CategoriesInfo.CATAGORY_TYPE, category);
+		return mDb.insert(CategoriesInfo.TABLE_NAME, null, initialValues);
+	}
+
+	/**
+	 * Return a Cursor over the list of all Categories from the Categories
+	 * Table.
+	 * 
+	 * @return Cursor over all Categories.
+	 * */
+	public Cursor fetchAllCategories() {
+		return mDb.query(CategoriesInfo.TABLE_NAME, new String[] {
+				CategoriesInfo.ROW_ID, CategoriesInfo.CATAGORY_TYPE }, null,
+				null, null, null, null);
+
+	}
+
+	/**
+	 * Fetch Category Type for a particular ID.
+	 * 
+	 * @return Returns category name/type.
+	 */
+	public String getCategoryTypeFor(long this_id) {
+		String categoryType = null;
+		mCursor = mDb.query(true, CategoriesInfo.TABLE_NAME, new String[] {
+				CategoriesInfo.ROW_ID, CategoriesInfo.CATAGORY_TYPE },
+				CategoriesInfo.ROW_ID + "=" + this_id, null, null, null, null,
+				null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+			categoryType = mCursor.getString(mCursor
+					.getColumnIndexOrThrow(CategoriesInfo.CATAGORY_TYPE));
+			mCursor.close();
+		}
+		return categoryType;
+	}
+
+	/*************************
+	 * IMDB Table
+	 */
+
+	/**
+	 * Insert Imdb related info for a particular movie invoked from insertMedia.
+	 * 
+	 * @return Returns affected row id.
+	 */
+	private long insertImdbEntryFor(float rating, String reviewUrl) {
+		initialValues.clear();
+		initialValues.put(ImdbInfo.IMDB_RATING, rating);
+		initialValues.put(ImdbInfo.IMDB_LINK, reviewUrl);
+		return mDb.insert(ImdbInfo.TABLE_NAME, null, initialValues);
+	}
+
+	/**
+	 * Fetch imdb details for a particular ID.
+	 * 
+	 * @return Returns cursor over Imdb details.
+	 */
+	private Cursor getImdbDetailsFor(long this_id) {
+		return mDb.query(true, ImdbInfo.TABLE_NAME, new String[] {
+				ImdbInfo.ROW_ID, ImdbInfo.IMDB_RATING, ImdbInfo.IMDB_LINK },
+				Mediainfo.ROW_ID + "=" + this_id, null, null, null, null, null);
+
+	}
+
+	/**************************
+	 * Reminders Table
+	 */
+
+	/**
+	 * Update isFavorite under MediaInfo table, set to Mediainfo.IS_FAVORITE or
+	 * Mediainfo.IS_NOT_FAVORITE
+	 * 
+	 * @return Returns true or false, status of update
+	 * */
+	public long setIsFavorite(long mediaId, boolean isFavorite) {
+
+		initialValues.clear();
+		initialValues.put(Remindersinfo.MEDIA_ID, mediaId);
+		initialValues.put(Remindersinfo.REMINDER_ENABLED,
+				sanitiseBooleanToInteger(isFavorite));
+		initialValues.put(Remindersinfo.IS_FAVORITE_FLAG,
+				sanitiseBooleanToInteger(isFavorite));
+		return mDb.insert(Remindersinfo.TABLE_NAME, null, initialValues);
+	}
+
+	/**
+	 * Enable/Disable Reminder for a particular media id.
+	 * 
+	 * @return Returns true or false, status of update
+	 * */
+	public boolean toggleReminderFor(long mediaId, boolean reminderEnabled) {
+		updateValues.clear();
+		updateValues.put(Remindersinfo.REMINDER_ENABLED,
+				sanitiseBooleanToInteger(reminderEnabled));
+		return mDb.update(Remindersinfo.TABLE_NAME, updateValues,
+				Remindersinfo.ROW_ID + "=" + mediaId, null) > 0;
+	}
+	
+
+	/**
+	 * Removes isFavorite flag for the given media id.
+	 * 
+	 * @param mediaId
+	 * @return true if successful; false otherwise.
+	 */
+	public boolean removeIsFavFor(long mediaId) {
+		return mDb.delete(Remindersinfo.TABLE_NAME, Remindersinfo.MEDIA_ID + "="
+				+ mediaId, null) > 0;
+	}
+
+	/**
+	 * Return a Cursor over the list of all shows in the ReminderInfo Table.
+	 * 
+	 * @return Cursor over all shows
+	 * */
+	public Cursor fetchAllFromReminderInfo() {
+		return mDb.query(Remindersinfo.TABLE_NAME,
+				new String[] { Remindersinfo.ROW_ID, Remindersinfo.MEDIA_ID,
+						Remindersinfo.IS_FAVORITE_FLAG,
+						Remindersinfo.REMINDER_ENABLED }, null, null, null,
+				null, null);
+	}
+
+	/**
+	 * Checks whether is favorite is enabled for the given media id
+	 * 
+	 * @param this_mediaID
+	 * @return true if found, false otherwise.
+	 */
+	public boolean IsFavoriteEnabledFor(long this_mediaID){
+		boolean isEnabled = false;
+		Cursor tmpCursor = mDb.query(true, Remindersinfo.TABLE_NAME, new String[] {
+				Remindersinfo.ROW_ID, Remindersinfo.IS_FAVORITE_FLAG },
+				Remindersinfo.MEDIA_ID + "=" + this_mediaID, null, null, null, null, null);
+		if(tmpCursor == null){
+			//safety !
+			isEnabled = false;
+		}else if(!tmpCursor.moveToFirst()){
+			isEnabled = false;
+		} else{
+			isEnabled = sanitiseIntegerToBoolean(tmpCursor.getInt(tmpCursor.getColumnIndexOrThrow(Remindersinfo.IS_FAVORITE_FLAG)));
+		}
+		tmpCursor.close();
+		return isEnabled;
+	}
+
+	/**************************
+	 * Private Helpers
+	 */
+
+	/**
+	 * Get Basic Media Object from the given cursor.
+	 * 
+	 * @param cursor
+	 *            from channel_info table
+	 * @return Media Object
+	 */
+	private Media unWrapShowDataFrom(Cursor tmpCursor) {
+		Media media;
+		long media_id = tmpCursor.getLong(tmpCursor
+				.getColumnIndexOrThrow(ChannelMediaInfo.MEDIA_ID));
+		media = fetchMediaFor(media_id);
+		media.setId(media_id);
+		media.setChannel(tmpCursor.getInt(tmpCursor
+				.getColumnIndexOrThrow(ChannelMediaInfo.CHANNEL_ID)));
+		media.setShowTime(tmpCursor.getString(tmpCursor
+				.getColumnIndexOrThrow(ChannelMediaInfo.AIR_TIME)));
+		media.setShowEndTime(tmpCursor.getString(tmpCursor
+				.getColumnIndexOrThrow(ChannelMediaInfo.END_TIME)));
+		return media;
+	}
+
 	/**
 	 * Get Media Object from the given cursor.
 	 * 
 	 * @param cursor
+	 *            from media_info table
 	 * @return Media Object
 	 */
 	private Media getMediaFromCursor(Cursor cursor) {
@@ -169,8 +452,6 @@ public class TvTickerDBAdapter {
 				.getColumnIndexOrThrow(Mediainfo.MEDIA_DESCRIPTION)));
 		media.setMediaThumb(cursor.getString(cursor
 				.getColumnIndexOrThrow(Mediainfo.MEDIA_THUMB)));
-		media.setIsFavorite(sanitiseIntegerToBoolean(cursor.getInt(cursor
-				.getColumnIndexOrThrow(Mediainfo.IS_FAVORITE_FLAG))));
 		media.setCategoryType(cursor.getInt(cursor
 				.getColumnIndexOrThrow(Mediainfo.MEDIA_CAT_ID)));
 		media.setShowDuration(cursor.getString(cursor
@@ -192,132 +473,6 @@ public class TvTickerDBAdapter {
 	}
 
 	/**
-	 * Insert a new Channel.
-	 * 
-	 * @return Returns affected row id.
-	 */
-	public long insertNewChannel(String channelName) {
-		initialValues.clear();
-		initialValues.put(ChannelsInfo.CHANNEL_NAME, channelName);
-		return mDb.insert(ChannelsInfo.TABLE_NAME, null, initialValues);
-	}
-
-	/**
-	 * Insert a new Category.
-	 * 
-	 * @return Returns affected row id.
-	 */
-	public long insertNewCategory(String category) {
-		initialValues.clear();
-		initialValues.put(CategoriesInfo.CATAGORY_TYPE, category);
-		return mDb.insert(CategoriesInfo.TABLE_NAME, null, initialValues);
-	}
-
-	/**
-	 * Insert Imdb related info for a particular movie invoked from insertMedia.
-	 * 
-	 * @return Returns affected row id.
-	 */
-	private long insertImdbEntryFor(float rating, String reviewUrl) {
-		initialValues.clear();
-		initialValues.put(ImdbInfo.IMDB_RATING, rating);
-		initialValues.put(ImdbInfo.IMDB_LINK, reviewUrl);
-		return mDb.insert(ImdbInfo.TABLE_NAME, null, initialValues);
-	}
-
-	/**
-	 * Fetch imdb details for a particular ID.
-	 * 
-	 * @return Returns cursor over Imdb details.
-	 */
-	public Cursor getImdbDetailsFor(long this_id) {
-		return mDb.query(true, ImdbInfo.TABLE_NAME, new String[] {
-				ImdbInfo.ROW_ID, ImdbInfo.IMDB_RATING, ImdbInfo.IMDB_LINK },
-				Mediainfo.ROW_ID + "=" + this_id, null, null, null, null, null);
-
-	}
-
-	/**
-	 * Update isFavorite under MediaInfo table, set to Mediainfo.IS_FAVORITE or
-	 * Mediainfo.IS_NOT_FAVORITE
-	 * 
-	 * @return Returns true or false, status of update
-	 * */
-	public boolean setIsFavorite(long mediaId, boolean isFavorite,
-			boolean isReminderEnabled) {
-		// isReminderEnabled == true => user wants it to be
-		// reminded. so..
-		setReminderFor(mediaId, isReminderEnabled);
-		updateValues.clear();
-		updateValues.put(Mediainfo.IS_FAVORITE_FLAG,
-				sanitiseBooleanToInteger(isFavorite));
-		return mDb.update(Mediainfo.TABLE_NAME, updateValues, Mediainfo.ROW_ID
-				+ "=" + mediaId, null) > 0;
-	}
-
-	/**
-	 * Creates a new reminder entry for given media Id.
-	 * 
-	 * @return Returns affected row id.
-	 */
-	private long setReminderFor(long mediaId, boolean reminderEnabled) {
-		updateValues.clear();
-		updateValues.put(Remindersinfo.MEDIA_ID, mediaId);
-		updateValues.put(Remindersinfo.REMINDER_ENABLED,
-				sanitiseBooleanToInteger(reminderEnabled));
-		return mDb.insert(Remindersinfo.TABLE_NAME, null, updateValues);
-	}
-
-	/**
-	 * Enable/Disable Reminder for a particular media id.
-	 * 
-	 * @return Returns true or false, status of update
-	 * */
-	public boolean enableOrDisableReminderFor(long mediaId,
-			boolean reminderEnabled) {
-		updateValues.clear();
-		updateValues.put(Remindersinfo.REMINDER_ENABLED,
-				sanitiseBooleanToInteger(reminderEnabled));
-		return mDb.update(Remindersinfo.TABLE_NAME, updateValues,
-				Remindersinfo.ROW_ID + "=" + mediaId, null) > 0;
-	}
-
-	/**
-	 * Return a Cursor over the list of all shows in the ReminderInfo Table.
-	 * 
-	 * @return Cursor over all shows
-	 * */
-	public Cursor fetchAllFromReminderInfo() {
-		return mDb.query(Remindersinfo.TABLE_NAME, new String[] {
-				Remindersinfo.ROW_ID, Remindersinfo.MEDIA_ID,
-				Remindersinfo.REMINDER_ENABLED }, null, null, null, null, null);
-	}
-
-	/**
-	 * Return a Cursor over the list of all Channels from the Channels Table.
-	 * 
-	 * @return Cursor over all channels
-	 * */
-	public Cursor fetchAllChannels() {
-		return mDb.query(ChannelsInfo.TABLE_NAME, new String[] {
-				ChannelsInfo.ROW_ID, ChannelsInfo.CHANNEL_NAME }, null, null,
-				null, null, null);
-	}
-
-	/**
-	 * Return a Cursor over the list of all Categories from the Categories
-	 * Table.
-	 * 
-	 * @return Cursor over all Categories.
-	 * */
-	public Cursor fetchAllCategories() {
-		return mDb.query(CategoriesInfo.TABLE_NAME, new String[] {
-				CategoriesInfo.ROW_ID, CategoriesInfo.CATAGORY_TYPE }, null,
-				null, null, null, null);
-
-	}
-
-	/**
 	 * Sanitises boolean to integer.
 	 * */
 	private int sanitiseBooleanToInteger(boolean isTrue) {
@@ -329,44 +484,6 @@ public class TvTickerDBAdapter {
 	 * */
 	private boolean sanitiseIntegerToBoolean(int isTrue) {
 		return isTrue == Models.IS_TRUE ? true : false;
-	}
-
-	/**
-	 * Fetch Channel Name for a particular ID.
-	 * 
-	 * @return Returns channel name.
-	 */
-	public String getChannelNameFor(long this_id) {
-		String channelName = null;
-		mCursor = mDb.query(true, ChannelsInfo.TABLE_NAME, new String[] {
-				ChannelsInfo.ROW_ID, ChannelsInfo.CHANNEL_NAME },
-				ChannelsInfo.ROW_ID + "=" + this_id, null, null, null, null,
-				null);
-		if (mCursor != null) {
-			mCursor.moveToFirst();
-			channelName = mCursor.getString(mCursor
-					.getColumnIndexOrThrow(ChannelsInfo.CHANNEL_NAME));
-		}
-		return channelName;
-	}
-
-	/**
-	 * Fetch Category Type for a particular ID.
-	 * 
-	 * @return Returns category name/type.
-	 */
-	public String getCategoryTypeFor(long this_id) {
-		String categoryType = null;
-		mCursor = mDb.query(true, CategoriesInfo.TABLE_NAME, new String[] {
-				CategoriesInfo.ROW_ID, CategoriesInfo.CATAGORY_TYPE },
-				CategoriesInfo.ROW_ID + "=" + this_id, null, null, null, null,
-				null);
-		if (mCursor != null) {
-			mCursor.moveToFirst();
-			categoryType = mCursor.getString(mCursor
-					.getColumnIndexOrThrow(CategoriesInfo.CATAGORY_TYPE));
-		}
-		return categoryType;
 	}
 
 }

@@ -13,44 +13,16 @@
 		minutes before every show.
 	</string>
     <string name="default_empty_text">Error, couldn\'t fetch Data.</string>
-
-    <!-- Test strings -->
-    <string name="sample_description">Jason Bourne dodges a ruthless CIA official and his
-		agents from a new assassination program while searching for the
-		origins of his life as a trained killer. </string>
-    <string name="sample_imdb_url">http://www.imdb.com/title/tt0440963/reviews/
-	</string>
-
-    <!-- General instructions in the main activity. -->
-    <string name="search_instructions">Use the search box in the Action Bar to look up a word</string>
+    
+    <!-- Shown above search results when we receive a search request. -->
+    <plurals name="search_results">
+        <item quantity="one">%1$d result for \"%2$s\": </item>
+        <item quantity="other">%1$d results for \"%2$s\": </item>
+    </plurals>
 
     <!-- Search failure message. -->
     <string name="no_results">No results found for \"%s\"</string>
 
-    <string-array name="list1">
-        <item>Item1</item>
-        <item>A Very Long Item2, Should be displayed as marquee</item>
-        <item>Another long Item3. Well I mean it</item>
-        <item>Item4, I\'m also huge.ehhhhhhhhhh</item>
-        <item>Item5, Count me in too</item>
-        <item>Item6.. Say what ??? Amigo</item>
-    </string-array>
-    <string-array name="list2">
-        <item>Item7</item>
-        <item>Item8</item>
-        <item>Item9</item>
-        <item>Item10</item>
-        <item>Item11</item>
-        <item>Item12</item>
-    </string-array>
-    <string-array name="list3">
-        <item>Item13</item>
-        <item>Item14</item>
-        <item>Item15</item>
-        <item>Item16</item>
-        <item>Item17</item>
-        <item>Item18</item>
-    </string-array>
 
     <!-- Reminder Pref list -->
     <string name="ReminderPref_summary">TV Ticker can remind you (twice!) so that you

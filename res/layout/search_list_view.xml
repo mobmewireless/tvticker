@@ -4,6 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <TextView
+        android:id="@+id/search_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/title_bar"
+        android:text="@string/no_results"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="17dp" />
+
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"

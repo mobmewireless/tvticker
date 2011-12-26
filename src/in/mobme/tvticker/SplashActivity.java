@@ -40,9 +40,9 @@ public class SplashActivity extends Activity {
 						}
 						// Useful code here..
 						// Experiment..
-						// DataMocker dataMocker =
-						// newDataMocker(getBaseContext());
-						// dataMocker.startMocking();
+//						 DataMocker dataMocker =
+//						 new DataMocker(getBaseContext());
+//						 dataMocker.startMocking();
 						// Check connection here..
 
 					} catch (InterruptedException e) {

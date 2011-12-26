@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@xml/custom_background"
+    android:background="@drawable/pale_white"
     android:orientation="vertical" >
 
     <!-- Movie thumb and description -->
@@ -11,35 +11,52 @@
         android:id="@+id/relativeLayoutMovieMeta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp" >
+        android:layout_marginTop="20dp" 
+        android:paddingLeft="5dp"
+        android:paddingBottom="3dp">
 
         <in.mobme.tvticker.customwidget.WebImageView
             android:id="@+id/movie_thumb"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:background="#00000000"
             android:src="@drawable/thumb_bu" />
 
         <LinearLayout
-            android:id="@+id/linearLayoutImdbRating"
+            android:id="@+id/linearLayoutText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:layout_marginRight="10dp"
-            android:gravity="center"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/movie_thumb"
             android:orientation="vertical" >
 
-            <Button
-                android:id="@+id/rating_non_interactive_button"
+            <TextView
+                android:id="@+id/textViewTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_rating_star_big"
-                android:clickable="false"
-                android:paddingTop="6dp"
-                android:text="8.8" />
+                android:text="__time here__"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/textViewChannel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="__channel name here__"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearLayoutText"
+            android:layout_alignBottom="@id/movie_thumb"
+            android:layout_toRightOf="@id/movie_thumb"
+            android:paddingLeft="5dp" >
 
             <Button
                 android:id="@+id/button_go_imdb"
@@ -50,8 +67,20 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/imdb_button_text"
-                android:textColor="@drawable/white" />
-        </LinearLayout>
+                android:textColor="@drawable/white"
+                android:layout_alignParentBottom="true" />
+
+            <Button
+                android:id="@+id/rating_non_interactive_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ic_rating_star_big"
+                android:clickable="false"
+                android:paddingTop="6dp"
+                android:text="N.A" 
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
     </RelativeLayout>
 
     <!-- Description -->
@@ -61,7 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/relativeLayoutMovieMeta"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="@xml/rounded_border_white"
         android:paddingLeft="4dp"
         android:paddingRight="4dp" >

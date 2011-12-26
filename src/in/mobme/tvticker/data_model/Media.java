@@ -22,7 +22,6 @@ public class Media implements MediaBase, Category, Channel, IMDB, Serializable {
 	int categoryType;
 	int onChannel;
 	int seriesId;
-	boolean isFavorite = false;
 
 	public void setId(long _id){
 		this._id = _id;
@@ -71,16 +70,6 @@ public class Media implements MediaBase, Category, Channel, IMDB, Serializable {
 	@Override
 	public void setMediaTitle(String title) {
 		this.mediaTitle = title;
-	}
-	
-	@Override
-	public boolean isFavorite() {
-		return isFavorite;
-	}
-
-	@Override
-	public void setIsFavorite(boolean isFav) {
-		this.isFavorite = isFav;
 	}
 	
 	@Override

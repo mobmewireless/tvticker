@@ -32,10 +32,6 @@ public interface MediaBase {
 
 	void setMediaThumb(String mediaThumb);
 
-	boolean isFavorite();
-
-	void setIsFavorite(boolean isFav);
-
 	void setShowEndTime(String showEndTime);
 
 	String getShowEndTime();

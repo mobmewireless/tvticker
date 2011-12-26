@@ -32,9 +32,10 @@ public class HomePageActivity extends FragmentActivity implements
 		menu.add(0, SETTINGS_MENU_ITEM, 0, "settings").setIcon(
 				R.drawable.ic_action_settings).setShowAsAction(
 				MenuItem.SHOW_AS_ACTION_ALWAYS);
-		 menu.add(0, SEARCH_MENU_ITEM, 0, "").setIcon(
-		 R.drawable.ic_menu_search).setShowAsAction(
-		 MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+		menu.add(0, SEARCH_MENU_ITEM, 0, "").setIcon(
+				R.drawable.ic_action_search).setShowAsAction(
+				MenuItem.SHOW_AS_ACTION_ALWAYS);
 
 		return super.onCreateOptionsMenu(menu);
 	}

@@ -16,8 +16,8 @@ public class Models {
 	private final static String KEY_IMDB_ROW_ID = "imdb_id";
 	private final static String KEY_SERIES_ROW_ID = "series_id";
 
-	final static int IS_TRUE = 1;
-	final static int IS_FALSE = 0;
+	public final static int IS_TRUE = 1;
+	public final static int IS_FALSE = 0;
 
 	/* Media Info table */
 	class Mediainfo {
@@ -30,7 +30,6 @@ public class Models {
 		final static String MEDIA_THUMB = "thumbnail_path";
 		final static String MEDIA_IMDB_ID = KEY_IMDB_ROW_ID;
 		final static String MEDIA_CAT_ID = KEY_CATEGORY_ROW_ID;
-		final static String IS_FAVORITE_FLAG = "is_favorite";
 		final static String SERIES_ID = KEY_SERIES_ROW_ID;
 		final static String MEDIA_DURATION = "duration";
 
@@ -39,9 +38,9 @@ public class Models {
 				+ TABLE_NAME + "(" + ROW_ID
 				+ " integer primary key autoincrement, " + MEDIA_TITLE
 				+ " text, " + MEDIA_DESCRIPTION + " text, " + MEDIA_THUMB
-				+ " text, " + MEDIA_IMDB_ID + " integer, " + IS_FAVORITE_FLAG
-				+ " integer, " + MEDIA_CAT_ID + " integer, " + SERIES_ID
-				+ " integer, " + MEDIA_DURATION + " text)";
+				+ " text, " + MEDIA_IMDB_ID + " integer, " + MEDIA_CAT_ID
+				+ " integer, " + SERIES_ID + " integer, " + MEDIA_DURATION
+				+ " text)";
 
 		/* media_table drop query */
 		final static String MEDIA_TABLE_DROP = "DROP TABLE IF EXISTS "
@@ -66,9 +65,7 @@ public class Models {
 				+ ROW_ID
 				+ " integer primary key autoincrement, "
 				+ IS_FAVORITE_CHANNEL
-				+ " integer, "
-				+ CHANNEL_NAME
-				+ " text )";
+				+ " integer, " + CHANNEL_NAME + " text )";
 
 		/* channel_table drop query */
 		final static String CHANNEL_TABLE_DROP = "DROP TABLE IF EXISTS "
@@ -98,9 +95,7 @@ public class Models {
 				+ CHANNEL_ID
 				+ " integer, "
 				+ END_TIME
-				+ " text, "
-				+ AIR_TIME
-				+ " text)";
+				+ " text, " + AIR_TIME + " text)";
 
 		/* channel_media_table drop query */
 		final static String CHANNEL_MEDIA_TABLE_DROP = "DROP TABLE IF EXISTS "
@@ -161,6 +156,7 @@ public class Models {
 		final static String ROW_ID = KEY_ROW_ID;
 		final static String MEDIA_ID = KEY_MEDIA_ROW_ID;
 		final static String REMINDER_ENABLED = "reminder_flag";
+		final static String IS_FAVORITE_FLAG = "is_favorite";
 
 		/* reminders_table create query */
 		final static String REMINDER_TABLE_CREATE = "create table if not exists "
@@ -169,7 +165,10 @@ public class Models {
 				+ ROW_ID
 				+ " integer primary key autoincrement, "
 				+ MEDIA_ID
-				+ " integer, " + REMINDER_ENABLED + " integer)";
+				+ " integer, "
+				+ REMINDER_ENABLED
+				+ " integer, "
+				+ IS_FAVORITE_FLAG + " integer)";
 
 		/* reminder_table drop query */
 		final static String REMINDER_TABLE_DROP = "DROP TABLE IF EXISTS "

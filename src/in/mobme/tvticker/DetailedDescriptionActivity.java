@@ -10,6 +10,7 @@ import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,24 +22,33 @@ import android.widget.Toast;
 public class DetailedDescriptionActivity extends FragmentActivity {
 
 	private final int MENU_ADD_TO_FAVORITES = 1;
+	
 	private WebImageView movieThumb = null;
 	private TextView movieDescription = null;
+	private TextView movieTimeText = null;
+	private TextView movieChannelText = null;
 	private Button readReviewsButton = null;
 	private ImageButton faceBookButton = null;
 	private ImageButton twitterButton = null;
 	private Button imdbRatingButton = null;
+	private boolean fav_status = false;
+	private int cMenuDrawable;
+
 	private Media media = null;
 	TvTickerDBAdapter dataAdapter;
-	
+
 	String title;
 	String subTitle;
 	String imdbURL;
+	String channel;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, MENU_ADD_TO_FAVORITES, 0, "fav").setIcon(
-				R.drawable.ic_action_fav).setShowAsAction(
-				MenuItem.SHOW_AS_ACTION_ALWAYS);
+		Log.i(Constants.TAG, "" + fav_status);
+		cMenuDrawable = fav_status ? R.drawable.ic_action_fav_on
+				: R.drawable.ic_action_fav_off;
+		menu.add(0, MENU_ADD_TO_FAVORITES, 0, "fav").setIcon(cMenuDrawable)
+				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -46,11 +56,17 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.detailed_description);
+		media = (Media) this.getIntent().getExtras().getSerializable(
+				Constants.MEDIA_OBJECT);
 		dataAdapter = new TvTickerDBAdapter(this);
-		media = (Media) this.getIntent().getExtras().getSerializable(Constants.MEDIA_OBJECT);
+		dataAdapter.open();
+		fav_status = dataAdapter.IsFavoriteEnabledFor(media.getId());
+		channel = dataAdapter.getChannelNameFor(media.getChannel());
+		subTitle = dataAdapter.getCategoryTypeFor(media.getCategoryType());
+		dataAdapter.close();
+		setContentView(R.layout.detailed_description);
+
 		title = media.getMediaTitle();
-		subTitle = "channel_name, " + media.getShowTime();
 		imdbURL = media.getImdbLink();
 
 		// configure action bar - private method
@@ -58,6 +74,9 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 
 		movieThumb = (WebImageView) findViewById(R.id.movie_thumb);
 		movieDescription = (TextView) findViewById(R.id.movie_description);
+		movieTimeText = (TextView) findViewById(R.id.textViewTime);
+		movieChannelText = (TextView) findViewById(R.id.textViewChannel);
+		
 		readReviewsButton = (Button) findViewById(R.id.button_go_imdb);
 
 		faceBookButton = (ImageButton) findViewById(R.id.go_facebook_button);
@@ -65,14 +84,16 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		// non_interactive fields
 		imdbRatingButton = (Button) findViewById(R.id.rating_non_interactive_button);
 
-		// set up IMDB rating got from web api, here
-		imdbRatingButton.setText(getFormattedImdbTextRatingFor(media.getImdbRating()));
-
+		//media object to UI components
+		imdbRatingButton.setText(getFormattedImdbTextRatingFor(media
+				.getImdbRating()));
 		movieThumb.setImageWithURL(this, media.getMediaThumb());
 		movieDescription.setText(media.getMediaDescription());
+		movieTimeText.setText(media.getShowTime());
+		movieChannelText.setText(channel);
 
 		// adjust sliding drawer's handle opacity
-		adjustAlphaOf(R.id.handle, 220);
+		findViewById(R.id.handle).getBackground().setAlpha(220);
 
 		// button click listeners
 		readReviewsButton.setOnClickListener(new OnClickListener() {
@@ -98,6 +119,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 				showMsg("twitter");
 			}
 		});
+
 	}
 
 	// Action bar menu item click listener.
@@ -105,11 +127,19 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case MENU_ADD_TO_FAVORITES:
-			showMsg(media.getId() + "Added to favorites");
+			// take curStatus from db, this is trivial !
 			dataAdapter.open();
-			dataAdapter.setIsFavorite(media.getId(), true, true);
+			fav_status = !dataAdapter.IsFavoriteEnabledFor(media.getId());
+			if (fav_status) {
+				cMenuDrawable = R.drawable.ic_action_fav_on;
+				dataAdapter.setIsFavorite(media.getId(), fav_status);
+			} else {
+				cMenuDrawable = R.drawable.ic_action_fav_off;
+				dataAdapter.removeIsFavFor(media.getId());
+			}
 			dataAdapter.close();
-			//not recommended !
+			item.setIcon(cMenuDrawable);
+			// not recommended !
 			ViewPagerAdapter.staticAdapterObj.refreshFavAdapter(media);
 			break;
 		}
@@ -133,10 +163,6 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	// helpers for Imdb Rating bar
 	private String getFormattedImdbTextRatingFor(float rating) {
 		return "" + rating;
-	}
-
-	private void adjustAlphaOf(int resId, int alpha) {
-		this.findViewById(resId).getBackground().setAlpha(alpha);
 	}
 
 }
