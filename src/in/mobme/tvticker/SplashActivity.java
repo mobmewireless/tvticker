@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 public class SplashActivity extends Activity {
-	
+
 	protected boolean _active = true;
 	protected int _splashTime = 1000; // time to display the splash screen in ms
 	protected boolean isDisabled = false;
@@ -38,10 +38,8 @@ public class SplashActivity extends Activity {
 							}
 						}
 						// Useful code here..
-						// Experiment..
-//						 DataMocker dataMocker =
-//						 new DataMocker(getBaseContext());
-//						 dataMocker.startMocking();
+						// // Experiment..
+						//
 						// Check connection here..
 
 					} catch (InterruptedException e) {
@@ -50,6 +48,9 @@ public class SplashActivity extends Activity {
 					} finally {
 						finish();
 						if (_active) {
+							DataMocker dataMocker = new DataMocker(
+									getBaseContext());
+							dataMocker.startMocking();
 							startActivity(new Intent(getBaseContext(),
 									HomePageActivity.class));
 						}
