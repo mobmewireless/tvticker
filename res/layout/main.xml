@@ -13,9 +13,10 @@
 		android:paddingTop="5dp" />
 	<RelativeLayout android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:background="#ffeaeaea">
-		<View android:layout_width="fill_parent" android:layout_height="1px"
+		<View android:layout_width="fill_parent" android:layout_height="1dp"
 			android:layout_alignBottom="@+id/current" android:background="#ffbdbdbd" />
 		<ImageView android:id="@id/current" android:layout_width="wrap_content"
+		    android:contentDescription="@string/default_indicator_desc_text"
 			android:layout_height="wrap_content" android:src="@drawable/indicator_current"
 			android:layout_centerInParent="true" android:layout_alignParentTop="true" />
 	</RelativeLayout>

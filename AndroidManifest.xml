@@ -15,7 +15,7 @@
         android:theme="@style/Theme.SherlockCustom.ItemTitleAndSubTitle" >
         <activity
             android:name=".SplashActivity"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@style/Theme.NullBackground" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

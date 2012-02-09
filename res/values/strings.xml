@@ -8,12 +8,30 @@
     <string name="search_hint">Search TvTicker</string>
     <string name="favorites_empty_text">You haven\'t added any shows here yet. Why not
 		search below to add a show?</string>
-    <string name="favorites_normal_text">We will send you two reminders, half an
+    <string name="favorites_normal_text">e will send you two reminders, half an
 		hour and ten
-		minutes before every show.
-	</string>
-    <string name="default_empty_text">Error, couldn\'t fetch Data.</string>
-    
+		minutes before every show.</string>
+		
+    <!-- <string name="default_empty_text">Error, couldn\'t fetch Data.</string> -->
+    <string name="default_channel_text">channel_name</string>
+    <string name="default_time_text">time</string>
+    <string name="default_share_text">Share with your friends</string>
+    <string name="default_rating_text">N.A</string>
+    <string name="default_browse_shows_text">Browse all shows</string>
+    <string name="default_header_text">HeaderText</string>
+    <string name="default_loader_text">Loading..</string>
+    <string name="default_show_time_text">show_timing</string>
+    <string name="default_category_tag_text">category_tag</string>
+    <string name="default_channel_id_text">Channel_ID</string>
+    <string name="default_movie_text">movie_name</string>
+    <string name="default_checked_view_text">CheckedTextView</string>
+    <string name="default_indicator_desc_text">Pointer to current view</string>
+    <string name="left_handle_description">Handle image(left side)</string>
+    <string name="right_handle_description">Handle image(Right side)</string>
+    <string name="facebook_button_desc">Share to facebook</string>
+    <string name="twitter_button_desc">Share to Twitter</string>
+    <string name="throbber_desc">Loading Animation</string>
+
     <!-- Shown above search results when we receive a search request. -->
     <plurals name="search_results">
         <item quantity="one">%1$d result for \"%2$s\": </item>
@@ -23,12 +41,10 @@
     <!-- Search failure message. -->
     <string name="no_results">No results found for \"%s\"</string>
 
-
     <!-- Reminder Pref list -->
-    <string name="ReminderPref_summary">TV Ticker can remind you (twice!) so that you
+    <string name="ReminderPref_summary">V Ticker can remind you (twice!) so that you
 		never miss your favorite show. If you\'d like to
-		turn off reminders, you can do that here.
-	</string>
+		turn off reminders, you can do that here.</string>
 
     <string-array name="first_pref">
         <item>OFF</item>

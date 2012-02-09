@@ -12,21 +12,21 @@
 		android:gravity="center_vertical" android:layout_toRightOf="@+id/left_icon"
 		android:layout_height="match_parent" android:layout_width="match_parent"
 		android:layout_alignBottom="@+id/left_icon" android:layout_marginLeft="1dp"
-		android:paddingTop="10px" android:paddingLeft="5px"
-		android:paddingRight="5px" android:paddingBottom="3px">
+		android:paddingTop="10dp" android:paddingLeft="5dp"
+		android:paddingRight="5dp" android:paddingBottom="3dp">
 
 
 		<RelativeLayout android:id="@+id/linearLayout1"
 			android:layout_height="wrap_content" android:layout_width="match_parent">
 
 			<TextView android:layout_height="wrap_content" android:id="@+id/label"
-				android:ellipsize="marquee" android:text="TextView"
+				android:ellipsize="marquee" android:text="@string/default_movie_text"
 				android:textAppearance="?android:attr/textAppearanceMedium"
 				android:layout_alignParentLeft="true" android:layout_width="160dp"
 				android:singleLine="true" />
 
 			<TextView android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:text="Channel_ID"
+				android:layout_width="wrap_content" android:text="@string/default_channel_id_text"
 				android:id="@+id/channel_id" android:textSize="6pt"
 				android:layout_alignParentTop="true"
 				android:layout_alignParentRight="true" />
@@ -39,7 +39,7 @@
 			android:layout_height="wrap_content" android:layout_width="match_parent">
 
 			<TextView android:layout_height="wrap_content" android:id="@+id/category_tag"
-				android:text="category_tag" android:textSize="6pt"
+				android:text="@string/default_category_tag_text" android:textSize="6pt"
 				android:layout_marginRight="6dp" android:layout_alignParentLeft="true"
 				android:layout_width="wrap_content" />
 
@@ -52,7 +52,7 @@
 
 
 			<TextView android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:text="show_timing"
+				android:layout_width="wrap_content" android:text="@string/default_show_time_text"
 				android:id="@+id/show_time" android:textSize="6pt"
 				android:layout_alignParentRight="true" />
 

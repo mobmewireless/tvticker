@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pale_white"
     android:orientation="vertical" >
 
     <!-- Movie thumb and description -->
@@ -37,7 +36,7 @@
                 android:id="@+id/textViewTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="__time here__"
+                android:text="@string/default_channel_text"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
@@ -45,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="__channel name here__"
+                android:text="@string/default_time_text"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
 
@@ -78,7 +77,7 @@
                 android:background="@drawable/ic_rating_star_big"
                 android:clickable="false"
                 android:paddingTop="6dp"
-                android:text="N.A" 
+                android:text="@string/default_rating_text" 
                 android:layout_alignParentBottom="true"/>
         </RelativeLayout>
     </RelativeLayout>
@@ -125,6 +124,7 @@
 
             <ImageView
                 android:id="@+id/left_handle"
+                android:contentDescription="@string/left_handle_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -136,12 +136,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Share with your friends"
+                android:text="@string/default_share_text"
                 android:textColor="@drawable/white"
                 android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/right_handle"
+                android:contentDescription="@string/right_handle_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -153,11 +154,11 @@
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:background="#999"
             android:gravity="center" >
 
             <ImageButton
+                android:contentDescription="@string/facebook_button_desc"
                 android:id="@+id/go_facebook_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -165,6 +166,7 @@
                 android:src="@xml/facebook_button" />
 
             <ImageButton
+                android:contentDescription="@string/twitter_button_desc"
                 android:id="@+id/go_twitter_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
