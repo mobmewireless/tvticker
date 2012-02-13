@@ -4,6 +4,7 @@ import in.mobme.tvticker.data_model.Categories;
 import in.mobme.tvticker.data_model.Channels;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
+import in.mobme.tvticker.rpcclient.Constants;
 import in.mobme.tvticker.rpcclient.RPCClient;
 
 import java.util.ArrayList;
@@ -25,7 +26,6 @@ public class DataMocker {
 	final String[] CATEGORIES = { "MOVIES", "NEWS", "TV SERIES", "DOCUMENTARY",
 			"ENTERTAINMENT", "ANIME" };
 	final String[] SERIES = { "NO", "YES" };
-
 	public DataMocker(Context ctx) {
 		this.ctx = ctx;
 		mockAdapter = new TvTickerDBAdapter(ctx);
@@ -88,16 +88,15 @@ public class DataMocker {
 	private void populateMainTable() {
 		Log.i(TAG, "Populating Main table..");
 		ArrayList<Media> media = null;
-
 		try {
 			rpc_client.ping();
 			media = rpc_client.getMediaListFor("2012-02-08 16:28:00", "full");
 			Log.i("media", media.get(0).getImdbLink());
 			for (Media program : media) {
-
+					String thumbnail = Constants.RPC.Media.THUMBNAIL_PREFIX  +program.getThumbnailID();
 				long _id = mockAdapter.createNewMediaInfo(mockMediaFor(
 						program.getMediaTitle(), program.getMediaDescription(),
-						program.getMediaThumb(), program.getImdbLink()
+						thumbnail, program.getImdbLink()
 								+ "reviews", program.getImdbRating(),
 						program.getCategoryType(), program.getShowTime(),
 						program.getShowEndTime(), program.getShowDuration(),

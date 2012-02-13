@@ -20,6 +20,7 @@ public class MediaJsonParser {
 		media.setMediaThumb(mediaObj.getString(Constants.RPC.Media.THUMBNAIL_TAG));
 		media.setMediaTitle(mediaObj.getString(Constants.RPC.Media.TITLE_TAG));
 		media.setSeriesID(mediaObj.getInt(Constants.RPC.Media.SERIES_ID_TAG));
+		media.setThumbnailID(mediaObj.getInt(Constants.RPC.Media.THUMBNAIL_ID_TAG));
 		media.setShowDuration(mediaObj.getString(Constants.RPC.Media.DURATION_TAG));
 		media.setShowEndTime(mediaObj.getString(Constants.RPC.Media.SHOW_TIME_END_TAG));
 		media.setShowTime(mediaObj.getString(Constants.RPC.Media.SHOW_TIME_START_TAG));

@@ -22,6 +22,7 @@ public class Media implements MediaBase, Category, Channel, IMDB, Serializable {
 	int categoryType;
 	int onChannel;
 	int seriesId;
+	int thumbnailId;
 
 	public void setId(long _id){
 		this._id = _id;
@@ -134,7 +135,7 @@ public class Media implements MediaBase, Category, Channel, IMDB, Serializable {
 
 	@Override
 	public void setImdbLink(String imdbLink) {
-		this.imdbLink = "http://www.imdb.com/title/"+imdbLink+"/";
+		this.imdbLink = imdbLink;
 	}
 
 	@Override
@@ -145,6 +146,17 @@ public class Media implements MediaBase, Category, Channel, IMDB, Serializable {
 	@Override
 	public void setImdbRating(float imdbRating) {
 		this.imdbRating = imdbRating;
+	}
+
+	@Override
+	public void setThumbnailID(int thumbnailId) {
+		this.thumbnailId =thumbnailId;
+		
+	}
+
+	@Override
+	public int getThumbnailID() {
+		return thumbnailId;
 	}
 
 }
