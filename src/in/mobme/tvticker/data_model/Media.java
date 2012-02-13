@@ -134,7 +134,7 @@ public class Media implements MediaBase, Category, Channel, IMDB, Serializable {
 
 	@Override
 	public void setImdbLink(String imdbLink) {
-		this.imdbLink = imdbLink;
+		this.imdbLink = "http://www.imdb.com/title/"+imdbLink+"/";
 	}
 
 	@Override

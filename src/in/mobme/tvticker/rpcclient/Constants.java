@@ -14,7 +14,7 @@ public class Constants {
 	}
 	
 	public class RPC {
-		final static String SERVICE_URI = "http://192.168.1.142:3000/service";
+		public final static String SERVICE_URI = "http://192.168.1.92:3000/service";
 		final static String PROGRAM_TAG = "program";
 		final static String CHANNEL_TAG = "channel";
 		final static String CATEGORY_TAG = "category";

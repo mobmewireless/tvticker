@@ -5,6 +5,7 @@ import in.mobme.tvticker.data_model.Media;
 import java.util.List;
 
 import android.app.Activity;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;

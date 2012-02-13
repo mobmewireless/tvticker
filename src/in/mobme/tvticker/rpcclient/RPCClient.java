@@ -18,8 +18,17 @@ public class RPCClient {
 	private JSONRPCClient client;
 	private MediaJsonParser parser;
 
-	public RPCClient(String URI, int ConnTimeOut, int SoTimeOut) {
+	public RPCClient(String URI , int ConnTimeOut, int SoTimeOut) {
 		client = JSONRPCClient.create(URI);
+		client.setConnectionTimeout(ConnTimeOut);
+		client.setSoTimeout(SoTimeOut);
+		Log.i(Constants.TAG, client.toString());
+		parser = new MediaJsonParser();
+	}
+	public RPCClient( ) {
+		int ConnTimeOut = Constants.RPC.CONNECTION_TIMEOUT;
+		int SoTimeOut = Constants.RPC.SO_TIMEOUT;
+		client = JSONRPCClient.create(Constants.RPC.SERVICE_URI);
 		client.setConnectionTimeout(ConnTimeOut);
 		client.setSoTimeout(SoTimeOut);
 		Log.i(Constants.TAG, client.toString());
