@@ -21,7 +21,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:background="#00000000"
-            android:src="@drawable/thumb_bu" />
+            android:src="@android:drawable/gallery_thumb" />
 
         <LinearLayout
             android:id="@+id/linearLayoutText"

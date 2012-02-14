@@ -91,9 +91,10 @@ public class DataMocker {
 		try {
 			rpc_client.ping();
 			media = rpc_client.getMediaListFor("2012-02-08 16:28:00", "full");
-			Log.i("media", media.get(0).getImdbLink());
+			
 			for (Media program : media) {
-					String thumbnail = Constants.RPC.Media.THUMBNAIL_PREFIX  +program.getThumbnailID();
+					String thumbnail = Constants.RPC.Media.THUMBNAIL_PREFIX  + program.getThumbnailID() + Constants.RPC.Media.THUMBNAIL_SUFFIX;
+					Log.i("media",thumbnail);
 				long _id = mockAdapter.createNewMediaInfo(mockMediaFor(
 						program.getMediaTitle(), program.getMediaDescription(),
 						thumbnail, program.getImdbLink()

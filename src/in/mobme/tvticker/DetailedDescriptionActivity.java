@@ -87,7 +87,8 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		//media object to UI components
 		imdbRatingButton.setText(getFormattedImdbTextRatingFor(media
 				.getImdbRating()));
-		movieThumb.setImageWithURL(this, media.getMediaThumb());
+		movieThumb.setImageWithURL(this, media.getMediaThumb(),this.getResources().getDrawable(
+				R.drawable.ic_placehoder));
 		movieDescription.setText(media.getMediaDescription());
 		movieTimeText.setText(media.getShowTime());
 		movieChannelText.setText(channel);
