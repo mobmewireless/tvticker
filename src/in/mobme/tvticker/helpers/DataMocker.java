@@ -8,11 +8,13 @@ import in.mobme.tvticker.rpcclient.Constants;
 import in.mobme.tvticker.rpcclient.RPCClient;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.alexd.jsonrpc.JSONRPCException;
 import org.json.JSONException;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 public class DataMocker {
@@ -90,7 +92,8 @@ public class DataMocker {
 		ArrayList<Media> media = null;
 		try {
 			rpc_client.ping();
-			media = rpc_client.getMediaListFor("2012-02-08 16:28:00", "full");
+			String now = (String) DateFormat.format("yyyy-MM-dd kk:mm:ss", new Date());
+			media = rpc_client.getMediaListFor(now, "now");
 			
 			for (Media program : media) {
 					String thumbnail = Constants.RPC.Media.THUMBNAIL_PREFIX  + program.getThumbnailID() + Constants.RPC.Media.THUMBNAIL_SUFFIX;

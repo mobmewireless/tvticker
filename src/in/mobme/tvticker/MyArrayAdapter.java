@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import com.ocpsoft.pretty.time.PrettyTime;
 
 public class MyArrayAdapter extends ArrayAdapter<Media> {
 
@@ -101,9 +103,10 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		try {
 			Date show_time_start = format.parse(media.getShowTime());
 			Date show_time_end = format.parse(media.getShowEndTime());
-
-			holder.show_timing.setText(timeMessage(show_time_start,
-					show_time_end));
+			settimeMessage(show_time_start,
+					show_time_end,holder);
+//			holder.show_timing.setText(timeMessage(show_time_start,
+//					show_time_end));
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -119,29 +122,27 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		return rowView;
 	}
 
-	private String timeMessage(Date show_time_start, Date show_time_end) {
+	private void settimeMessage(Date show_time_start, Date show_time_end,ViewHolder holder) {
 		String message = "";
+		PrettyTime p = new PrettyTime();
+		int style = 0;
 		Date now = new Date();
 		if (now.after(show_time_start) && now.before(show_time_end)) {
-			long timediff = (show_time_end.getTime() - now.getTime());
-			message = formattedmessage(timediff) + "left";
+			//long timediff = (show_time_end.getTime() - now.getTime());
+			message = p.format(show_time_end);
 		} else if (now.before(show_time_start)) {
 			long timediff = (show_time_start.getTime() - now.getTime());
-			message = "In " + formattedmessage(timediff) + " minutes";
+			message = p.format(show_time_start);
 		} else if (now.after(show_time_start)) {
 			message = "Finished";
 		} else {
 			message = "Unknown";
 		}
-		return message;
+		holder.show_timing.setText(message);
+		holder.show_timing.setTypeface(null,style);
+		
 	}
 
-	private String formattedmessage(long timeRemaining) {
-		String formattedmessage = "";
-		long temptime;
-
-		return formattedmessage;
-	}
 
 	private float sanitizeRatingValue(float floatValue) {
 		return (floatValue * 3) / 10;
