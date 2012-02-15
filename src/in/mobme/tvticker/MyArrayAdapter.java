@@ -2,7 +2,11 @@ package in.mobme.tvticker;
 
 import in.mobme.tvticker.customwidget.WebImageView;
 import in.mobme.tvticker.data_model.Media;
+import in.mobme.tvticker.database.TvTickerDBAdapter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -49,11 +53,17 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		// ViewHolder will buffer the assess to the individual fields of the row
 		// layout
 		ViewHolder holder;
+		TvTickerDBAdapter dataAdapter;
+		String title;
+		String category;
+		String imdbURL;
+		String channel;
 		// Recycle existing view if passed as parameter
 		// This will save memory and time on Android
 		// This only works if the base layout for all classes are the same
 		View rowView = convertView;
-
+		dataAdapter = new TvTickerDBAdapter(context);
+		dataAdapter.open();
 		if (rowView == null) {
 			LayoutInflater inflater = context.getLayoutInflater();
 			rowView = inflater.inflate(rowLayoutId, null, true);
@@ -81,10 +91,49 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 
 		holder.movieTitle.setText(media.getMediaTitle());
 		if (showThumb) {
-			holder.imageView.setImageWithURL(context, media.getMediaThumb(),placeHolder);
+			holder.imageView.setImageWithURL(context, media.getMediaThumb(),
+					placeHolder);
 		}
-		holder.imdbRatingBar.setRating(sanitizeRatingValue(media.getImdbRating()));
+		channel = dataAdapter.getChannelNameFor(media.getChannel());
+		category = dataAdapter.getCategoryTypeFor(media.getCategoryType());
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+		try {
+			Date show_time_start = format.parse(media.getShowTime());
+			Date show_time_end = format.parse(media.getShowEndTime());
+			Date now = new Date();
+			if (now.after(show_time_start) && now.before(show_time_end)) {
+				long timediff = (show_time_end.getTime() - now.getTime())
+						/ (60 * 1000);
+				holder.show_timing.setText(timediff + " minutes left");
+			} else if (now.before(show_time_start)) {
+				long timediff = (show_time_start.getTime() - now.getTime())
+						/ (60 * 1000);
+				holder.show_timing.setText("In " + timediff + " minutes");
+			} else if (now.after(show_time_start)) {
+				holder.show_timing.setText("Finished");
+			} else {
+				holder.show_timing.setText("Finished");
+			}
+
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			holder.show_timing.setText(media.getShowTime());
+			e.printStackTrace();
+		}
+
+		dataAdapter.close();
+		holder.channelID.setText(channel);
+		holder.categoryTag.setText(category);
+		holder.imdbRatingBar.setRating(sanitizeRatingValue(media
+				.getImdbRating()));
 		return rowView;
+	}
+
+	private String timeMessage(long timediff) {
+		String message = "";
+
+		return message;
 	}
 
 	private float sanitizeRatingValue(float floatValue) {
