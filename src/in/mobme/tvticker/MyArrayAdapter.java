@@ -101,20 +101,9 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		try {
 			Date show_time_start = format.parse(media.getShowTime());
 			Date show_time_end = format.parse(media.getShowEndTime());
-			Date now = new Date();
-			if (now.after(show_time_start) && now.before(show_time_end)) {
-				long timediff = (show_time_end.getTime() - now.getTime())
-						/ (60 * 1000);
-				holder.show_timing.setText(timediff + " minutes left");
-			} else if (now.before(show_time_start)) {
-				long timediff = (show_time_start.getTime() - now.getTime())
-						/ (60 * 1000);
-				holder.show_timing.setText("In " + timediff + " minutes");
-			} else if (now.after(show_time_start)) {
-				holder.show_timing.setText("Finished");
-			} else {
-				holder.show_timing.setText("Finished");
-			}
+
+			holder.show_timing.setText(timeMessage(show_time_start,
+					show_time_end));
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -130,10 +119,28 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		return rowView;
 	}
 
-	private String timeMessage(long timediff) {
+	private String timeMessage(Date show_time_start, Date show_time_end) {
 		String message = "";
-
+		Date now = new Date();
+		if (now.after(show_time_start) && now.before(show_time_end)) {
+			long timediff = (show_time_end.getTime() - now.getTime());
+			message = formattedmessage(timediff) + "left";
+		} else if (now.before(show_time_start)) {
+			long timediff = (show_time_start.getTime() - now.getTime());
+			message = "In " + formattedmessage(timediff) + " minutes";
+		} else if (now.after(show_time_start)) {
+			message = "Finished";
+		} else {
+			message = "Unknown";
+		}
 		return message;
+	}
+
+	private String formattedmessage(long timeRemaining) {
+		String formattedmessage = "";
+		long temptime;
+
+		return formattedmessage;
 	}
 
 	private float sanitizeRatingValue(float floatValue) {
