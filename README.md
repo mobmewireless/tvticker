@@ -17,7 +17,7 @@
     3. Use "TV Ticker" for the project name. 
     4. Click next. Use Android 3.2, and then click Finish.
 5. Right Click TvTicker, Properties -> Java Build Path -> Libraries -> Add External jar -> add <path_to_tvticker>/lib/CWAC AdapterWrapper -> Finish
-6. Right Click TvTicker, Properties -> Android. From Library, remove references to JakeWharton-ActionBarSherlock and add correct reference by clicking Add and selecting ActionBarSherlock.
+6. Right Click TvTicker, Properties -> Android. From Library, remove any references to JakeWharton-ActionBarSherlock and add correct reference by clicking Add and selecting ActionBarSherlock.
 7. Run your project.
 
 ### Action Bar Sherlock
