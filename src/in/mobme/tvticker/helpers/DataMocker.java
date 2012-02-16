@@ -93,7 +93,7 @@ public class DataMocker {
 		try {
 			rpc_client.ping();
 			String now = (String) DateFormat.format("yyyy-MM-dd kk:mm:ss", new Date());
-			media = rpc_client.getMediaListFor(now, "now");
+			media = rpc_client.getMediaListFor(now, "full");
 			
 			for (Media program : media) {
 					String thumbnail = Constants.RPC.Media.THUMBNAIL_PREFIX  + program.getThumbnailID() + Constants.RPC.Media.THUMBNAIL_SUFFIX;

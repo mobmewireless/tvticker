@@ -10,12 +10,16 @@ import in.mobme.tvticker.database.Models.Mediainfo;
 import in.mobme.tvticker.database.Models.Remindersinfo;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.format.DateFormat;
+import android.util.Log;
 
 public class TvTickerDBAdapter {
 
@@ -90,6 +94,61 @@ public class TvTickerDBAdapter {
 	 * 
 	 * @return List of all media
 	 * */
+	public ArrayList<Media> fetchShowsforNowFrame() {
+		
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.HOUR_OF_DAY, 1);
+		String one_hour_later = (String) DateFormat.format("yyyy-MM-dd kk:mm:ss", calendar.getTime());
+		
+		calendar.add(Calendar.HOUR, -2);
+		String one_hour_before =  (String) DateFormat.format("yyyy-MM-dd kk:mm:ss", calendar.getTime());
+		Log.i("one_hour_before ",one_hour_before);
+		Log.i("one_hour_later ",one_hour_later);
+		String whereclause = "show_time between ' "+ one_hour_before + "'and '"+one_hour_later+"'";
+		
+		mCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
+				ChannelMediaInfo.ROW_ID, ChannelMediaInfo.MEDIA_ID,
+				ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME,
+				ChannelMediaInfo.END_TIME }, whereclause, null, null, null, null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+			while (!mCursor.isAfterLast()) {
+				mediaList.add(unWrapShowDataFrom(mCursor));
+				mCursor.moveToNext();
+			}
+		}
+		return mediaList;
+
+	}
+public ArrayList<Media> fetchShowsforLaterFrame() {
+		
+	Calendar calendar = Calendar.getInstance();
+	calendar.add(Calendar.HOUR_OF_DAY, 1);
+	String one_hour_later = (String) DateFormat.format("yyyy-MM-dd kk:mm:ss", calendar.getTime());
+	calendar.add(Calendar.HOUR_OF_DAY, 2);
+	String three_hour_later =  (String) DateFormat.format("yyyy-MM-dd kk:mm:ss", calendar.getTime());
+	Log.i("one_hour_later ",one_hour_later);
+	Log.i("three_hour_later ",three_hour_later);
+
+	String whereclause = "show_time between ' "+ one_hour_later + "'and '"+three_hour_later+"'";
+		
+		mCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
+				ChannelMediaInfo.ROW_ID, ChannelMediaInfo.MEDIA_ID,
+				ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME,
+				ChannelMediaInfo.END_TIME }, whereclause, null, null, null, null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+			while (!mCursor.isAfterLast()) {
+				mediaList.add(unWrapShowDataFrom(mCursor));
+				mCursor.moveToNext();
+			}
+		}
+		return mediaList;
+
+	}
+
+
 	public ArrayList<Media> fetchAllShowsInfo() {
 
 		mCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
@@ -171,12 +230,12 @@ public class TvTickerDBAdapter {
 	 * @return Returns affected row id.
 	 */
 	private long insertMedia(Media media) {
-		long imdbId = insertImdbEntryFor(media.getImdbRating(), media
-				.getImdbLink());
+		long imdbId = insertImdbEntryFor(media.getImdbRating(),
+				media.getImdbLink());
 		initialValues.clear();
 		initialValues.put(Mediainfo.MEDIA_TITLE, media.getMediaTitle());
-		initialValues.put(Mediainfo.MEDIA_DESCRIPTION, media
-				.getMediaDescription());
+		initialValues.put(Mediainfo.MEDIA_DESCRIPTION,
+				media.getMediaDescription());
 		initialValues.put(Mediainfo.MEDIA_THUMB, media.getMediaThumb());
 		initialValues.put(Mediainfo.MEDIA_CAT_ID, media.getCategoryType());
 		initialValues.put(Mediainfo.MEDIA_DURATION, media.getShowDuration());
@@ -248,7 +307,7 @@ public class TvTickerDBAdapter {
 					.getColumnIndexOrThrow(ChannelsInfo.CHANNEL_NAME));
 			mCursor.close();
 		}
-		
+
 		return channelName;
 	}
 
@@ -361,7 +420,6 @@ public class TvTickerDBAdapter {
 		return mDb.update(Remindersinfo.TABLE_NAME, updateValues,
 				Remindersinfo.ROW_ID + "=" + mediaId, null) > 0;
 	}
-	
 
 	/**
 	 * Removes isFavorite flag for the given media id.
@@ -370,8 +428,8 @@ public class TvTickerDBAdapter {
 	 * @return true if successful; false otherwise.
 	 */
 	public boolean removeIsFavFor(long mediaId) {
-		return mDb.delete(Remindersinfo.TABLE_NAME, Remindersinfo.MEDIA_ID + "="
-				+ mediaId, null) > 0;
+		return mDb.delete(Remindersinfo.TABLE_NAME, Remindersinfo.MEDIA_ID
+				+ "=" + mediaId, null) > 0;
 	}
 
 	/**
@@ -393,18 +451,21 @@ public class TvTickerDBAdapter {
 	 * @param this_mediaID
 	 * @return true if found, false otherwise.
 	 */
-	public boolean IsFavoriteEnabledFor(long this_mediaID){
+	public boolean IsFavoriteEnabledFor(long this_mediaID) {
 		boolean isEnabled = false;
-		Cursor tmpCursor = mDb.query(true, Remindersinfo.TABLE_NAME, new String[] {
-				Remindersinfo.ROW_ID, Remindersinfo.IS_FAVORITE_FLAG },
-				Remindersinfo.MEDIA_ID + "=" + this_mediaID, null, null, null, null, null);
-		if(tmpCursor == null){
-			//safety !
+		Cursor tmpCursor = mDb.query(true, Remindersinfo.TABLE_NAME,
+				new String[] { Remindersinfo.ROW_ID,
+						Remindersinfo.IS_FAVORITE_FLAG },
+				Remindersinfo.MEDIA_ID + "=" + this_mediaID, null, null, null,
+				null, null);
+		if (tmpCursor == null) {
+			// safety !
 			isEnabled = false;
-		}else if(!tmpCursor.moveToFirst()){
+		} else if (!tmpCursor.moveToFirst()) {
 			isEnabled = false;
-		} else{
-			isEnabled = sanitiseIntegerToBoolean(tmpCursor.getInt(tmpCursor.getColumnIndexOrThrow(Remindersinfo.IS_FAVORITE_FLAG)));
+		} else {
+			isEnabled = sanitiseIntegerToBoolean(tmpCursor.getInt(tmpCursor
+					.getColumnIndexOrThrow(Remindersinfo.IS_FAVORITE_FLAG)));
 		}
 		tmpCursor.close();
 		return isEnabled;

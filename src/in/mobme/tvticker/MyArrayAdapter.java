@@ -124,7 +124,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 
 	private void settimeMessage(Date show_time_start, Date show_time_end,ViewHolder holder) {
 		String message = "";
-		PrettyTime p = new PrettyTime();
+		PrettyTime p = new PrettyTime(); //refer : http://ocpsoft.com/prettytime/#docs
 		int style = 0;
 		Date now = new Date();
 		if (now.after(show_time_start) && now.before(show_time_end)) {
