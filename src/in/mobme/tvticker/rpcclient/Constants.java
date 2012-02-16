@@ -1,5 +1,7 @@
 package in.mobme.tvticker.rpcclient;
 
+import android.R;
+
 public class Constants {
 	final static String TAG = "RPCClient";
 	
@@ -14,7 +16,9 @@ public class Constants {
 	}
 	
 	public class RPC {
-		public final static String SERVICE_URI = "http://192.168.1.92:3000/service";
+		public final static String SERVICE_URI = "http://192.168.1.143:3000/service";
+		final static String API_KEY = "tvticker";
+		
 		final static String PROGRAM_TAG = "program";
 		final static String CHANNEL_TAG = "channel";
 		final static String CATEGORY_TAG = "category";
@@ -41,14 +45,13 @@ public class Constants {
 			final static String THUMBNAIL_TAG = "thumbnail_link";
 			final static String SERIES_ID_TAG = "series_id";
 			final static String THUMBNAIL_ID_TAG = "thumbnail_id";
-			public final static String THUMBNAIL_PREFIX ="http://192.168.1.92:6666/image/";
+			public final static String THUMBNAIL_PREFIX ="http://192.168.1.143:6001/image/";
 			public final static String THUMBNAIL_SUFFIX ="/profile";
 
 
 		}
 
 		public class Services {
-			final static String API_KEY = "tvticker";
 			final static String PING = "ping";
 			final static String PROGRAMS_FOR_FRAME = "programs_for_current_frame";
 			final static String LIST_OF_CHANNELS = "channels";
