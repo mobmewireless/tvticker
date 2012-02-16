@@ -48,6 +48,7 @@ public class Constants {
 		}
 
 		public class Services {
+			final static String API_KEY = "tvticker";
 			final static String PING = "ping";
 			final static String PROGRAMS_FOR_FRAME = "programs_for_current_frame";
 			final static String LIST_OF_CHANNELS = "channels";

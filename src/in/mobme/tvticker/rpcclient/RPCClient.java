@@ -14,6 +14,10 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class RPCClient {
 	private JSONRPCClient client;
 	private MediaJsonParser parser;
@@ -85,4 +89,27 @@ public class RPCClient {
 		}
 	}
 
+	private String[] getAuthenticationParameters() throws NoSuchAlgorithmException {
+		String[] parameters = { "", "" };
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		
+		String timestamp = String.valueOf(java.lang.System.currentTimeMillis());
+		String keyWithTimestamp = timestamp.concat(Constants.RPC.Services.API_KEY);
+		
+		// Let's generate a hex representation of the hash
+		// http://stackoverflow.com/a/421696
+		md.reset();
+		md.update(keyWithTimestamp.getBytes());
+		byte[] digest = md.digest();
+		BigInteger bigInt = new BigInteger(1, digest);
+		String hashtext = bigInt.toString(16);
+		while(hashtext.length() < 32 ) {
+		  hashtext = "0" + hashtext;
+		}
+		
+		parameters[0] = timestamp;
+		parameters[1] = hashtext;
+		
+		return parameters;
+	}
 }
