@@ -7,7 +7,6 @@ import in.mobme.tvticker.database.TvTickerDBAdapter;
 import in.mobme.tvticker.rpcclient.Constants;
 import in.mobme.tvticker.rpcclient.RPCClient;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -41,7 +40,7 @@ public class DataMocker {
 	}
 
 	public int startMocking() {
-		try {
+	
 			rpc_client = new RPCClient();
 			try {
 				rpc_client.ping();
@@ -57,13 +56,7 @@ public class DataMocker {
 				e.printStackTrace();
 				return STATUS;
 			}
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			Log.i("TVTICKER_DATAMOCKER", "NoSuchAlgorithmException");
-
-			e.printStackTrace();
-			return AUTHENTICATION_FAILED;
-		}
+		
 		return 0;
 	}
 
