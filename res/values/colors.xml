@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<drawable name="ab_bg_black">#aa000000</drawable>
-	<drawable name="ab_bg_dark_gray">#373b44</drawable>
-	<drawable name="indicator_background">#656972</drawable>
-	<drawable name="light_gray">#999999</drawable>
-	<drawable name="dark_gray">#606060</drawable>
-	<drawable name="pale_white">#EEE</drawable>
-	<drawable name="white">#FFF</drawable>
-	<drawable name="pale_gray">#BBB</drawable>
-	<drawable name="transparent_ab_bg_dark_gray">#DD373b44</drawable>
+    <drawable name="ab_bg_dark_gray">#373b44</drawable>
+    <drawable name="light_gray">#999999</drawable>
+    <drawable name="dark_gray">#606060</drawable>
+    <drawable name="white">#FFF</drawable>
+    <drawable name="pale_gray">#BBB</drawable>
 </resources>

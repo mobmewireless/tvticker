@@ -23,9 +23,6 @@ public class AllChannelsActivity extends Activity {
 		setContentView(R.layout.default_listview);
 
 		listView = (ListView) findViewById(android.R.id.list);
-
-		String[] test = new String[] { "Abc", "Def" };
-
 		TvTickerDBAdapter dbAdapter = new TvTickerDBAdapter(getBaseContext());
 		dbAdapter.open();
 		listView.setAdapter(new CursorAdapter(getBaseContext(), dbAdapter

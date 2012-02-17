@@ -44,5 +44,9 @@ public interface MediaBase {
 
 	int getSeriesID();
 	
+	void setThumbnailID(int thumbnailId);
+
+	int getThumbnailID();
+	
 
 }

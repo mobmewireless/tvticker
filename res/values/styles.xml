@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<style name="MainHeaderTitle" parent="TextAppearance.Widget.Title">
-		<item name="android:textColor">#e0e3e9</item>
-		<item name="android:textSize">6pt</item>
-		<item name="android:paddingTop">20px</item>
-		<item name="android:paddingBottom">20px</item>
-	</style>
 
-	<style name="MainTitle" parent="TextAppearance.Widget.Title">
-		<item name="android:textColor">#e0e3e9</item>
-		<item name="android:textSize">7.5pt</item>
-		<item name="android:paddingTop">15px</item>
-		<item name="android:paddingBottom">10px</item>
-	</style>
+    <style name="MainHeaderTitle" parent="TextAppearance.Widget.Title">
+        <item name="android:textColor">#e0e3e9</item>
+        <item name="android:textSize">6pt</item>
+        <item name="android:paddingTop">20px</item>
+        <item name="android:paddingBottom">20px</item>
+    </style>
 
-	<style name="SubTitle" parent="TextAppearance.Widget.Title">
-		<item name="android:textColor">#e0e3e9</item>
-		<item name="android:textSize">5pt</item>
-		<item name="android:paddingTop">10px</item>
-		<item name="android:paddingBottom">10px</item>
-	</style>
+    <style name="MainTitle" parent="TextAppearance.Widget.Title">
+        <item name="android:textColor">#e0e3e9</item>
+        <item name="android:textSize">7.5pt</item>
+        <item name="android:paddingTop">15px</item>
+        <item name="android:paddingBottom">10px</item>
+    </style>
 
-	<style name="yellowRatingBarSmall" parent="@android:style/Widget.RatingBar">
-    <item name="android:progressDrawable">@xml/custom_rating_star</item>
-    <item name="android:minHeight">16dip</item>
-    <item name="android:maxHeight">16dip</item>
-</style>
-	
+    <style name="SubTitle" parent="TextAppearance.Widget.Title">
+        <item name="android:textColor">#e0e3e9</item>
+        <item name="android:textSize">5pt</item>
+        <item name="android:paddingTop">10px</item>
+        <item name="android:paddingBottom">10px</item>
+    </style>
+
+    <style name="yellowRatingBarSmall" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@xml/custom_rating_star</item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
 
 </resources>

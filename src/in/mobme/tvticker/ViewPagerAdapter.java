@@ -91,13 +91,17 @@ class ViewPagerAdapter extends PagerAdapter {
 		listView = (ListView) layoutInflater.inflate(listViewId, null);
 
 		if (position == NOW_POSITION) {
-
+			tvDataAdapter.open();
+			mediaList = tvDataAdapter.fetchShowsforNowFrame();
+			tvDataAdapter.close();
 			lazyAdapter = new LazyAdapter((Activity) context, mediaList, true);
 			listView.setAdapter(lazyAdapter);
 			listView.setOnItemClickListener(new CustomOnItemClickListener());
 			
 		} else if (position == LATER_TODAY_POSITION) {
-
+			tvDataAdapter.open();
+			mediaList = tvDataAdapter.fetchShowsforLaterFrame();
+			tvDataAdapter.close();
 			lazyAdapter = new LazyAdapter((Activity) context, mediaList, true);
 			listView.setAdapter(lazyAdapter);
 			listView.setOnItemClickListener(new CustomOnItemClickListener());

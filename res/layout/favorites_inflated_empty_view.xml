@@ -23,7 +23,7 @@
         android:background="@xml/custom_blue_button"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="Browse all shows"
+        android:text="@string/default_browse_shows_text"
         android:textColor="@drawable/white" />
 
 </LinearLayout>

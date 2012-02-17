@@ -7,5 +7,7 @@
 	<classpathentry kind="src" path="com_actionbarsherlock_src"/>
 	<classpathentry kind="lib" path="libs/CWAC-AdapterWrapper.jar"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry kind="lib" path="libs/ocpsoft-pretty-time-1.0.7.jar"/>
+	<classpathentry kind="lib" path="libs/android-json-rpc-0.2.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

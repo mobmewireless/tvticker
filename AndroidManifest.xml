@@ -15,15 +15,15 @@
         android:theme="@style/Theme.SherlockCustom.ItemTitleAndSubTitle" >
         <activity
             android:name=".SplashActivity"
-            android:theme="@android:style/Theme.NoTitleBar" >
-            <intent-filter >
+            android:theme="@style/Theme.NullBackground" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:label="@string/app_name"
-            android:name=".HomePageActivity" >
+            android:name=".HomePageActivity"
+            android:label="@string/app_name" >
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".SearchableActivity" />
@@ -33,16 +33,16 @@
         <activity android:name=".DetailedDescriptionActivity" />
         <activity android:name=".BrowseAllShowsActivity" />
         <activity
-            android:label="Reminder Settings"
-            android:name=".ReminderPreferenceActivity" />
+            android:name=".ReminderPreferenceActivity"
+            android:label="Reminder Settings" />
         <activity android:name=".EditShowRemindersActivity" />
         <activity
-            android:label="TvTicker Settings"
-            android:name=".SettingsPreferenceActivity" />
+            android:name=".SettingsPreferenceActivity"
+            android:label="TvTicker Settings" />
         <activity
-            android:launchMode="singleTop"
-            android:name=".SearchableActivity" >
-            <intent-filter >
+            android:name=".SearchableActivity"
+            android:launchMode="singleTop" >
+            <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
 
