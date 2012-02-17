@@ -28,6 +28,8 @@
                 android:name="android.app.default_searchable"
                 android:value=".SearchableActivity" />
         </activity>
+    
+        <activity android:name=".AllChannelsActivity" />
         <activity android:name=".DetailedDescriptionActivity" />
         <activity android:name=".BrowseAllShowsActivity" />
         <activity

@@ -66,6 +66,9 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+
+    <string name="browse_channels">All TV Channels</string>
+    <string name="browse_categories">All Categories</string>
     <string name="api_url">http://192.168.1.143:3000/service</string>
 
 </resources>
