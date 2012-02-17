@@ -38,9 +38,6 @@ public class SplashActivity extends Activity {
 								waited += 100;
 							}
 						}
-						// Useful code here..
-						// // Experiment..
-						//
 						// Check connection here..
 
 					} catch (InterruptedException e) {
@@ -54,7 +51,11 @@ public class SplashActivity extends Activity {
 							dataMocker.startMocking();
 							startActivity(new Intent(getBaseContext(),
 									HomePageActivity.class));
+							//DataMocker dataMocker = new DataMocker(
+							//		getBaseContext());
+							//dataMocker.startMocking();
 						}
+
 					}
 				}
 			};

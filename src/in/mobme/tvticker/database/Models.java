@@ -57,6 +57,7 @@ public class Models {
 		final static String ROW_ID = KEY_ROW_ID;
 		final static String CHANNEL_NAME = "channel_name";
 		final static String IS_FAVORITE_CHANNEL = "is_favorite";
+		final static String REMOTE_CHANNEL_ID = "remote_channel_id";
 
 		/* channel_table create query */
 		final static String CHANNEL_TABLE_CREATE = "create table if not exists "
@@ -65,7 +66,8 @@ public class Models {
 				+ ROW_ID
 				+ " integer primary key autoincrement, "
 				+ IS_FAVORITE_CHANNEL
-				+ " integer, " + CHANNEL_NAME + " text )";
+				+ " integer, " + CHANNEL_NAME + " text "
+				+ REMOTE_CHANNEL_ID + " integer)"  ;
 
 		/* channel_table drop query */
 		final static String CHANNEL_TABLE_DROP = "DROP TABLE IF EXISTS "
@@ -111,15 +113,18 @@ public class Models {
 		/* columns */
 		final static String ROW_ID = KEY_ROW_ID;
 		final static String CATAGORY_TYPE = "category_type";
-
+		final static String REMOTE_CATEGORY_ID = "remote_category_id";
+		
 		/* category_table create query */
 		final static String CATEGORY_TABLE_CREATE = "create table if not exists "
 				+ TABLE_NAME
 				+ "("
 				+ ROW_ID
 				+ " integer primary key autoincrement, "
+				
 				+ CATAGORY_TYPE
-				+ " text )";
+				+ " text "
+				+ REMOTE_CATEGORY_ID + " integer)";
 
 		/* category_table drop query */
 		final static String CATEGORY_TABLE_DROP = "DROP TABLE IF EXISTS "

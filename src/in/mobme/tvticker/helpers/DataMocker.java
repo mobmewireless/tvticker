@@ -22,31 +22,46 @@ public class DataMocker {
 	Context ctx = null;
 	TvTickerDBAdapter mockAdapter = null;
 	RPCClient rpc_client = null;
+	public static int CONNECTION_FAILED = -2;
+	public static int AUTHENTICATION_FAILED = -3;
+	public static int STATUS = -1;
+
 	final String TAG = "TVTICKER_DATAMOCKER";
 	final String[] CHANNELS = { "STAR MOVIES", "HBO", "SURYA", "MOVIES NOW",
 			"BBC", "CNBC", "DISCOVERY", "STAR WORLD", "TEN SPORTS" };
 	final String[] CATEGORIES = { "MOVIES", "NEWS", "TV SERIES", "DOCUMENTARY",
 			"ENTERTAINMENT", "ANIME" };
 	final String[] SERIES = { "NO", "YES" };
+
 	public DataMocker(Context ctx) {
 		this.ctx = ctx;
 		mockAdapter = new TvTickerDBAdapter(ctx);
-		rpc_client = new RPCClient();
+
 	}
 
-	public boolean startMocking() {
-		mockAdapter.open();
-		populateChannels();
-		populateCategories();
-		// populateSeries();
-		populateMainTable();
-		mockAdapter.close();
-		return true;
+	public int startMocking() {
+	
+			rpc_client = new RPCClient();
+			try {
+				rpc_client.ping();
+				mockAdapter.open();
+				populateChannels();
+				populateCategories();
+				// populateSeries();
+				populateMainTable();
+				mockAdapter.close();
+			} catch (JSONRPCException e) {
+				// TODO Auto-generated catch block
+				Log.i("TVTICKER_DATAMOCKER", "json exception");
+				e.printStackTrace();
+				return STATUS;
+			}
+		
+		return 0;
 	}
 
 	private void populateChannels() {
 		ArrayList<Channels> channels = null;
-		
 
 		try {
 			channels = rpc_client.getAllChannelList();
@@ -91,17 +106,17 @@ public class DataMocker {
 		Log.i(TAG, "Populating Main table..");
 		ArrayList<Media> media = null;
 		try {
-			rpc_client.ping();
-			String now = (String) DateFormat.format("yyyy-MM-dd kk:mm:ss", new Date());
-			media = rpc_client.getMediaListFor(now, "full");
 			
+			String now = (String) DateFormat.format("yyyy-MM-dd kk:mm:ss",
+					new Date());
+			media = rpc_client.getMediaListFor(now, "full");
+
 			for (Media program : media) {
 					String thumbnail = Constants.RPC.Media.THUMBNAIL_PREFIX  + program.getThumbnailID() + Constants.RPC.Media.THUMBNAIL_SUFFIX;
 					Log.i("media",thumbnail);
 					program.setMediaThumb(thumbnail);
 				long _id = mockAdapter.createNewMediaInfo(mockMediaFor(program));
 				mockAdapter.setIsFavorite(_id, false);
-
 			}
 		} catch (JSONRPCException e) {
 			// TODO Auto-generated catch block

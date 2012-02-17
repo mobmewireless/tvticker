@@ -8,6 +8,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.alexd.jsonrpc.JSONRPCClient;
 import org.alexd.jsonrpc.JSONRPCException;
@@ -20,16 +21,20 @@ import android.util.Log;
 public class RPCClient {
 	private JSONRPCClient client;
 	private MediaJsonParser parser;
+	
 
-	public RPCClient(String URI , int ConnTimeOut, int SoTimeOut) {
 
+	public RPCClient(String URI, int ConnTimeOut, int SoTimeOut) {
 		client = JSONRPCClient.create(URI);
 		client.setConnectionTimeout(ConnTimeOut);
 		client.setSoTimeout(SoTimeOut);
 		Log.i(Constants.TAG, client.toString());
 		parser = new MediaJsonParser();
+	//	hashed_key = getAuthenticationParameters();
 	}
-	public RPCClient( ) {
+
+	
+	public RPCClient() {
 		int ConnTimeOut = Constants.RPC.CONNECTION_TIMEOUT;
 		int SoTimeOut = Constants.RPC.SO_TIMEOUT;
 		client = JSONRPCClient.create(Constants.RPC.SERVICE_URI);
@@ -37,15 +42,17 @@ public class RPCClient {
 		client.setSoTimeout(SoTimeOut);
 		Log.i(Constants.TAG, client.toString());
 		parser = new MediaJsonParser();
+	//	hashed_key = getAuthenticationParameters();
 	}
+
 	
 	public boolean ping() throws JSONRPCException{
-		return client.callString(Constants.RPC.Services.PING).equals("pong") ? true : false;
+		return callClientString(Constants.RPC.Services.PING).equals("pong") ? true : false;
 	}
 	
-	public ArrayList<Channels> getAllChannelList() throws JSONRPCException, JSONException{
+	public ArrayList<Channels> getAllChannelList() throws JSONRPCException, JSONException {
 		ArrayList<Channels> channelList = new ArrayList<Channels>();
-		JSONArray channels = client.callJSONArray(Constants.RPC.Services.LIST_OF_CHANNELS);
+		JSONArray channels = callClientJSONArray(Constants.RPC.Services.LIST_OF_CHANNELS);
 		for(int i = 0; i < channels.length(); i++ ){
 			JSONObject mediaObj = channels.getJSONObject(i).getJSONObject(Constants.RPC.CHANNEL_TAG);
 			//straight to DB or list .. Pending
@@ -54,9 +61,9 @@ public class RPCClient {
 		return channelList;
 	}
 	
-	public ArrayList<Categories> getAllCategoryList() throws JSONRPCException, JSONException{
+	public ArrayList<Categories> getAllCategoryList() throws JSONRPCException, JSONException {
 		ArrayList<Categories> categoryList = new ArrayList<Categories>();
-		JSONArray categories = client.callJSONArray(Constants.RPC.Services.LIST_OF_CATEGORIES);
+		JSONArray categories = callClientJSONArray(Constants.RPC.Services.LIST_OF_CATEGORIES);
 		for(int i = 0; i < categories.length(); i++ ){
 			JSONObject mediaObj = categories.getJSONObject(i).getJSONObject(Constants.RPC.CATEGORY_TAG);
 			//straight to DB or list .. Pending
@@ -65,36 +72,65 @@ public class RPCClient {
 		return categoryList;
 	}
 	
-	public ArrayList<Media> getMediaListFor(String time, String frameType) throws JSONRPCException, JSONException{
+	public ArrayList<Media> getMediaListFor(String time, String frameType) throws JSONRPCException, JSONException {
 		ArrayList<Media> mediaList = new ArrayList<Media>();
-		JSONArray pgms = client.callJSONArray(Constants.RPC.Services.PROGRAMS_FOR_FRAME, time, frameType);
+		JSONArray pgms = callClientJSONArray(Constants.RPC.Services.PROGRAMS_FOR_FRAME, time, frameType);
 		for(int i = 0; i < pgms.length(); i++ ){
 			JSONObject mediaObj = pgms.getJSONObject(i).getJSONObject(Constants.RPC.PROGRAM_TAG);
 			//straight to DB or list .. Pending
 			mediaList.add(parser.parseJsonMedia(mediaObj));
 		}
-		return mediaList;	
+		return mediaList;
 	}
 	
-	public String getCurrentVersion() throws JSONRPCException{
+	public String getCurrentVersion() throws JSONRPCException {
 		return client.callString(Constants.RPC.Services.CURRENT_DATA_VERSION);
 	}
 	
-	public void updateTo(String version) throws JSONRPCException, JSONException{
-		JSONObject updateResult = client.callJSONObject(Constants.RPC.Services.UPDATE_TO_VERSION);
+	public void updateTo(String version) throws JSONRPCException, JSONException {
+		JSONObject updateResult = callClientJSONObject(Constants.RPC.Services.UPDATE_TO_VERSION);
 		Log.i(Constants.TAG, updateResult.getString("channels"));
-		for(int i = 0; i < updateResult.length(); i++ ){
-//			JSONObject mediaObj = updateResult.getJSONObject(i).getJSONObject("version");
-//			Log.i(Constants.TAG, mediaObj.toString());
+		for (int i = 0; i < updateResult.length(); i++) {
+			// JSONObject mediaObj =
+			// updateResult.getJSONObject(i).getJSONObject("version");
+			// Log.i(Constants.TAG, mediaObj.toString());
 		}
 	}
+	
+	private String callClientString(String method, Object... params) throws JSONRPCException {
+		ArrayList<Object> parameters = new ArrayList<Object>();
+		parameters.addAll(getAuthenticationParameters());
+		parameters.addAll(Arrays.asList(params));
+		return client.callString(method, parameters.toArray());
+	}
+	
+	private JSONObject callClientJSONObject(String method, Object... params) throws JSONRPCException {
+		ArrayList<Object> parameters = new ArrayList<Object>();
+		parameters.addAll(getAuthenticationParameters());
+		parameters.addAll(Arrays.asList(params));
+		return client.callJSONObject(method, parameters.toArray());
+	}
+	
+	private JSONArray callClientJSONArray(String method, Object... params) throws JSONRPCException {
+		ArrayList<Object> parameters = new ArrayList<Object>();
+		parameters.addAll(getAuthenticationParameters());
+		parameters.addAll(Arrays.asList(params));
+		return client.callJSONArray(method, parameters.toArray());
+	}
 
-	private String[] getAuthenticationParameters() throws NoSuchAlgorithmException {
-		String[] parameters = { "", "" };
-		MessageDigest md = MessageDigest.getInstance("MD5");
+	private ArrayList<String> getAuthenticationParameters() {
+		ArrayList<String> parameters = new ArrayList<String>();
+		MessageDigest md;
+		
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch(NoSuchAlgorithmException error) {
+			Log.e(Constants.TAG, "Can't generate hash!");
+			return parameters;
+		}
 		
 		String timestamp = String.valueOf(java.lang.System.currentTimeMillis());
-		String keyWithTimestamp = timestamp.concat(Constants.RPC.Services.API_KEY);
+		String keyWithTimestamp = timestamp.concat(Constants.RPC.API_KEY);
 		
 		// Let's generate a hex representation of the hash
 		// http://stackoverflow.com/a/421696
@@ -103,12 +139,12 @@ public class RPCClient {
 		byte[] digest = md.digest();
 		BigInteger bigInt = new BigInteger(1, digest);
 		String hashtext = bigInt.toString(16);
-		while(hashtext.length() < 32 ) {
-		  hashtext = "0" + hashtext;
+		while (hashtext.length() < 32) {
+			hashtext = "0" + hashtext;
 		}
 		
-		parameters[0] = timestamp;
-		parameters[1] = hashtext;
+		parameters.add(timestamp);
+		parameters.add(hashtext);
 		
 		return parameters;
 	}
