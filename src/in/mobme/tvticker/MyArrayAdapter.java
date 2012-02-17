@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
 import com.ocpsoft.pretty.time.PrettyTime;
 
 public class MyArrayAdapter extends ArrayAdapter<Media> {
@@ -128,10 +128,8 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		int style = 0;
 		Date now = new Date();
 		if (now.after(show_time_start) && now.before(show_time_end)) {
-			//long timediff = (show_time_end.getTime() - now.getTime());
 			message = p.format(show_time_end);
 		} else if (now.before(show_time_start)) {
-			long timediff = (show_time_start.getTime() - now.getTime());
 			message = p.format(show_time_start);
 		} else if (now.after(show_time_start)) {
 			message = "Finished";

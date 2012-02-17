@@ -15,21 +15,19 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class DetailedDescriptionActivity extends FragmentActivity {
 
 	private final int MENU_ADD_TO_FAVORITES = 1;
-	
+	private final int MENU_SHARE = 2;
+
 	private WebImageView movieThumb = null;
 	private TextView movieDescription = null;
 	private TextView movieTimeText = null;
 	private TextView movieChannelText = null;
 	private Button readReviewsButton = null;
-	private ImageButton faceBookButton = null;
-	private ImageButton twitterButton = null;
 	private Button imdbRatingButton = null;
 	private boolean fav_status = false;
 	private int cMenuDrawable;
@@ -49,6 +47,8 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 				: R.drawable.ic_action_fav_off;
 		menu.add(0, MENU_ADD_TO_FAVORITES, 0, "fav").setIcon(cMenuDrawable)
 				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(0, MENU_SHARE, 1, "share").setIcon(R.drawable.ic_action_share)
+				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -56,8 +56,8 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		media = (Media) this.getIntent().getExtras().getSerializable(
-				Constants.MEDIA_OBJECT);
+		media = (Media) this.getIntent().getExtras()
+				.getSerializable(Constants.MEDIA_OBJECT);
 		dataAdapter = new TvTickerDBAdapter(this);
 		dataAdapter.open();
 		fav_status = dataAdapter.IsFavoriteEnabledFor(media.getId());
@@ -76,25 +76,20 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		movieDescription = (TextView) findViewById(R.id.movie_description);
 		movieTimeText = (TextView) findViewById(R.id.textViewTime);
 		movieChannelText = (TextView) findViewById(R.id.textViewChannel);
-		
+
 		readReviewsButton = (Button) findViewById(R.id.button_go_imdb);
 
-		faceBookButton = (ImageButton) findViewById(R.id.go_facebook_button);
-		twitterButton = (ImageButton) findViewById(R.id.go_twitter_button);
 		// non_interactive fields
 		imdbRatingButton = (Button) findViewById(R.id.rating_non_interactive_button);
 
-		//media object to UI components
+		// media object to UI components
 		imdbRatingButton.setText(getFormattedImdbTextRatingFor(media
 				.getImdbRating()));
-		movieThumb.setImageWithURL(this, media.getMediaThumb(),this.getResources().getDrawable(
-				R.drawable.ic_placehoder));
+		movieThumb.setImageWithURL(this, media.getMediaThumb(), this
+				.getResources().getDrawable(R.drawable.ic_placehoder));
 		movieDescription.setText(media.getMediaDescription());
 		movieTimeText.setText(media.getShowTime());
 		movieChannelText.setText(channel);
-
-		// adjust sliding drawer's handle opacity
-		findViewById(R.id.handle).getBackground().setAlpha(220);
 
 		// button click listeners
 		readReviewsButton.setOnClickListener(new OnClickListener() {
@@ -105,19 +100,6 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 				Uri uriUrl = Uri.parse(imdbURL);
 				Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
 				startActivity(launchBrowser);
-			}
-		});
-
-		faceBookButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showMsg("facebook");
-			}
-		});
-		twitterButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showMsg("twitter");
 			}
 		});
 
@@ -143,6 +125,8 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 			// not recommended !
 			ViewPagerAdapter.staticAdapterObj.refreshFavAdapter(media);
 			break;
+		case MENU_SHARE:
+			share("TvTicker", "I'm watching " + title + " on " + channel );
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -150,8 +134,8 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	// helper method to show toasts !
 	private void showMsg(String msg) {
 		Toast toast = Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER, toast.getXOffset() / 2, toast
-				.getYOffset() / 2);
+		toast.setGravity(Gravity.CENTER, toast.getXOffset() / 2,
+				toast.getYOffset() / 2);
 		toast.show();
 	}
 
@@ -159,6 +143,14 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 			String subTitle) {
 		actionBar.setTitle(title);
 		actionBar.setSubtitle(subTitle);
+	}
+
+	public void share(String subject, String text) {
+		final Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+		intent.putExtra(Intent.EXTRA_TEXT, text);
+		startActivity(Intent.createChooser(intent, getString(R.string.share)));
 	}
 
 	// helpers for Imdb Rating bar

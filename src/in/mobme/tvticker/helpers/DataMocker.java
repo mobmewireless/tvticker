@@ -98,13 +98,8 @@ public class DataMocker {
 			for (Media program : media) {
 					String thumbnail = Constants.RPC.Media.THUMBNAIL_PREFIX  + program.getThumbnailID() + Constants.RPC.Media.THUMBNAIL_SUFFIX;
 					Log.i("media",thumbnail);
-				long _id = mockAdapter.createNewMediaInfo(mockMediaFor(
-						program.getMediaTitle(), program.getMediaDescription(),
-						thumbnail, program.getImdbLink()
-								+ "reviews", program.getImdbRating(),
-						program.getCategoryType(), program.getShowTime(),
-						program.getShowEndTime(), program.getShowDuration(),
-						program.getSeriesID(), program.getChannel()));
+					program.setMediaThumb(thumbnail);
+				long _id = mockAdapter.createNewMediaInfo(mockMediaFor(program));
 				mockAdapter.setIsFavorite(_id, false);
 
 			}
@@ -115,25 +110,24 @@ public class DataMocker {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 
 		Log.i(TAG, "Done");
 	}
 
-	private Media mockMediaFor(String title, String desc, String thumb,
-			String imdb_url, float rating, int category, String showTime,
-			String show_end, String duration, int series_id, int channel_id) {
+	private Media mockMediaFor(Media thisMedia) {
 		media = new Media();
-		media.setCategoryType(category);
-		media.setChannel(channel_id);
-		media.setImdbLink(imdb_url);
-		media.setImdbRating(rating);
-		media.setMediaDescription(desc);
-		media.setMediaThumb(thumb);
-		media.setMediaTitle(title);
-		media.setSeriesID(series_id);
-		media.setShowDuration(duration);
-		media.setShowEndTime(show_end);
-		media.setShowTime(showTime);
+		media.setCategoryType(thisMedia.getCategoryType());
+		media.setChannel(thisMedia.getChannel());
+		media.setImdbLink(thisMedia.getImdbLink() + "reviews");
+		media.setImdbRating(thisMedia.getImdbRating());
+		media.setMediaDescription(thisMedia.getMediaDescription());
+		media.setMediaThumb(thisMedia.getMediaThumb());
+		media.setMediaTitle(thisMedia.getMediaTitle());
+		media.setSeriesID(thisMedia.getSeriesID());
+		media.setShowDuration(thisMedia.getShowDuration());
+		media.setShowEndTime(thisMedia.getShowEndTime());
+		media.setShowTime(thisMedia.getShowTime());
 		return media;
 	}
 

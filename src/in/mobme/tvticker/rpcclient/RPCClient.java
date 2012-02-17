@@ -4,6 +4,9 @@ import in.mobme.tvticker.data_model.Categories;
 import in.mobme.tvticker.data_model.Channels;
 import in.mobme.tvticker.data_model.Media;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import org.alexd.jsonrpc.JSONRPCClient;
@@ -14,15 +17,12 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 public class RPCClient {
 	private JSONRPCClient client;
 	private MediaJsonParser parser;
 
 	public RPCClient(String URI , int ConnTimeOut, int SoTimeOut) {
+
 		client = JSONRPCClient.create(URI);
 		client.setConnectionTimeout(ConnTimeOut);
 		client.setSoTimeout(SoTimeOut);

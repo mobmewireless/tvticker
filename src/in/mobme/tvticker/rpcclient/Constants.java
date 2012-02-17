@@ -14,7 +14,7 @@ public class Constants {
 	}
 	
 	public class RPC {
-		public final static String SERVICE_URI = "http://192.168.1.92:3000/service";
+		public final static String SERVICE_URI = "http://192.168.1.134:3000/service";
 		final static String PROGRAM_TAG = "program";
 		final static String CHANNEL_TAG = "channel";
 		final static String CATEGORY_TAG = "category";
@@ -43,7 +43,6 @@ public class Constants {
 			final static String THUMBNAIL_ID_TAG = "thumbnail_id";
 			public final static String THUMBNAIL_PREFIX ="http://192.168.1.92:6666/image/";
 			public final static String THUMBNAIL_SUFFIX ="/profile";
-
 
 		}
 
