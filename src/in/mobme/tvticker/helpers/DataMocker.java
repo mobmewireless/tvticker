@@ -112,7 +112,7 @@ public class DataMocker {
 						"Catwoman",
 						"A shy woman, endowed with the speed, reflexes, and senses of a cat, walks a thin line between criminal and hero, even as a detective doggedly pursues her, fascinated by both of her personas. ",
 						"http://msn.mess.be/data/media/169/catwoman32.jpg",
-						"http://www.imdb.com/title/tt0327554/reviews", 3.2f, 0,
+						"http://www.imdb.com/title/tt0327554/reviews", 3.2f, 1,
 						"21:30", "23:50", "104 min", 0, 1));
 		mockAdapter.setIsFavorite(_id, false);
 
@@ -121,7 +121,7 @@ public class DataMocker {
 						"Spider-Man (2002)",
 						"When bitten by a genetically modified spider, a nerdy, shy, and awkward high school student gains spider-like abilities that he eventually must use to fight evil as a superhero after tragedy befalls his family. ",
 						"http://4mobifun.com/media/1038-spiderman-3.jpg",
-						"http://www.imdb.com/title/tt0145487/reviews", 7.4f, 0,
+						"http://www.imdb.com/title/tt0145487/reviews", 7.4f, 1,
 						"17:10", "19:50", "121 min", 0, 3));
 		mockAdapter.setIsFavorite(_id, false);
 

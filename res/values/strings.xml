@@ -50,5 +50,7 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string name="browse_channels">All TV Channels</string>
+    <string name="browse_categories">All Categories</string>
 
 </resources>
