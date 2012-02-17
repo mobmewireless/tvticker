@@ -28,8 +28,8 @@ public class BrowseAllShowsActivity extends FragmentActivity{
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(getBaseContext(), AllChannelsActivity.class));
-				//Toast.makeText(getBaseContext(), "Channels Button!", Toast.LENGTH_SHORT).show();
 			}
+			
 		});
 	}
 	
