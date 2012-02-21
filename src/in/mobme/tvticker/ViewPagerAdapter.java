@@ -33,7 +33,8 @@ class ViewPagerAdapter extends PagerAdapter {
 	private String[] pageTitles = null;
 	private int listViewId;
 
-	private static List<Media> mediaList = new ArrayList<Media>();
+	private static List<Media> nowMediaList = new ArrayList<Media>();
+	private static List<Media> laterMediaList = new ArrayList<Media>();
 	private static List<Media> favmediaList = new ArrayList<Media>();
 
 	private ListView listView;
@@ -52,10 +53,9 @@ class ViewPagerAdapter extends PagerAdapter {
 		this.context = ctx;
 		this.tvDataAdapter = new TvTickerDBAdapter(context);
 		tvDataAdapter.open();
-		mediaList = tvDataAdapter.fetchAllShowsInfo();
-		favmediaList = getFavoriteMediaFrom(mediaList);
-		// Log.i("MediaList says, ", "" + mediaList.size());
-		// Log.i("FavList say, ", "" + favmediaList.size());
+		nowMediaList = tvDataAdapter.fetchShowsforNowFrame();
+		laterMediaList = tvDataAdapter.fetchShowsforLaterFrame();
+		favmediaList = getFavoriteMediaFrom( tvDataAdapter.fetchAllShowsInfo());
 		tvDataAdapter.close();
 		staticAdapterObj = this;
 	}
@@ -91,18 +91,14 @@ class ViewPagerAdapter extends PagerAdapter {
 		listView = (ListView) layoutInflater.inflate(listViewId, null);
 
 		if (position == NOW_POSITION) {
-			tvDataAdapter.open();
-			mediaList = tvDataAdapter.fetchShowsforNowFrame();
-			tvDataAdapter.close();
-			lazyAdapter = new LazyAdapter((Activity) context, mediaList, true);
+			
+			lazyAdapter = new LazyAdapter((Activity) context, nowMediaList, true);
 			listView.setAdapter(lazyAdapter);
 			listView.setOnItemClickListener(new CustomOnItemClickListener());
 			
 		} else if (position == LATER_TODAY_POSITION) {
-			tvDataAdapter.open();
-			mediaList = tvDataAdapter.fetchShowsforLaterFrame();
-			tvDataAdapter.close();
-			lazyAdapter = new LazyAdapter((Activity) context, mediaList, true);
+		
+			lazyAdapter = new LazyAdapter((Activity) context, laterMediaList, true);
 			listView.setAdapter(lazyAdapter);
 			listView.setOnItemClickListener(new CustomOnItemClickListener());
 
@@ -158,7 +154,7 @@ class ViewPagerAdapter extends PagerAdapter {
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view,
 				int position, long arg3) {
-			Media selectedMedia = mediaList.get(position);
+			Media selectedMedia = nowMediaList.get(position);
 			Intent detailedViewIntent = new Intent(context,
 					DetailedDescriptionActivity.class);
 			Bundle b = new Bundle();

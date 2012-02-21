@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import android.util.Log;
+
 import com.ocpsoft.pretty.time.PrettyTime;
 
 public class DateHelper {
@@ -13,12 +15,14 @@ public class DateHelper {
 	public final static String dateFormatForDb = "yyyy-MM-dd HH:mm:ss";
 	public final static String dateFormattemp = "M dd,yyyy HH:mm:ss";
 
-	public static String SanitizeJsonTime(String jsonTime) throws ParseException {
+	public static String SanitizeJsonTime(String jsonTime)
+			throws ParseException {
 		SimpleDateFormat format = new SimpleDateFormat(dateFormat);
 		format.setTimeZone(TimeZone.getTimeZone("UTC"));
-		Date date =  format.parse(jsonTime);
+		Date date = format.parse(jsonTime);
 		format = new SimpleDateFormat(dateFormatForDb);
-		format.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getID()));
+		format.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance()
+				.getTimeZone().getID()));
 		Calendar.getInstance().getTimeZone();
 		return format.format(date);
 	}

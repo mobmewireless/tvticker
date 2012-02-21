@@ -99,7 +99,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		}
 		channel = dataAdapter.getChannelNameFor(media.getChannel());
 		category = dataAdapter.getCategoryTypeFor(media.getCategoryType());
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		try {
 			Date show_time_start = format.parse(media.getShowTime());
