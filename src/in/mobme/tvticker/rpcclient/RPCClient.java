@@ -71,7 +71,7 @@ public class RPCClient {
 		return categoryList;
 	}
 	
-	public ArrayList<Media> getMediaListFor(String time, String frameType) throws JSONRPCException, JSONException {
+	public ArrayList<Media> getMediaListFor(String time, String frameType ) throws JSONRPCException, JSONException {
 		ArrayList<Media> mediaList = new ArrayList<Media>();
 		JSONArray pgms = callClientJSONArray(Constants.RPC.Services.PROGRAMS_FOR_FRAME, time, frameType);
 		for(int i = 0; i < pgms.length(); i++ ){

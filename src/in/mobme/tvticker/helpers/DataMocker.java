@@ -7,14 +7,16 @@ import in.mobme.tvticker.database.TvTickerDBAdapter;
 import in.mobme.tvticker.rpcclient.Constants;
 import in.mobme.tvticker.rpcclient.RPCClient;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.alexd.jsonrpc.JSONRPCException;
 import org.json.JSONException;
 
 import android.content.Context;
-import android.text.format.DateFormat;
 import android.util.Log;
 
 public class DataMocker {
@@ -106,9 +108,10 @@ public class DataMocker {
 		Log.i(TAG, "Populating Main table..");
 		ArrayList<Media> media = null;
 		try {
-			
-			String now = (String) DateFormat.format("yyyy-MM-dd kk:mm:ss",
-					new Date());
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+			 TimeZone tz = Calendar.getInstance().getTimeZone();
+
+			String now = (String) format.format(new Date());
 			media = rpc_client.getMediaListFor(now, "full");
 
 			for (Media program : media) {

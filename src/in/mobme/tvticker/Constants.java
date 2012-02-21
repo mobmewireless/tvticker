@@ -1,8 +1,8 @@
 package in.mobme.tvticker;
 
 public class Constants {
-	final static String TAG = "TVTicker";
-	final static String MEDIA_OBJECT = "media_object";
+	public final static String TAG = "TVTicker";
+	public final static String MEDIA_OBJECT = "media_object";
 	
 	
 	

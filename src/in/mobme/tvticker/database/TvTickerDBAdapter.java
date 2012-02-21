@@ -1,5 +1,6 @@
 package in.mobme.tvticker.database;
 
+import in.mobme.tvticker.Constants;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.data_model.SearchableMedia;
 import in.mobme.tvticker.database.Models.CategoriesInfo;
@@ -8,7 +9,9 @@ import in.mobme.tvticker.database.Models.ChannelsInfo;
 import in.mobme.tvticker.database.Models.ImdbInfo;
 import in.mobme.tvticker.database.Models.Mediainfo;
 import in.mobme.tvticker.database.Models.Remindersinfo;
+import in.mobme.tvticker.helpers.DateHelper;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -81,11 +84,24 @@ public class TvTickerDBAdapter {
 	 */
 	public long createNewMediaInfo(Media media) {
 		long mediaId = insertMedia(media);
+		String showTimeStart = "";
+		String showTimeEnd = "";
+		
+		try {
+			showTimeStart = DateHelper.SanitizeJsonTime( media.getShowTime());
+			showTimeEnd = DateHelper.SanitizeJsonTime( media.getShowEndTime());
+			Log.i(Constants.TAG,showTimeStart + showTimeEnd );
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e(Constants.TAG,e.toString());
+		}
+		
 		initialValues.clear();
 		initialValues.put(ChannelMediaInfo.MEDIA_ID, mediaId);
 		initialValues.put(ChannelMediaInfo.CHANNEL_ID, media.getChannel());
-		initialValues.put(ChannelMediaInfo.AIR_TIME, media.getShowTime());
-		initialValues.put(ChannelMediaInfo.END_TIME, media.getShowEndTime());
+		initialValues.put(ChannelMediaInfo.AIR_TIME, showTimeStart);
+		initialValues.put(ChannelMediaInfo.END_TIME,showTimeEnd);
 		return mDb.insert(ChannelMediaInfo.TABLE_NAME, null, initialValues);
 	}
 
@@ -103,8 +119,6 @@ public class TvTickerDBAdapter {
 		
 		calendar.add(Calendar.HOUR, -2);
 		String one_hour_before =  (String) DateFormat.format("yyyy-MM-dd kk:mm:ss", calendar.getTime());
-		Log.i("one_hour_before ",one_hour_before);
-		Log.i("one_hour_later ",one_hour_later);
 		String whereclause = "show_time between ' "+ one_hour_before + "'and '"+one_hour_later+"'";
 		
 		mCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
