@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
 import com.ocpsoft.pretty.time.PrettyTime;
 
 public class MyArrayAdapter extends ArrayAdapter<Media> {
@@ -121,6 +121,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 				.getImdbRating()));
 		return rowView;
 	}
+
 
 	private float sanitizeRatingValue(float floatValue) {
 		return (floatValue * 3) / 10;

@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/movie_thumb"
+            android:layout_toRightOf="@id/movie_thumb"
             android:orientation="vertical" >
 
             <TextView
@@ -104,75 +104,5 @@
             android:text=""
             android:textSize="6.8pt" />
     </RelativeLayout>
-
-    <!-- Sliding drawer -->
-
-    <SlidingDrawer
-        android:id="@+id/slidingDrawer1"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:content="@+id/content"
-        android:handle="@+id/handle" >
-
-        <RelativeLayout
-            android:id="@+id/handle"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:background="@xml/rounded_border"
-            android:padding="1dp" >
-
-            <ImageView
-                android:id="@+id/left_handle"
-                android:contentDescription="@string/left_handle_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_dots" />
-
-            <TextView
-                android:id="@+id/handle_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/default_share_text"
-                android:textColor="@drawable/white"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/right_handle"
-                android:contentDescription="@string/right_handle_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_dots" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#999"
-            android:gravity="center" >
-
-            <ImageButton
-                android:contentDescription="@string/facebook_button_desc"
-                android:id="@+id/go_facebook_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:src="@xml/facebook_button" />
-
-            <ImageButton
-                android:contentDescription="@string/twitter_button_desc"
-                android:id="@+id/go_twitter_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:src="@xml/twitter_button" />
-        </LinearLayout>
-    </SlidingDrawer>
 
 </RelativeLayout>

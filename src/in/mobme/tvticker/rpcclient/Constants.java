@@ -17,12 +17,11 @@ public class Constants {
 	
 	public class RPC {
 
+
 		public final static String SERVICE_URI = "http://192.168.1.89:3000/service";
 
-		
-		final static String API_KEY = "tvticker";
-		
 
+		final static String API_KEY = "tvticker";
 		final static String PROGRAM_TAG = "program";
 		final static String CHANNEL_TAG = "channel";
 		final static String CATEGORY_TAG = "category";
@@ -53,7 +52,6 @@ public class Constants {
 			public final static String THUMBNAIL_PREFIX ="http://192.168.1.89:6666/image/";
 
 			public final static String THUMBNAIL_SUFFIX ="/profile";
-
 
 		}
 
