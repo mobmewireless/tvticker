@@ -30,6 +30,7 @@
         </activity>
     
         <activity android:name=".AllChannelsActivity" />
+        <activity android:name=".BrowseChannelShowsActivity" />
         <activity android:name=".DetailedDescriptionActivity" />
         <activity android:name=".BrowseAllShowsActivity" />
         <activity

@@ -165,6 +165,26 @@ public ArrayList<Media> fetchShowsforLaterFrame() {
 		return mediaList;
 
 	}
+	
+
+	public ArrayList<Media> fetchAllShowsForChannel(String channelId) {
+		
+		String whereClause = ChannelMediaInfo.CHANNEL_ID + " = " + channelId;
+		
+		mCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
+				ChannelMediaInfo.ROW_ID, ChannelMediaInfo.MEDIA_ID,
+				ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME,
+				ChannelMediaInfo.END_TIME }, whereClause, null, null, null, null);
+		
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+			while (!mCursor.isAfterLast()) {
+				mediaList.add(unWrapShowDataFrom(mCursor));
+				mCursor.moveToNext();
+			}
+		}
+		return mediaList;
+	}
 
 	/**
 	 * Return a list of all media in the ChannelMediaInfoTable for given
@@ -289,6 +309,7 @@ public ArrayList<Media> fetchShowsforLaterFrame() {
 				ChannelsInfo.ROW_ID, ChannelsInfo.CHANNEL_NAME }, null, null,
 				null, null, null);
 	}
+	
 
 	/**
 	 * Fetch Channel Name for a particular ID.

@@ -24,6 +24,8 @@ public class AllShowsCursorAdapter extends CursorAdapter {
 		TextView tv = (TextView) rowView.findViewById(R.id.list_item);
 		
 		tv.setText(cursor.getString(1));
+		tv.setTag(cursor.getString(0)); //tag stores the channel id
+		
 		return rowView;
 	}
 	
