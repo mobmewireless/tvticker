@@ -1,10 +1,12 @@
 package in.mobme.tvticker.rpcclient;
 
-import in.mobme.tvticker.HomePageActivity;
 import in.mobme.tvticker.data_model.Categories;
 import in.mobme.tvticker.data_model.Channels;
 import in.mobme.tvticker.data_model.Media;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,13 +18,11 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 public class RPCClient {
 	private JSONRPCClient client;
 	private MediaJsonParser parser;
+	
+
 
 	public RPCClient(String URI, int ConnTimeOut, int SoTimeOut) {
 		client = JSONRPCClient.create(URI);
@@ -30,7 +30,9 @@ public class RPCClient {
 		client.setSoTimeout(SoTimeOut);
 		Log.i(Constants.TAG, client.toString());
 		parser = new MediaJsonParser();
+	//	hashed_key = getAuthenticationParameters();
 	}
+
 	
 	public RPCClient() {
 		int ConnTimeOut = Constants.RPC.CONNECTION_TIMEOUT;
@@ -40,7 +42,9 @@ public class RPCClient {
 		client.setSoTimeout(SoTimeOut);
 		Log.i(Constants.TAG, client.toString());
 		parser = new MediaJsonParser();
+	//	hashed_key = getAuthenticationParameters();
 	}
+
 	
 	public boolean ping() throws JSONRPCException{
 		return callClientString(Constants.RPC.Services.PING).equals("pong") ? true : false;
@@ -68,7 +72,7 @@ public class RPCClient {
 		return categoryList;
 	}
 	
-	public ArrayList<Media> getMediaListFor(String time, String frameType) throws JSONRPCException, JSONException {
+	public ArrayList<Media> getMediaListFor(String time, String frameType ) throws JSONRPCException, JSONException {
 		ArrayList<Media> mediaList = new ArrayList<Media>();
 		JSONArray pgms = callClientJSONArray(Constants.RPC.Services.PROGRAMS_FOR_FRAME, time, frameType);
 		for(int i = 0; i < pgms.length(); i++ ){
@@ -76,7 +80,7 @@ public class RPCClient {
 			//straight to DB or list .. Pending
 			mediaList.add(parser.parseJsonMedia(mediaObj));
 		}
-		return mediaList;	
+		return mediaList;
 	}
 	
 	public String getCurrentVersion() throws JSONRPCException {
@@ -86,35 +90,36 @@ public class RPCClient {
 	public void updateTo(String version) throws JSONRPCException, JSONException {
 		JSONObject updateResult = callClientJSONObject(Constants.RPC.Services.UPDATE_TO_VERSION);
 		Log.i(Constants.TAG, updateResult.getString("channels"));
-		for(int i = 0; i < updateResult.length(); i++ ){
-//			JSONObject mediaObj = updateResult.getJSONObject(i).getJSONObject("version");
-//			Log.i(Constants.TAG, mediaObj.toString());
+		for (int i = 0; i < updateResult.length(); i++) {
+			// JSONObject mediaObj =
+			// updateResult.getJSONObject(i).getJSONObject("version");
+			// Log.i(Constants.TAG, mediaObj.toString());
 		}
 	}
 	
 	private String callClientString(String method, Object... params) throws JSONRPCException {
-		ArrayList<Object> parameters = new ArrayList();
+		ArrayList<Object> parameters = new ArrayList<Object>();
 		parameters.addAll(getAuthenticationParameters());
 		parameters.addAll(Arrays.asList(params));
 		return client.callString(method, parameters.toArray());
 	}
 	
 	private JSONObject callClientJSONObject(String method, Object... params) throws JSONRPCException {
-		ArrayList<Object> parameters = new ArrayList();
+		ArrayList<Object> parameters = new ArrayList<Object>();
 		parameters.addAll(getAuthenticationParameters());
 		parameters.addAll(Arrays.asList(params));
 		return client.callJSONObject(method, parameters.toArray());
 	}
 	
 	private JSONArray callClientJSONArray(String method, Object... params) throws JSONRPCException {
-		ArrayList<Object> parameters = new ArrayList();
+		ArrayList<Object> parameters = new ArrayList<Object>();
 		parameters.addAll(getAuthenticationParameters());
 		parameters.addAll(Arrays.asList(params));
 		return client.callJSONArray(method, parameters.toArray());
 	}
 
 	private ArrayList<String> getAuthenticationParameters() {
-		ArrayList<String> parameters = new ArrayList();
+		ArrayList<String> parameters = new ArrayList<String>();
 		MessageDigest md;
 		
 		try {
@@ -134,8 +139,8 @@ public class RPCClient {
 		byte[] digest = md.digest();
 		BigInteger bigInt = new BigInteger(1, digest);
 		String hashtext = bigInt.toString(16);
-		while(hashtext.length() < 32 ) {
-		  hashtext = "0" + hashtext;
+		while (hashtext.length() < 32) {
+			hashtext = "0" + hashtext;
 		}
 		
 		parameters.add(timestamp);

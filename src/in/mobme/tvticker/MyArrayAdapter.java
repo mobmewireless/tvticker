@@ -3,6 +3,7 @@ package in.mobme.tvticker;
 import in.mobme.tvticker.customwidget.WebImageView;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
+import in.mobme.tvticker.helpers.DateHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
 import com.ocpsoft.pretty.time.PrettyTime;
 
 public class MyArrayAdapter extends ArrayAdapter<Media> {
@@ -98,15 +99,14 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		}
 		channel = dataAdapter.getChannelNameFor(media.getChannel());
 		category = dataAdapter.getCategoryTypeFor(media.getCategoryType());
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		try {
 			Date show_time_start = format.parse(media.getShowTime());
 			Date show_time_end = format.parse(media.getShowEndTime());
-			settimeMessage(show_time_start,
-					show_time_end,holder);
-//			holder.show_timing.setText(timeMessage(show_time_start,
-//					show_time_end));
+			DateHelper dateHelper = new DateHelper();
+			holder.show_timing.setText(dateHelper.getFormattedMessage(
+					show_time_start, show_time_end));
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -120,27 +120,6 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		holder.imdbRatingBar.setRating(sanitizeRatingValue(media
 				.getImdbRating()));
 		return rowView;
-	}
-
-	private void settimeMessage(Date show_time_start, Date show_time_end,ViewHolder holder) {
-		String message = "";
-		PrettyTime p = new PrettyTime(); //refer : http://ocpsoft.com/prettytime/#docs
-		int style = 0;
-		Date now = new Date();
-		if (now.after(show_time_start) && now.before(show_time_end)) {
-			//long timediff = (show_time_end.getTime() - now.getTime());
-			message = p.format(show_time_end);
-		} else if (now.before(show_time_start)) {
-			long timediff = (show_time_start.getTime() - now.getTime());
-			message = p.format(show_time_start);
-		} else if (now.after(show_time_start)) {
-			message = "Finished";
-		} else {
-			message = "Unknown";
-		}
-		holder.show_timing.setText(message);
-		holder.show_timing.setTypeface(null,style);
-		
 	}
 
 

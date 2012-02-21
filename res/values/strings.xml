@@ -31,7 +31,8 @@
     <string name="facebook_button_desc">Share to facebook</string>
     <string name="twitter_button_desc">Share to Twitter</string>
     <string name="throbber_desc">Loading Animation</string>
-
+	<string name="share">Share to</string>
+    
     <!-- Shown above search results when we receive a search request. -->
     <plurals name="search_results">
         <item quantity="one">%1$d result for \"%2$s\": </item>
