@@ -1,25 +1,12 @@
 package in.mobme.tvticker.rpcclient;
 
-import android.R;
 
 public class Constants {
 	final static String TAG = "RPCClient";
 	
-	public class ViewPager{
-		final static String INDICATOR_POINTER = "indicator_pointer";
-		final static int FAVORITES_POSITION = 0;
-		final static int NOW_POSITION = 1;
-		final static int LATER_TODAY_POSITION = 2;
-		final static String FAVORITES_LABEL = "Favorites";
-		final static String NOW_LABEL = "Now";
-		final static String LATER_TODAY_LABEL = "Later Today";
-	}
-	
 	public class RPC {
 
-
 		public final static String SERVICE_URI = "http://enterprise.mobme.in/tv-ticker-api/service";
-
 
 		final static String API_KEY = "tvticker";
 		final static String PROGRAM_TAG = "program";
@@ -65,9 +52,9 @@ public class Constants {
 		}
 		
 		public class FrameType{
-			final static String FRAME_NOW = "now";
-			final static String FRAME_LATER = "later";
-			final static String FRAME_COMPLETE = "full";
+			public final static String FRAME_NOW = "now";
+			public final static String FRAME_LATER = "later";
+			public final static String FRAME_COMPLETE = "full";
 		}
 		
 	}

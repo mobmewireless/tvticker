@@ -3,7 +3,7 @@ package in.mobme.tvticker;
 import in.mobme.tvticker.customwidget.WebImageView;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
-import in.mobme.tvticker.helpers.DateHelper;
+import in.mobme.tvticker.helpers.DateTimeHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,8 +18,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
-import com.ocpsoft.pretty.time.PrettyTime;
 
 public class MyArrayAdapter extends ArrayAdapter<Media> {
 
@@ -104,7 +102,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		try {
 			Date show_time_start = format.parse(media.getShowTime());
 			Date show_time_end = format.parse(media.getShowEndTime());
-			DateHelper dateHelper = new DateHelper();
+			DateTimeHelper dateHelper = new DateTimeHelper();
 			holder.show_timing.setText(dateHelper.getFormattedMessage(
 					show_time_start, show_time_end));
 
