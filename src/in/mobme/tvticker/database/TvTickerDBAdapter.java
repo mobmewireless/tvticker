@@ -15,6 +15,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -335,7 +339,7 @@ public class TvTickerDBAdapter {
 	 * */
 	public Cursor fetchAllChannels() {
 		return mDb.query(ChannelsInfo.TABLE_NAME, new String[] {
-				ChannelsInfo.ROW_ID, ChannelsInfo.CHANNEL_NAME }, null, null,
+				ChannelsInfo.ROW_ID, ChannelsInfo.CHANNEL_NAME,ChannelsInfo.IS_FAVORITE_CHANNEL }, null, null,
 				null, null, null);
 	}
 	
@@ -470,6 +474,32 @@ public class TvTickerDBAdapter {
 		return mDb.update(Remindersinfo.TABLE_NAME, updateValues,
 				Remindersinfo.ROW_ID + "=" + mediaId, null) > 0;
 	}
+	/**
+	 * Updates a channel to favourite or not
+	 * 
+	 *
+	 * @return true if updated, false otherwise.
+	 */
+	
+	public void setFavoriteChannels(HashMap<Integer, Object> changes)
+	{
+	
+		Map data = (HashMap<Integer, Object>)changes ;
+		 Set set = data.entrySet();
+		 Iterator iter = set.iterator();
+		 while (iter.hasNext()) {
+		      Map.Entry entry = (Map.Entry) iter.next();
+		      Log.i("changes",entry.getKey() + " -- " + entry.getValue());
+		      ContentValues args = new ContentValues();
+		      int fav_value = (Integer) entry.getValue();
+		        args.put("is_favorite", fav_value );
+		       
+		        mDb.update(Models.ChannelsInfo.TABLE_NAME, args, 
+                        "_id=" + entry.getKey(), null) ;
+		        
+		    }
+        
+	}
 
 	/**
 	 * Removes isFavorite flag for the given media id.
@@ -520,7 +550,7 @@ public class TvTickerDBAdapter {
 		tmpCursor.close();
 		return isEnabled;
 	}
-
+	
 	/**************************
 	 * Private Helpers
 	 */

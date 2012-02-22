@@ -66,7 +66,7 @@ public class Models {
 				+ ROW_ID
 				+ " integer primary key autoincrement, "
 				+ IS_FAVORITE_CHANNEL
-				+ " integer, " + CHANNEL_NAME + " text "
+				+ " integer default 0, " + CHANNEL_NAME + " text "
 				+ REMOTE_CHANNEL_ID + " integer)"  ;
 
 		/* channel_table drop query */

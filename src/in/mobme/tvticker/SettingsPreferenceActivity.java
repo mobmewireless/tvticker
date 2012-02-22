@@ -12,14 +12,29 @@ public class SettingsPreferenceActivity extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings_pref);
 		Preference customizeReminders = findPreference("customize_reminders");
-		
-		customizeReminders.setOnPreferenceClickListener(new OnPreferenceClickListener(){
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				Intent reminderIntent = new Intent(getBaseContext(), ReminderPreferenceActivity.class);
-				startActivity(reminderIntent);
-				return true;
-			}
-		});
+		final Intent target = new Intent();
+
+		customizeReminders
+				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+					@Override
+					public boolean onPreferenceClick(Preference preference) {
+						target.setClass(getBaseContext(),
+								ReminderPreferenceActivity.class);
+						startActivity(target);
+						return true;
+					}
+				});
+		Preference fav_channels = findPreference("fav_channels");
+
+		fav_channels
+				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+					@Override
+					public boolean onPreferenceClick(Preference preference) {
+						target.setClass(getBaseContext(),
+								SetFavouriteChannelsActivity.class);
+						startActivity(target);
+						return true;
+					}
+				});
 	}
 }

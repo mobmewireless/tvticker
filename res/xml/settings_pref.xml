@@ -7,5 +7,11 @@
 			android:title="Customize Reminders" android:summary="Advanced Settings"
 			android:key="customize_reminders" />
 	</PreferenceCategory>
+	<PreferenceCategory android:title="Favourite channels">
+		<Preference
+			android:title="Favourite channels" android:summary="Set your favourite channels here."
+			android:key="fav_channels" />
+	</PreferenceCategory>
+	
 
 </PreferenceScreen>

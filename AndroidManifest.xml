@@ -18,6 +18,7 @@
             android:theme="@style/Theme.NullBackground" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -28,11 +29,11 @@
                 android:name="android.app.default_searchable"
                 android:value=".SearchableActivity" />
         </activity>
-    
         <activity android:name=".AllChannelsActivity" />
         <activity android:name=".BrowseChannelShowsActivity" />
         <activity android:name=".DetailedDescriptionActivity" />
         <activity android:name=".BrowseAllShowsActivity" />
+        <activity android:name=".SetFavouriteChannelsActivity" />
         <activity
             android:name=".ReminderPreferenceActivity"
             android:label="Reminder Settings" />
