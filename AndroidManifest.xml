@@ -29,10 +29,10 @@
                 android:value=".SearchableActivity" />
         </activity>
     
-        <activity android:name=".AllChannelsActivity" />
-        <activity android:name=".BrowseChannelShowsActivity" />
+        <activity android:name=".activity.AllShowsFilterListActivity" />
+        <activity android:name=".activity.AllShowsResultListActivity" />
         <activity android:name=".DetailedDescriptionActivity" />
-        <activity android:name=".BrowseAllShowsActivity" />
+        <activity android:name=".activity.AllShowsMainPageActivity" />
         <activity
             android:name=".ReminderPreferenceActivity"
             android:label="Reminder Settings" />

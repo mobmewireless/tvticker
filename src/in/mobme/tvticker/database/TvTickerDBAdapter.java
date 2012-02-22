@@ -195,7 +195,6 @@ public class TvTickerDBAdapter {
 
 	}
 	
-
 	public ArrayList<Media> fetchAllShowsForChannel(String channelId) {
 		
 		String whereClause = ChannelMediaInfo.CHANNEL_ID + " = " + channelId;
@@ -212,6 +211,65 @@ public class TvTickerDBAdapter {
 				mCursor.moveToNext();
 			}
 		}
+		return mediaList;
+	}
+		
+	public ArrayList<Media> fetchAllShowsForCategory(String categoryId) {
+		
+		ArrayList<Media> mediaList = new ArrayList<Media>();
+		
+		Cursor cursor = mDb.query(true, Mediainfo.TABLE_NAME, new String[] {
+				Mediainfo.ROW_ID, Mediainfo.MEDIA_TITLE,
+				Mediainfo.MEDIA_DESCRIPTION, Mediainfo.MEDIA_THUMB,
+				Mediainfo.MEDIA_CAT_ID, Mediainfo.MEDIA_IMDB_ID,
+				
+				Mediainfo.MEDIA_DURATION, Mediainfo.SERIES_ID },
+				Mediainfo.MEDIA_CAT_ID + "=" + categoryId, null, null, null, null, null);
+		
+		if (cursor != null) {
+			cursor.moveToFirst();
+			
+			while (!cursor.isAfterLast()) {
+				Media media = new Media();
+				media.setMediaTitle(cursor.getString(cursor
+						.getColumnIndexOrThrow(Mediainfo.MEDIA_TITLE)));
+				media.setMediaDescription(cursor.getString(cursor
+						.getColumnIndexOrThrow(Mediainfo.MEDIA_DESCRIPTION)));
+				media.setMediaThumb(cursor.getString(cursor
+						.getColumnIndexOrThrow(Mediainfo.MEDIA_THUMB)));
+				media.setCategoryType(cursor.getInt(cursor
+						.getColumnIndexOrThrow(Mediainfo.MEDIA_CAT_ID)));
+				media.setShowDuration(cursor.getString(cursor
+						.getColumnIndexOrThrow(Mediainfo.MEDIA_DURATION)));
+				media.setSeriesID(cursor.getInt(cursor
+						.getColumnIndexOrThrow(Mediainfo.SERIES_ID)));
+				
+				// get channel details of this media.
+				Cursor channelCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
+						ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME }, ChannelMediaInfo.MEDIA_ID + "=" + cursor.getString(cursor.getColumnIndexOrThrow(Mediainfo.ROW_ID))
+						, null, null, null, null, null);
+				channelCursor.moveToFirst();
+				media.setChannel(channelCursor.getInt(0));
+				media.setShowTime(channelCursor.getString(1));
+				channelCursor.close();
+				
+				// get imdb details of this media from IMDBInfo table.
+				Cursor tmpCursor = getImdbDetailsFor(cursor.getInt(cursor
+						.getColumnIndexOrThrow(Mediainfo.MEDIA_IMDB_ID)));
+				tmpCursor.moveToFirst();
+				media.setImdbRating(tmpCursor.getFloat(tmpCursor
+						.getColumnIndexOrThrow(ImdbInfo.IMDB_RATING)));
+				media.setImdbLink(tmpCursor.getString(tmpCursor
+						.getColumnIndexOrThrow(ImdbInfo.IMDB_LINK)));
+				tmpCursor.close();
+				
+				mediaList.add(media);
+				cursor.moveToNext();
+			}
+			
+			cursor.close();
+		}
+		
 		return mediaList;
 	}
 

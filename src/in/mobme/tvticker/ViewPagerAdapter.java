@@ -1,5 +1,6 @@
 package in.mobme.tvticker;
 
+import in.mobme.tvticker.activity.AllShowsMainPageActivity;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
 
@@ -141,7 +142,7 @@ class ViewPagerAdapter extends PagerAdapter {
 			@Override
 			public void onClick(View v) {
 				Intent browseShowsIntent = new Intent(context,
-						BrowseAllShowsActivity.class);
+						AllShowsMainPageActivity.class);
 				context.startActivity(browseShowsIntent);
 			}
 		});
