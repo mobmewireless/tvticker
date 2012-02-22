@@ -246,11 +246,12 @@ public class TvTickerDBAdapter {
 				
 				// get channel details of this media.
 				Cursor channelCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
-						ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME }, ChannelMediaInfo.MEDIA_ID + "=" + cursor.getString(cursor.getColumnIndexOrThrow(Mediainfo.ROW_ID))
+						ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME, ChannelMediaInfo.END_TIME }, ChannelMediaInfo.MEDIA_ID + "=" + cursor.getString(cursor.getColumnIndexOrThrow(Mediainfo.ROW_ID))
 						, null, null, null, null, null);
 				channelCursor.moveToFirst();
 				media.setChannel(channelCursor.getInt(0));
 				media.setShowTime(channelCursor.getString(1));
+				media.setShowEndTime(channelCursor.getString(2));
 				channelCursor.close();
 				
 				// get imdb details of this media from IMDBInfo table.

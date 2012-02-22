@@ -18,7 +18,7 @@ public class Constants {
 	public class RPC {
 
 
-		public final static String SERVICE_URI = "http://192.168.1.89:3000/service";
+		public final static String SERVICE_URI = "http://enterprise.mobme.in/tv-ticker-api/service";
 
 
 		final static String API_KEY = "tvticker";
