@@ -1,5 +1,8 @@
-package in.mobme.tvticker;
+package in.mobme.tvticker.adapter;
 
+import in.mobme.tvticker.R;
+import in.mobme.tvticker.R.id;
+import in.mobme.tvticker.R.layout;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;

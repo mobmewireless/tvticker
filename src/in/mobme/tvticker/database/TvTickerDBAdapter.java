@@ -9,12 +9,10 @@ import in.mobme.tvticker.database.Models.ChannelsInfo;
 import in.mobme.tvticker.database.Models.ImdbInfo;
 import in.mobme.tvticker.database.Models.Mediainfo;
 import in.mobme.tvticker.database.Models.Remindersinfo;
-import in.mobme.tvticker.helpers.DateHelper;
+import in.mobme.tvticker.helpers.DateTimeHelper;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -25,7 +23,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.format.DateFormat;
 import android.util.Log;
 
 public class TvTickerDBAdapter {
@@ -36,9 +33,7 @@ public class TvTickerDBAdapter {
 	ContentValues initialValues = null;
 	ContentValues updateValues = null;
 	Cursor mCursor = null;
-	Cursor nowCursor = null;
-	Cursor laterCursor = null;
-	ArrayList<Media> mediaList = new ArrayList<Media>();
+	DateTimeHelper dateTimeHelper = null;
 
 	/**
 	 * Constructor - takes the context to allow the database to be
@@ -65,6 +60,7 @@ public class TvTickerDBAdapter {
 	public TvTickerDBAdapter open() throws SQLException {
 		mDbHelper = new TvTickerDBHelper(mCtx);
 		mDb = mDbHelper.getWritableDatabase();
+		dateTimeHelper = new DateTimeHelper();
 		initialValues = new ContentValues();
 		updateValues = new ContentValues();
 		return this;
@@ -73,12 +69,15 @@ public class TvTickerDBAdapter {
 	// clean everything !
 	public void close() {
 		initialValues.clear();
-		if (nowCursor != null) {
-			//mCursor.close();
-			laterCursor.close();
-			nowCursor.close();
-		}
+		safelyCloseMCursor();
 		mDbHelper.close();
+	}
+
+	private void safelyCloseMCursor() {
+		if (mCursor != null) {
+			mCursor.deactivate();
+			mCursor.close();
+		}
 	}
 
 	/**************************
@@ -96,8 +95,10 @@ public class TvTickerDBAdapter {
 		String showTimeEnd = "";
 
 		try {
-			showTimeStart = DateHelper.SanitizeJsonTime(media.getShowTime());
-			showTimeEnd = DateHelper.SanitizeJsonTime(media.getShowEndTime());
+			showTimeStart = dateTimeHelper
+					.SanitizeJsonTime(media.getShowTime());
+			showTimeEnd = dateTimeHelper.SanitizeJsonTime(media
+					.getShowEndTime());
 			Log.i(Constants.TAG, showTimeStart + showTimeEnd);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -113,102 +114,75 @@ public class TvTickerDBAdapter {
 		return mDb.insert(ChannelMediaInfo.TABLE_NAME, null, initialValues);
 	}
 
+	// private where clause helper for now and later frames
+	private String getWhereConstruct() {
+		return ChannelMediaInfo.AIR_TIME + " between ? and ?";
+	}
+
 	/**
-	 * Return a list of all media in the ChannelMediaInfoTable.
+	 * Return a list of all media in the ChannelMediaInfoTable for now frame.
 	 * 
 	 * @return List of all media
 	 * */
 	public ArrayList<Media> fetchShowsforNowFrame() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.HOUR_OF_DAY, 1);
-		String one_hour_later = (String) DateFormat.format(
-				"yyyy-MM-dd kk:mm:ss", calendar.getTime());
-
-		calendar.add(Calendar.HOUR, -2);
-		String one_hour_before = (String) DateFormat.format(
-				"yyyy-MM-dd kk:mm:ss", calendar.getTime());
-		String whereclause = "show_time between '" + one_hour_before
-				+ "' and '" + one_hour_later + "'";
-		Log.i("where clause now", whereclause);
-		if (nowCursor != null) {
-			nowCursor = null;
-		}
-		nowCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
-				ChannelMediaInfo.ROW_ID, ChannelMediaInfo.MEDIA_ID,
-				ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME,
-				ChannelMediaInfo.END_TIME }, whereclause, null, null, null,
-				null);
-		if (nowCursor != null) {
-			nowCursor.moveToFirst();
-			while (!nowCursor.isAfterLast()) {
-				mediaList.add(unWrapShowDataFrom(nowCursor));
-				nowCursor.moveToNext();
-			}
-		}
-		return mediaList;
+		String[] timeFrame = dateTimeHelper
+				.getStringTimeFrameFor(DateTimeHelper.FRAME_NOW);
+		Log.i("now where clause", getWhereConstruct());
+		return fetchAllShowsFor(getWhereConstruct(), timeFrame);
 
 	}
+
+	/**
+	 * Return a list of all media in the ChannelMediaInfoTable for later frame.
+	 * 
+	 * @return List of all media
+	 * */
 
 	public ArrayList<Media> fetchShowsforLaterFrame() {
-
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.HOUR_OF_DAY, 1);
-		String one_hour_later = (String) DateFormat.format(
-				"yyyy-MM-dd kk:mm:ss", calendar.getTime());
-		calendar.add(Calendar.HOUR_OF_DAY, 2);
-		String three_hour_later = (String) DateFormat.format(
-				"yyyy-MM-dd kk:mm:ss", calendar.getTime());
-		String whereclause = "show_time between '" + one_hour_later + "' and '"
-				+ three_hour_later + "'";
-		Log.i("where clause later", whereclause);
-		if (laterCursor != null) {
-			laterCursor = null;
-		}
-		laterCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
-				ChannelMediaInfo.ROW_ID, ChannelMediaInfo.MEDIA_ID,
-				ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME,
-				ChannelMediaInfo.END_TIME }, whereclause, null, null, null,
-				null);
-		if (laterCursor != null) {
-			laterCursor.moveToFirst();
-			while (!laterCursor.isAfterLast()) {
-				mediaList.add(unWrapShowDataFrom(laterCursor));
-				laterCursor.moveToNext();
-			}
-		}
-		return mediaList;
-
+		String[] timeFrame = dateTimeHelper
+				.getStringTimeFrameFor(DateTimeHelper.FRAME_LATER);
+		Log.i("later where clause", getWhereConstruct());
+		return fetchAllShowsFor(getWhereConstruct(), timeFrame);
 	}
+
+	/**
+	 * Return all media from the ChannelMediaInfoTable.
+	 * 
+	 * @return list of media (ArrayList)
+	 * */
 
 	public ArrayList<Media> fetchAllShowsInfo() {
-		if (mCursor != null) {
-			mCursor = null;
-		}
-		mCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
-				ChannelMediaInfo.ROW_ID, ChannelMediaInfo.MEDIA_ID,
-				ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME,
-				ChannelMediaInfo.END_TIME }, null, null, null, null, null);
-		if (mCursor != null) {
-			mCursor.moveToFirst();
-			while (!mCursor.isAfterLast()) {
-				mediaList.add(unWrapShowDataFrom(mCursor));
-				mCursor.moveToNext();
-			}
-		}
-		return mediaList;
-
+		return fetchAllShowsFor(null, null);
 	}
-	
 
+	/**
+	 * Return all media from the ChannelMediaInfoTable for the give channel ID.
+	 * 
+	 * @return list of media (ArrayList)
+	 * */
 	public ArrayList<Media> fetchAllShowsForChannel(String channelId) {
-		
 		String whereClause = ChannelMediaInfo.CHANNEL_ID + " = " + channelId;
-		
+		return fetchAllShowsFor(whereClause, null);
+	}
+
+	/**
+	 * Return all media from the ChannelMediaInfoTable which passes the given
+	 * whereClause.
+	 * 
+	 * @return list of media (ArrayList)
+	 * */
+	public ArrayList<Media> fetchAllShowsFor(String whereClause,
+			String[] whereArgs) {
+		// flush old stuff from mediaList
+		ArrayList<Media> mediaList = new ArrayList<Media>();
+		if (whereArgs != null)
+			Log.i("DEbug whereargs", whereArgs[0] + whereArgs[1]);
 		mCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
 				ChannelMediaInfo.ROW_ID, ChannelMediaInfo.MEDIA_ID,
 				ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME,
-				ChannelMediaInfo.END_TIME }, whereClause, null, null, null, null);
-		
+				ChannelMediaInfo.END_TIME }, whereClause, whereArgs, null,
+				null, null);
+
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 			while (!mCursor.isAfterLast()) {
@@ -216,12 +190,81 @@ public class TvTickerDBAdapter {
 				mCursor.moveToNext();
 			}
 		}
+		safelyCloseMCursor();
+		Log.i("DEbug", "rawQuery medialist count: " + mediaList.size());
+		return mediaList;
+	}
+
+	public ArrayList<Media> fetchAllShowsForCategory(String categoryId) {
+
+		ArrayList<Media> mediaList = new ArrayList<Media>();
+
+		Cursor cursor = mDb.query(true, Mediainfo.TABLE_NAME, new String[] {
+				Mediainfo.ROW_ID, Mediainfo.MEDIA_TITLE,
+				Mediainfo.MEDIA_DESCRIPTION, Mediainfo.MEDIA_THUMB,
+				Mediainfo.MEDIA_CAT_ID, Mediainfo.MEDIA_IMDB_ID,
+
+				Mediainfo.MEDIA_DURATION, Mediainfo.SERIES_ID },
+				Mediainfo.MEDIA_CAT_ID + "=" + categoryId, null, null, null,
+				null, null);
+
+		if (cursor != null) {
+			cursor.moveToFirst();
+
+			while (!cursor.isAfterLast()) {
+				Media media = new Media();
+				media.setMediaTitle(cursor.getString(cursor
+						.getColumnIndexOrThrow(Mediainfo.MEDIA_TITLE)));
+				media.setMediaDescription(cursor.getString(cursor
+						.getColumnIndexOrThrow(Mediainfo.MEDIA_DESCRIPTION)));
+				media.setMediaThumb(cursor.getString(cursor
+						.getColumnIndexOrThrow(Mediainfo.MEDIA_THUMB)));
+				media.setCategoryType(cursor.getInt(cursor
+						.getColumnIndexOrThrow(Mediainfo.MEDIA_CAT_ID)));
+				media.setShowDuration(cursor.getString(cursor
+						.getColumnIndexOrThrow(Mediainfo.MEDIA_DURATION)));
+				media.setSeriesID(cursor.getInt(cursor
+						.getColumnIndexOrThrow(Mediainfo.SERIES_ID)));
+
+				// get channel details of this media.
+				Cursor channelCursor = mDb
+						.query(ChannelMediaInfo.TABLE_NAME,
+								new String[] { ChannelMediaInfo.CHANNEL_ID,
+										ChannelMediaInfo.AIR_TIME,
+										ChannelMediaInfo.END_TIME },
+								ChannelMediaInfo.MEDIA_ID
+										+ "="
+										+ cursor.getString(cursor
+												.getColumnIndexOrThrow(Mediainfo.ROW_ID)),
+								null, null, null, null, null);
+				channelCursor.moveToFirst();
+				media.setChannel(channelCursor.getInt(0));
+				media.setShowTime(channelCursor.getString(1));
+				media.setShowEndTime(channelCursor.getString(2));
+				channelCursor.close();
+
+				// get imdb details of this media from IMDBInfo table.
+				Cursor tmpCursor = getImdbDetailsFor(cursor.getInt(cursor
+						.getColumnIndexOrThrow(Mediainfo.MEDIA_IMDB_ID)));
+				tmpCursor.moveToFirst();
+				media.setImdbRating(tmpCursor.getFloat(tmpCursor
+						.getColumnIndexOrThrow(ImdbInfo.IMDB_RATING)));
+				media.setImdbLink(tmpCursor.getString(tmpCursor
+						.getColumnIndexOrThrow(ImdbInfo.IMDB_LINK)));
+				tmpCursor.close();
+
+				mediaList.add(media);
+				cursor.moveToNext();
+			}
+
+			cursor.close();
+		}
+
 		return mediaList;
 	}
 
 	/**
-	 * Return a list of all media in the ChannelMediaInfoTable for given
-	 * media_id.
+	 * Return a media from the ChannelMediaInfoTable for given media_id.
 	 * 
 	 * @return media
 	 * */
@@ -235,8 +278,8 @@ public class TvTickerDBAdapter {
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 			media = unWrapShowDataFrom(mCursor);
-
 		}
+		safelyCloseMCursor();
 		return media;
 	}
 
@@ -342,7 +385,6 @@ public class TvTickerDBAdapter {
 				ChannelsInfo.ROW_ID, ChannelsInfo.CHANNEL_NAME,ChannelsInfo.IS_FAVORITE_CHANNEL }, null, null,
 				null, null, null);
 	}
-	
 
 	/**
 	 * Fetch Channel Name for a particular ID.

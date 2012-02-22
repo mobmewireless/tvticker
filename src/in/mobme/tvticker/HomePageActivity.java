@@ -20,22 +20,25 @@ public class HomePageActivity extends FragmentActivity implements
 	private ViewPager awesomePager;
 	private ViewPagerAdapter awesomeAdapter;
 	private ViewPagerIndicator indicator = null;
-	private int indicator_position = ViewPagerAdapter.NOW_POSITION;
-	private static final String[] titles = new String[] { "Favorites", "Now",
-			"Later Today", };
+	private int indicator_position = Constants.ViewPager.NOW_POSITION;
+	private static final String[] titles = new String[] {
+			Constants.ViewPager.FAVORITES_LABEL, 
+			Constants.ViewPager.NOW_LABEL,
+			Constants.ViewPager.LATER_TODAY_LABEL 
+		};
 
 	private static final int SETTINGS_MENU_ITEM = Menu.FIRST;
 	private static final int SEARCH_MENU_ITEM = SETTINGS_MENU_ITEM + 1;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, SETTINGS_MENU_ITEM, 0, "settings").setIcon(
-				R.drawable.ic_action_settings).setShowAsAction(
-				MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(0, SETTINGS_MENU_ITEM, 0, "settings")
+				.setIcon(R.drawable.ic_action_settings)
+				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-		menu.add(0, SEARCH_MENU_ITEM, 0, "").setIcon(
-				R.drawable.ic_action_search).setShowAsAction(
-				MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(0, SEARCH_MENU_ITEM, 0, "")
+				.setIcon(R.drawable.ic_action_search)
+				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -74,8 +77,8 @@ public class HomePageActivity extends FragmentActivity implements
 		// Save UI state changes to the savedInstanceState.
 		// This bundle will be passed to onCreate if the process is
 		// killed and restarted.
-		savedInstanceState.putInt("indicator_pointer", indicator
-				.getCurrentPosition());
+		savedInstanceState.putInt("indicator_pointer",
+				indicator.getCurrentPosition());
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
@@ -106,8 +109,8 @@ public class HomePageActivity extends FragmentActivity implements
 
 		@Override
 		public void onPreviousClicked(View v) {
-			awesomePager.setCurrentItem(Math.max(0, indicator
-					.getCurrentPosition() - 1));
+			awesomePager.setCurrentItem(Math.max(0,
+					indicator.getCurrentPosition() - 1));
 		}
 
 	}
@@ -136,8 +139,8 @@ public class HomePageActivity extends FragmentActivity implements
 	// helper method to show toasts !
 	private void showMsg(String msg) {
 		Toast toast = Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER, toast.getXOffset() / 2, toast
-				.getYOffset() / 2);
+		toast.setGravity(Gravity.CENTER, toast.getXOffset() / 2,
+				toast.getYOffset() / 2);
 		toast.show();
 	}
 
