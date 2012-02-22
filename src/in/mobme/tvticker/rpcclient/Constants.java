@@ -49,7 +49,7 @@ public class Constants {
 			final static String SERIES_ID_TAG = "series_id";
 			final static String THUMBNAIL_ID_TAG = "thumbnail_id";
 
-			public final static String THUMBNAIL_PREFIX ="http://192.168.1.89:6666/image/";
+			public final static String THUMBNAIL_PREFIX ="http://enterprise.mobme.in/tv-ticker/image/";
 
 			public final static String THUMBNAIL_SUFFIX ="/profile";
 
