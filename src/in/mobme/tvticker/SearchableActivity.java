@@ -72,7 +72,7 @@ public class SearchableActivity extends Activity {
     			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
     					long arg3) {
     				dbAdapter.open();
-    				Media selectedMedia = dbAdapter.FetchShowsInfoFor(searchResult.get(pos).getMedia_id());
+    				Media selectedMedia = dbAdapter.fetchShowsInfoFor(searchResult.get(pos).getMedia_id());
     				dbAdapter.close();
     				Intent detailedViewIntent = new Intent(getBaseContext(),
     						DetailedDescriptionActivity.class);
