@@ -50,7 +50,7 @@ public class SetFavouriteChannelsActivity extends Activity {
 
 			ListView listView = (ListView) findViewById(android.R.id.list);
 			listView.setAdapter(new FavouriteChannelsCursorAdapter(
-					getBaseContext(), dbAdapter.fetchAllChannels(), true));
+					getBaseContext(), dbAdapter.fetchAllChannels(), true,hm));
 			listView.setItemsCanFocus(false);
 			listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			dbAdapter.close();
@@ -60,13 +60,14 @@ public class SetFavouriteChannelsActivity extends Activity {
 						int position, long id) {
 
 					CheckedTextView textview = (CheckedTextView) view;
-					Log.i("id",(String) textview.getTag());
-					int tag = Integer.parseInt((String) (textview.getTag() ) );
+					
+					int tag = (Integer) textview.getTag() ;
+					Log.i("id",""+tag);
 					int currentStatus = (Integer) hm.get(tag);
 					Log.i("status",(currentStatus==1)?"unchecking":"checking");
 					hm.put(tag, (currentStatus==1)?0:1);
 					changes.put(tag, (currentStatus==1)?0:1);
-					textview.setChecked((currentStatus==0));
+				//	textview.setChecked((currentStatus==0));
 					Log.i("INFO", "items" + hm);
 				}
 			});

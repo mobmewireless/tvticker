@@ -1,8 +1,15 @@
 package in.mobme.tvticker;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
 import in.mobme.tvticker.MyArrayAdapter.ViewHolder;
 import in.mobme.tvticker.customwidget.WebImageView;
+import in.mobme.tvticker.database.Models;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
@@ -15,13 +22,14 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 public class FavouriteChannelsCursorAdapter extends CursorAdapter {
-
+	private HashMap hm= new HashMap<Integer, Object>();
 	Context thisContext = null;
 
 	public FavouriteChannelsCursorAdapter(Context context, Cursor c,
-			boolean autoRequery) {
+			boolean autoRequery,HashMap<Integer, Object>hash) {
 
 		super(context, c, autoRequery);
+		this.hm = hash;
 		thisContext = context;
 	}
 
@@ -32,7 +40,7 @@ public class FavouriteChannelsCursorAdapter extends CursorAdapter {
 	}
 
 	@Override
-	public View newView(Context context, Cursor cursor, ViewGroup parent) {
+	public CheckedTextView newView(Context context, Cursor cursor, ViewGroup parent) {
 
 		Log.i("TAG", "on new view");
 
@@ -43,8 +51,17 @@ public class FavouriteChannelsCursorAdapter extends CursorAdapter {
 		//
 		// return rowView;
 		LayoutInflater inflater = LayoutInflater.from(context);
-		View v = inflater.inflate(android.R.layout.simple_list_item_checked,
+		CheckedTextView v = (CheckedTextView) inflater.inflate(android.R.layout.simple_list_item_checked,
 				parent, false);
+		String name = cursor.getString(1);
+		int Id = Integer.parseInt(cursor.getString(0));
+		Log.i("hashmap",""+hm);
+		Log.i("key",""+Id);
+		int currentStatus = (Integer) hm.get(Id);
+		v.setText(name);
+		v.setTag(Id);
+		v.setChecked((currentStatus==1));
+		
 		return v;
 	}
 
@@ -55,8 +72,18 @@ public class FavouriteChannelsCursorAdapter extends CursorAdapter {
 		// .findViewById(R.id.cv_id);
 		// checked_text_view.setText(cursor.getString(1));
 		CheckedTextView textview = (CheckedTextView) view;
-		textview.setText(cursor.getString(1));
-		textview.setTag(cursor.getString(0));
+		String name = cursor.getString(1);
+		int Id = Integer.parseInt(cursor.getString(0));
+		int currentStatus = (Integer) hm.get(Id);
+		textview.setText(name);
+		textview.setTag(Id);
+		textview.setChecked((currentStatus==1));
+		
+		
+		
+       
+		
+		
 //		if (cursor.getString(2).equals("1"))
 //			{
 //			textview.setChecked(true);
