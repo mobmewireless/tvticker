@@ -44,7 +44,7 @@ public class Models {
 	}
 
 	/* Media Info table */
-	class Mediainfo {
+	public class Mediainfo {
 		/* table name */
 		final static String TABLE_NAME = "media_info";
 		/* columns */
@@ -73,15 +73,15 @@ public class Models {
 	}
 
 	/* Channel Info table */
-	class ChannelsInfo {
+	public class ChannelsInfo {
 		/* table name */
-		final static String TABLE_NAME = "channel_info";
+		public final static String TABLE_NAME = "channel_info";
 
 		/* columns */
-		final static String ROW_ID = KEY_ROW_ID;
-		final static String CHANNEL_NAME = "channel_name";
-		final static String IS_FAVORITE_CHANNEL = "is_favorite";
-		final static String REMOTE_CHANNEL_ID = "remote_channel_id";
+		public final static String ROW_ID = KEY_ROW_ID;
+		public final static String CHANNEL_NAME = "channel_name";
+		public final static String IS_FAVORITE_CHANNEL = "is_favorite";
+		public final static String REMOTE_CHANNEL_ID = "remote_channel_id";
 
 		/* channel_table create query */
 		final static String CHANNEL_TABLE_CREATE = "create table if not exists "
@@ -101,16 +101,16 @@ public class Models {
 	}
 
 	/* Channel-Media Info table */
-	class ChannelMediaInfo {
+	public class ChannelMediaInfo {
 		/* table name */
-		final static String TABLE_NAME = "channel_media_info";
+		public final static String TABLE_NAME = "channel_media_info";
 
 		/* columns */
-		final static String ROW_ID = KEY_ROW_ID;
-		final static String MEDIA_ID = KEY_MEDIA_ROW_ID;
-		final static String CHANNEL_ID = KEY_CHANNEL_ROW_ID;
-		final static String AIR_TIME = "show_time";
-		final static String END_TIME = "end_time";
+		public final static String ROW_ID = KEY_ROW_ID;
+		public final static String MEDIA_ID = KEY_MEDIA_ROW_ID;
+		public final static String CHANNEL_ID = KEY_CHANNEL_ROW_ID;
+		public final static String AIR_TIME = "show_time";
+		public final static String END_TIME = "end_time";
 
 		/* channel_media_table create query */
 		final static String CHANNEL_MEDIA_TABLE_CREATE = "create table if not exists "
@@ -132,15 +132,16 @@ public class Models {
 	}
 
 	/* Category Info table */
-	class CategoriesInfo {
+	public class CategoriesInfo {
 		/* table name */
-		final static String TABLE_NAME = "category_info";
+		public final static String TABLE_NAME = "category_info";
 
 		/* columns */
-		final static String ROW_ID = KEY_ROW_ID;
-		final static String CATAGORY_TYPE = "category_type";
-		final static String REMOTE_CATEGORY_ID = "remote_category_id";
 
+		public final static String ROW_ID = KEY_ROW_ID;
+		public final static String CATAGORY_TYPE = "category_type";
+		public final static String REMOTE_CATEGORY_ID = "remote_category_id";
+		
 		/* category_table create query */
 		final static String CATEGORY_TABLE_CREATE = "create table if not exists "
 				+ TABLE_NAME
@@ -156,14 +157,14 @@ public class Models {
 	}
 
 	/* Imdb Info table */
-	class ImdbInfo {
+	public class ImdbInfo {
 		/* table name */
-		final static String TABLE_NAME = "imdb_info";
+		public final static String TABLE_NAME = "imdb_info";
 
 		/* columns */
-		final static String ROW_ID = KEY_ROW_ID;
-		final static String IMDB_RATING = "rating";
-		final static String IMDB_LINK = "link";
+		public final static String ROW_ID = KEY_ROW_ID;
+		public final static String IMDB_RATING = "rating";
+		public final static String IMDB_LINK = "link";
 
 		/* imdb_table create query */
 		final static String IMDB_TABLE_CREATE = "create table if not exists "
@@ -177,15 +178,15 @@ public class Models {
 	}
 
 	/* Reminders Info table */
-	class Remindersinfo {
+	public class Remindersinfo {
 		/* table name */
-		final static String TABLE_NAME = "reminders_info";
+		public final static String TABLE_NAME = "reminders_info";
 
 		/* columns */
-		final static String ROW_ID = KEY_ROW_ID;
-		final static String MEDIA_ID = KEY_MEDIA_ROW_ID;
-		final static String REMINDER_ENABLED = "reminder_flag";
-		final static String IS_FAVORITE_FLAG = "is_favorite";
+		public final static String ROW_ID = KEY_ROW_ID;
+		public final static String MEDIA_ID = KEY_MEDIA_ROW_ID;
+		public final static String REMINDER_ENABLED = "reminder_flag";
+		public final static String IS_FAVORITE_FLAG = "is_favorite";
 
 		/* reminders_table create query */
 		final static String REMINDER_TABLE_CREATE = "create table if not exists "
@@ -205,12 +206,12 @@ public class Models {
 	}
 
 	/* Series Info table */
-	class SeriesInfo {
+	public class SeriesInfo {
 		/* table name */
-		final static String TABLE_NAME = "series_info";
+		public final static String TABLE_NAME = "series_info";
 		/* columns */
-		final static String ROW_ID = KEY_ROW_ID;
-		final static String SERIES_NAME = KEY_MEDIA_ROW_ID;
+		public final static String ROW_ID = KEY_ROW_ID;
+		public final static String SERIES_NAME = KEY_MEDIA_ROW_ID;
 
 		/* series_table create query */
 		final static String SERIES_TABLE_CREATE = "create table if not exists "
