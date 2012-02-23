@@ -1,5 +1,7 @@
 package in.mobme.tvticker.activity;
 
+import java.util.Date;
+
 import in.mobme.tvticker.Constants;
 import in.mobme.tvticker.R;
 import android.content.Intent;
@@ -26,6 +28,7 @@ public class AllShowsMainPageActivity extends FragmentActivity{
 		
 		channelsButton.setOnClickListener(new ButtonOnClickListener(Constants.CHANNEL_FILTER));
 		categoriesButton.setOnClickListener(new ButtonOnClickListener(Constants.CATEGORY_FILTER));
+		
 	}
 	
 	private void configureActionbarWith(ActionBar actionBar, String title){

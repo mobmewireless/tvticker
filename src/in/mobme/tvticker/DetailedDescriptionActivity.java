@@ -1,8 +1,17 @@
 package in.mobme.tvticker;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import in.mobme.tvticker.alarm.ShowAlarmService;
 import in.mobme.tvticker.customwidget.WebImageView;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +38,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	private TextView movieChannelText = null;
 	private Button readReviewsButton = null;
 	private Button imdbRatingButton = null;
+	private Button setReminderButton = null;
 	private boolean fav_status = false;
 	private int cMenuDrawable;
 
@@ -78,7 +88,8 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		movieChannelText = (TextView) findViewById(R.id.textViewChannel);
 
 		readReviewsButton = (Button) findViewById(R.id.button_go_imdb);
-
+		setReminderButton = (Button) findViewById(R.id.button_set_reminder);
+		
 		// non_interactive fields
 		imdbRatingButton = (Button) findViewById(R.id.rating_non_interactive_button);
 
@@ -100,6 +111,36 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 				Uri uriUrl = Uri.parse(imdbURL);
 				Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
 				startActivity(launchBrowser);
+			}
+		});
+		
+		setReminderButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent myIntent = new Intent(DetailedDescriptionActivity.this, ShowAlarmService.class);
+				
+				Log.i("Test", media.getShowTime());
+				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date date = new Date(); 
+				try {
+					date = (Date) formatter.parse(media.getShowTime());
+				} catch (ParseException e) {
+					Log.i("Error", "Date format exception");
+				}
+				
+				Calendar calender = Calendar.getInstance();
+				calender.setTimeInMillis(new Date().getTime());
+				calender.add(Calendar.SECOND, 15);
+				
+				myIntent.putExtra("alert_display_text", new String[] { channel, media.getMediaTitle() });
+				
+				PendingIntent pendingIntent = PendingIntent.getService(DetailedDescriptionActivity.this, 0, myIntent, 0);
+				AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+				
+				alarmManager.set(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), pendingIntent);
+				
+				Toast.makeText(DetailedDescriptionActivity.this, "Alarm Set!", Toast.LENGTH_SHORT).show();
 			}
 		});
 

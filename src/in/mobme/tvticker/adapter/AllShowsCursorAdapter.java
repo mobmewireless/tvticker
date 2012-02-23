@@ -1,8 +1,6 @@
 package in.mobme.tvticker.adapter;
 
 import in.mobme.tvticker.R;
-import in.mobme.tvticker.R.id;
-import in.mobme.tvticker.R.layout;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
@@ -24,17 +22,17 @@ public class AllShowsCursorAdapter extends CursorAdapter {
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		View rowView = activity.getLayoutInflater().inflate(R.layout.channel_row, null, true);
 		
-		TextView tv = (TextView) rowView.findViewById(R.id.list_item);
-		
-		tv.setText(cursor.getString(1));
-		tv.setTag(cursor.getString(0)); //tag stores the channel id
-		
 		return rowView;
 	}
 	
 	@Override
-	public void bindView(View arg0, Context arg1, Cursor arg2) {
-		
+	public void bindView(View view, Context context, Cursor cursor) {
+		populateViewItem((TextView) view, cursor); 
+	}
+	
+	private void populateViewItem(TextView textView, Cursor cursor) {
+		textView.setText(cursor.getString(1));
+		textView.setTag(cursor.getString(0)); //tag stores the channel id
 	}
 
 }
