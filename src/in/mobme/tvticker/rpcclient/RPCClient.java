@@ -83,6 +83,17 @@ public class RPCClient {
 		return mediaList;
 	}
 	
+	public void updateToLatestVersion(String version) throws JSONRPCException, JSONException {
+		
+		JSONObject updateResult = callClientJSONObject(Constants.RPC.Services.UPDATE_TO_VERSION);
+		JSONArray channels = updateResult.getJSONArray("channels");
+		JSONArray categories = updateResult.getJSONArray("categories");
+		JSONArray programs = updateResult.getJSONArray("programs");
+		JSONArray series = updateResult.getJSONArray("series");
+		JSONArray versions = updateResult.getJSONArray("versions");
+			
+	}
+	
 	public String getCurrentVersion() throws JSONRPCException {
 		return client.callString(Constants.RPC.Services.CURRENT_DATA_VERSION);
 	}
@@ -96,6 +107,8 @@ public class RPCClient {
 			// Log.i(Constants.TAG, mediaObj.toString());
 		}
 	}
+	
+	
 	
 	private String callClientString(String method, Object... params) throws JSONRPCException {
 		ArrayList<Object> parameters = new ArrayList<Object>();

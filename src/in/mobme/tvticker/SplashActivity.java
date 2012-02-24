@@ -1,5 +1,7 @@
 package in.mobme.tvticker;
 
+import org.json.JSONException;
+
 import in.mobme.tvticker.helpers.DataMocker;
 import android.app.Activity;
 import android.content.Intent;
@@ -48,7 +50,12 @@ public class SplashActivity extends Activity {
 						if (_active) {
 							DataMocker dataMocker = new DataMocker(
 									getBaseContext());
-							dataMocker.startMocking();
+							try {
+								dataMocker.startMocking();
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							startActivity(new Intent(getBaseContext(),
 									HomePageActivity.class));
 							//DataMocker dataMocker = new DataMocker(

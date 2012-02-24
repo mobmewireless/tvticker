@@ -38,6 +38,7 @@ public class SetFavouriteChannelsActivity extends Activity {
 		Cursor cursor = dbAdapter.fetchAllChannels();
 		if (cursor.getCount() == 0) {
 			Log.i("Cursor Null", "CURSOR IS NULL");
+			dbAdapter.close();
 		} else if (cursor.getCount() > 0) {
 			for (cursor.move(0); cursor.moveToNext(); cursor.isAfterLast()) {
 				String name = cursor.getString(cursor.getColumnIndex("channel_name"));

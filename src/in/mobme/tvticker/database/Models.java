@@ -19,6 +19,30 @@ public class Models {
 	public final static int IS_TRUE = 1;
 	public final static int IS_FALSE = 0;
 
+	/* Version Info table */
+	class Version {
+		/* table name */
+		final static String TABLE_NAME = "version";
+		/* columns */
+		final static String ROW_ID = KEY_ROW_ID;
+		final static String VERSION_NAME = "version_name";
+		final static String REMOTE_VERSION_ID = "remote_version_id";
+
+		/* version_table create query */
+		final static String VERSION_TABLE_CREATE = "create table if not exists "
+				+ TABLE_NAME
+				+ "("
+				+ ROW_ID
+				+ " integer primary key autoincrement, "
+				+ REMOTE_VERSION_ID
+				+ " integer," + VERSION_NAME + " text default '')";
+
+		/* version_table drop query */
+		final static String VERSION_TABLE_DROP = "DROP TABLE IF EXISTS "
+				+ TABLE_NAME;
+
+	}
+
 	/* Media Info table */
 	class Mediainfo {
 		/* table name */
@@ -32,15 +56,15 @@ public class Models {
 		final static String MEDIA_CAT_ID = KEY_CATEGORY_ROW_ID;
 		final static String SERIES_ID = KEY_SERIES_ROW_ID;
 		final static String MEDIA_DURATION = "duration";
-
+		final static String REMOTE_MEDIA_ID = "remote_media_id";
 		/* media_table create query */
 		final static String MEDIA_TABLE_CREATE = "create table if not exists "
 				+ TABLE_NAME + "(" + ROW_ID
 				+ " integer primary key autoincrement, " + MEDIA_TITLE
 				+ " text, " + MEDIA_DESCRIPTION + " text, " + MEDIA_THUMB
 				+ " text, " + MEDIA_IMDB_ID + " integer, " + MEDIA_CAT_ID
-				+ " integer, " + SERIES_ID + " integer, " + MEDIA_DURATION
-				+ " text)";
+				+ " integer, " + SERIES_ID + " integer, " + REMOTE_MEDIA_ID
+				+ " integer," + MEDIA_DURATION + " text)";
 
 		/* media_table drop query */
 		final static String MEDIA_TABLE_DROP = "DROP TABLE IF EXISTS "
@@ -66,8 +90,10 @@ public class Models {
 				+ ROW_ID
 				+ " integer primary key autoincrement, "
 				+ IS_FAVORITE_CHANNEL
-				+ " integer default 0, " + CHANNEL_NAME + " text "
-				+ REMOTE_CHANNEL_ID + " integer)"  ;
+				+ " integer default 0, "
+				+ CHANNEL_NAME
+				+ " text "
+				+ REMOTE_CHANNEL_ID + " integer)";
 
 		/* channel_table drop query */
 		final static String CHANNEL_TABLE_DROP = "DROP TABLE IF EXISTS "
@@ -114,17 +140,15 @@ public class Models {
 		final static String ROW_ID = KEY_ROW_ID;
 		final static String CATAGORY_TYPE = "category_type";
 		final static String REMOTE_CATEGORY_ID = "remote_category_id";
-		
+
 		/* category_table create query */
 		final static String CATEGORY_TABLE_CREATE = "create table if not exists "
 				+ TABLE_NAME
 				+ "("
 				+ ROW_ID
 				+ " integer primary key autoincrement, "
-				
-				+ CATAGORY_TYPE
-				+ " text "
-				+ REMOTE_CATEGORY_ID + " integer)";
+
+				+ CATAGORY_TYPE + " text " + REMOTE_CATEGORY_ID + " integer)";
 
 		/* category_table drop query */
 		final static String CATEGORY_TABLE_DROP = "DROP TABLE IF EXISTS "

@@ -9,6 +9,7 @@ import in.mobme.tvticker.database.Models.ChannelsInfo;
 import in.mobme.tvticker.database.Models.ImdbInfo;
 import in.mobme.tvticker.database.Models.Mediainfo;
 import in.mobme.tvticker.database.Models.Remindersinfo;
+import in.mobme.tvticker.database.Models.Version;
 import in.mobme.tvticker.helpers.DateTimeHelper;
 
 import java.text.ParseException;
@@ -204,7 +205,7 @@ public class TvTickerDBAdapter {
 			cursor.moveToFirst();
 
 			while (!cursor.isAfterLast()) {
-				Media media =getMediaFromCursor(cursor);
+				Media media = getMediaFromCursor(cursor);
 				// get channel details of this media.
 				String channelWhereClause = ChannelMediaInfo.MEDIA_ID
 						+ "="
@@ -356,8 +357,9 @@ public class TvTickerDBAdapter {
 	 * */
 	public Cursor fetchAllChannels() {
 		return mDb.query(ChannelsInfo.TABLE_NAME, new String[] {
-				ChannelsInfo.ROW_ID, ChannelsInfo.CHANNEL_NAME,ChannelsInfo.IS_FAVORITE_CHANNEL }, null, null,
-				null, null, null);
+				ChannelsInfo.ROW_ID, ChannelsInfo.CHANNEL_NAME,
+				ChannelsInfo.IS_FAVORITE_CHANNEL }, null, null, null, null,
+				null);
 	}
 
 	/**
@@ -429,6 +431,27 @@ public class TvTickerDBAdapter {
 		return categoryType;
 	}
 
+	/**
+	 * Fetch version stored in db
+	 * 
+	 * @return Returns cursor over Imdb details.
+	 */
+	public String getCurrentVersion() {
+		String version = "";
+		mCursor = mDb.query(true, Version.TABLE_NAME, new String[] {
+				Version.ROW_ID, Version.VERSION_NAME }, "_id = 1", null, null,
+				null, null, null);
+		if (mCursor != null) {
+			if(mCursor.moveToFirst())
+			version = mCursor.getString(mCursor
+					.getColumnIndexOrThrow(Version.VERSION_NAME));
+			
+		}
+		mCursor.close();
+		return version;
+
+	}
+
 	/*************************
 	 * IMDB Table
 	 */
@@ -490,31 +513,31 @@ public class TvTickerDBAdapter {
 		return mDb.update(Remindersinfo.TABLE_NAME, updateValues,
 				Remindersinfo.ROW_ID + "=" + mediaId, null) > 0;
 	}
+
 	/**
 	 * Updates a channel to favourite or not
 	 * 
-	 *
+	 * 
 	 * @return true if updated, false otherwise.
 	 */
-	
-	public void setFavoriteChannels(HashMap<Integer, Object> changes)
-	{
-	
-		Map data = (HashMap<Integer, Object>)changes ;
-		 Set set = data.entrySet();
-		 Iterator iter = set.iterator();
-		 while (iter.hasNext()) {
-		      Map.Entry entry = (Map.Entry) iter.next();
-		      Log.i("changes",entry.getKey() + " -- " + entry.getValue());
-		      ContentValues args = new ContentValues();
-		      int fav_value = (Integer) entry.getValue();
-		        args.put("is_favorite", fav_value );
-		       
-		        mDb.update(Models.ChannelsInfo.TABLE_NAME, args, 
-                        "_id=" + entry.getKey(), null) ;
-		        
-		    }
-        
+
+	public void setFavoriteChannels(HashMap<Integer, Object> changes) {
+
+		Map data = (HashMap<Integer, Object>) changes;
+		Set set = data.entrySet();
+		Iterator iter = set.iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+			Log.i("changes", entry.getKey() + " -- " + entry.getValue());
+			ContentValues args = new ContentValues();
+			int fav_value = (Integer) entry.getValue();
+			args.put("is_favorite", fav_value);
+
+			mDb.update(Models.ChannelsInfo.TABLE_NAME, args,
+					"_id=" + entry.getKey(), null);
+
+		}
+
 	}
 
 	/**
@@ -566,7 +589,7 @@ public class TvTickerDBAdapter {
 		tmpCursor.close();
 		return isEnabled;
 	}
-	
+
 	/**************************
 	 * Private Helpers
 	 */

@@ -41,16 +41,18 @@ public class DataMocker {
 
 	}
 
-	public int startMocking() {
+	public int startMocking() throws JSONException {
 	
 			rpc_client = new RPCClient();
 			try {
-				rpc_client.ping();
+				Log.i("ping",""+rpc_client.ping());
+				
 				mockAdapter.open();
-				populateChannels();
-				populateCategories();
+				rpc_client.updateToLatestVersion(mockAdapter.getCurrentVersion());
+				//populateChannels();
+				//populateCategories();
 				// populateSeries();
-				populateMainTable();
+				//populateMainTable();
 				mockAdapter.close();
 			} catch (JSONRPCException e) {
 				// TODO Auto-generated catch block
@@ -113,10 +115,11 @@ public class DataMocker {
 
 			String now = (String) format.format(new Date());
 			media = rpc_client.getMediaListFor(now, "full");
+			rpc_client.updateToLatestVersion(mockAdapter.getCurrentVersion());
+			
 
 			for (Media program : media) {
 					String thumbnail = Constants.RPC.Media.THUMBNAIL_PREFIX  + program.getThumbnailID() + Constants.RPC.Media.THUMBNAIL_SUFFIX;
-					Log.i("media",thumbnail);
 					program.setMediaThumb(thumbnail);
 				long _id = mockAdapter.createNewMediaInfo(mockMediaFor(program));
 				mockAdapter.setIsFavorite(_id, false);

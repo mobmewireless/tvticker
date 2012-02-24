@@ -8,7 +8,7 @@ import android.util.Log;
 
 public class TvTickerDBHelper extends SQLiteOpenHelper {
 
-	private static final String DATABASE_NAME = "TvTickerDataBaseTest";
+	private static final String DATABASE_NAME = "TvTdb";
 	private static final int DATABASE_VERSION = 1;
 
 
@@ -39,6 +39,7 @@ public class TvTickerDBHelper extends SQLiteOpenHelper {
 		database.execSQL(Remindersinfo.REMINDER_TABLE_CREATE);
 		database.execSQL(SeriesInfo.SERIES_TABLE_CREATE);
 		database.execSQL(ChannelMediaInfo.CHANNEL_MEDIA_TABLE_CREATE);
+		database.execSQL(Version.VERSION_TABLE_CREATE);
 		Log.i(TvTickerDBHelper.class.getName(), "Successfully Created tables !");
 	}
 	
@@ -50,6 +51,7 @@ public class TvTickerDBHelper extends SQLiteOpenHelper {
 		database.execSQL(Remindersinfo.REMINDER_TABLE_DROP);
 		database.execSQL(SeriesInfo.SERIES_TABLE_DROP);
 		database.execSQL(ChannelMediaInfo.CHANNEL_MEDIA_TABLE_DROP);
+		database.execSQL(Version.VERSION_TABLE_DROP);
 		Log.i(TvTickerDBHelper.class.getName(), "Successfully dropped tables !");
 	}
 
