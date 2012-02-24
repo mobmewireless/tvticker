@@ -1,6 +1,7 @@
 package in.mobme.tvticker.database;
 
 import in.mobme.tvticker.Constants;
+import in.mobme.tvticker.FavouriteChannelModel;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.data_model.SearchableMedia;
 import in.mobme.tvticker.database.Models.CategoriesInfo;
@@ -14,10 +15,8 @@ import in.mobme.tvticker.helpers.DateTimeHelper;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -547,24 +546,37 @@ public class TvTickerDBAdapter {
 	 * @return true if updated, false otherwise.
 	 */
 
-	public void setFavoriteChannels(HashMap<Integer, Object> changes) {
-
-		Map data = (HashMap<Integer, Object>) changes;
-		Set set = data.entrySet();
-		Iterator iter = set.iterator();
-		while (iter.hasNext()) {
-			Map.Entry entry = (Map.Entry) iter.next();
-			Log.i("changes", entry.getKey() + " -- " + entry.getValue());
-			ContentValues args = new ContentValues();
-			int fav_value = (Integer) entry.getValue();
-			args.put("is_favorite", fav_value);
-
-			mDb.update(Models.ChannelsInfo.TABLE_NAME, args,
-					"_id=" + entry.getKey(), null);
-
+	public void setFavoriteChannels(List<FavouriteChannelModel> list){
+		updateValues.clear();
+		Iterator<FavouriteChannelModel> iter = list.iterator();
+		while(iter.hasNext()){
+			FavouriteChannelModel model = (FavouriteChannelModel) iter.next();
+			updateValues.put(ChannelsInfo.IS_FAVORITE_CHANNEL, model.isSelected());
+			mDb.update(Models.ChannelsInfo.TABLE_NAME, updateValues, ChannelsInfo.ROW_ID +"="+ model.get_id(), null) ;
+			Log.i("SAving", model.getName() + "==> " + model.isSelected());
 		}
 
 	}
+	
+	
+//	public void setFavoriteChannels(HashMap<Integer, Object> changes)
+//	{
+//	
+//		Map data = (HashMap<Integer, Object>)changes ;
+//		 Set set = data.entrySet();
+//		 Iterator iter = set.iterator();
+//		 while (iter.hasNext()) {
+//		      Map.Entry entry = (Map.Entry) iter.next();
+//		      Log.i("changes",entry.getKey() + " -- " + entry.getValue());
+//		      ContentValues args = new ContentValues();
+//		      int fav_value = (Integer) entry.getValue();
+//		        args.put("is_favorite", fav_value );
+//		       
+//		        mDb.update(Models.ChannelsInfo.TABLE_NAME, args, 
+//                        "_id=" + entry.getKey(), null) ;
+//		        
+//		    }
+//	}
 
 	/**
 	 * Removes isFavorite flag for the given media id.

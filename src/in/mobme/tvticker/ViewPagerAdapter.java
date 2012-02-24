@@ -155,7 +155,7 @@ class ViewPagerAdapter extends PagerAdapter {
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view,
 				int position, long arg3) {
-			Media selectedMedia = laterMediaList.get(position);
+			Media selectedMedia = nowMediaList.get(position);
 			Intent detailedViewIntent = new Intent(context,
 					DetailedDescriptionActivity.class);
 			Bundle b = new Bundle();
@@ -171,7 +171,7 @@ class ViewPagerAdapter extends PagerAdapter {
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view,
 				int position, long arg3) {
-			Media selectedMedia = nowMediaList.get(position);
+			Media selectedMedia = laterMediaList.get(position);
 			Intent detailedViewIntent = new Intent(context,
 					DetailedDescriptionActivity.class);
 			Bundle b = new Bundle();
