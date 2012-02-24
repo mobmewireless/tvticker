@@ -48,6 +48,9 @@ public class DataMocker {
 				Log.i("ping",""+rpc_client.ping());
 				
 				mockAdapter.open();
+				
+				Log.i("update status",""+mockAdapter.updateOrInsertChannel(1, "star"));
+				
 				rpc_client.updateToLatestVersion(mockAdapter.getCurrentVersion());
 				//populateChannels();
 				//populateCategories();
@@ -70,7 +73,7 @@ public class DataMocker {
 		try {
 			channels = rpc_client.getAllChannelList();
 			for (Channels channel : channels) {
-				mockAdapter.insertNewChannel(channel.getChannelTitle());
+			//	mockAdapter.insertNewChannel(channel.getChannelTitle());
 			}
 		} catch (JSONRPCException e) {
 			// TODO Auto-generated catch block
@@ -87,7 +90,7 @@ public class DataMocker {
 		try {
 			categories = rpc_client.getAllCategoryList();
 			for (Categories category : categories) {
-				mockAdapter.insertNewCategory(category.getCategoryName());
+				//mockAdapter.insertNewCategory(category.getCategoryName());
 			}
 		} catch (JSONRPCException e) {
 			// TODO Auto-generated catch block

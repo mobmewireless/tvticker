@@ -178,7 +178,7 @@ public class TvTickerDBAdapter {
 		ArrayList<Media> mediaList = new ArrayList<Media>();
 
 		mCursor = mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
-				ChannelMediaInfo.ROW_ID, ChannelMediaInfo.MEDIA_ID,
+				 ChannelMediaInfo.MEDIA_ID,
 				ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME,
 				ChannelMediaInfo.END_TIME }, whereClause, whereArgs, null,
 				null, null);
@@ -246,7 +246,7 @@ public class TvTickerDBAdapter {
 
 	private Cursor fetchShowsInfoForCondition(String whereClause) {
 		return mDb.query(ChannelMediaInfo.TABLE_NAME, new String[] {
-				ChannelMediaInfo.ROW_ID, ChannelMediaInfo.MEDIA_ID,
+				 ChannelMediaInfo.MEDIA_ID,
 				ChannelMediaInfo.CHANNEL_ID, ChannelMediaInfo.AIR_TIME,
 				ChannelMediaInfo.END_TIME }, whereClause, null, null, null,
 				null);
@@ -344,11 +344,26 @@ public class TvTickerDBAdapter {
 	 * 
 	 * @return Returns affected row id.
 	 */
-	public long insertNewChannel(String channelName) {
+	public long insertNewChannel(long remote_channel_id, String channelName) {
 		initialValues.clear();
 		initialValues.put(ChannelsInfo.CHANNEL_NAME, channelName);
+		initialValues.put(ChannelsInfo.ROW_ID, remote_channel_id);
+		
 		return mDb.insert(ChannelsInfo.TABLE_NAME, null, initialValues);
 	}
+	/**
+	 * Insert a new Channel.Updates the row if id already exists.
+	 * 
+	 * @return Returns affected row id.
+	 */
+	public long updateOrInsertChannel(long remote_channel_id, String name) {
+		initialValues.clear();
+		initialValues.put(ChannelsInfo.CHANNEL_NAME, name);
+		initialValues.put(ChannelsInfo.ROW_ID, remote_channel_id);
+		return mDb.replace(ChannelsInfo.TABLE_NAME, "empty", initialValues);
+	}
+	
+	
 
 	/**
 	 * Return a Cursor over the list of all Channels from the Channels Table.
@@ -392,12 +407,23 @@ public class TvTickerDBAdapter {
 	 * 
 	 * @return Returns affected row id.
 	 */
-	public long insertNewCategory(String category) {
+	public long insertNewCategory(long remote_category_id,String category) {
 		initialValues.clear();
 		initialValues.put(CategoriesInfo.CATAGORY_TYPE, category);
+		initialValues.put(CategoriesInfo.ROW_ID, remote_category_id);
 		return mDb.insert(CategoriesInfo.TABLE_NAME, null, initialValues);
 	}
-
+	/**
+	 * Insert a new Category or updates existing category.
+	 * 
+	 * @return Returns affected row id.
+	 */
+	public long updateOrInsertCategory(long remote_category_id, String name) {
+		initialValues.clear();
+		initialValues.put(CategoriesInfo.CATAGORY_TYPE, name);
+		initialValues.put(CategoriesInfo.ROW_ID, remote_category_id);
+		return mDb.replace(CategoriesInfo.TABLE_NAME, "empty", initialValues);
+	}
 	/**
 	 * Return a Cursor over the list of all Categories from the Categories
 	 * Table.
@@ -442,10 +468,10 @@ public class TvTickerDBAdapter {
 				Version.ROW_ID, Version.VERSION_NAME }, "_id = 1", null, null,
 				null, null, null);
 		if (mCursor != null) {
-			if(mCursor.moveToFirst())
-			version = mCursor.getString(mCursor
-					.getColumnIndexOrThrow(Version.VERSION_NAME));
-			
+			if (mCursor.moveToFirst())
+				version = mCursor.getString(mCursor
+						.getColumnIndexOrThrow(Version.VERSION_NAME));
+
 		}
 		mCursor.close();
 		return version;
