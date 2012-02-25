@@ -140,7 +140,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 				String message = media.getMediaTitle() + " will soon start in " + channel;
 
 				NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-				Notification notification = new Notification(R.drawable.ic_launcher, message, System.currentTimeMillis());
+				Notification notification = new Notification(R.drawable.ic_launcher, message, calender.getTimeInMillis());
 			    
 				notification.defaults |= Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND;
 
