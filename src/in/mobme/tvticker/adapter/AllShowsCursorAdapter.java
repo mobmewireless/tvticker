@@ -4,6 +4,7 @@ import in.mobme.tvticker.R;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 public class AllShowsCursorAdapter extends CursorAdapter {
 
 	private Activity activity;
+
 	
 	public AllShowsCursorAdapter(Context context, Cursor c, Activity activity) {
 		super(context, c);
@@ -21,7 +23,6 @@ public class AllShowsCursorAdapter extends CursorAdapter {
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		View rowView = activity.getLayoutInflater().inflate(R.layout.channel_row, null, true);
-		
 		return rowView;
 	}
 	

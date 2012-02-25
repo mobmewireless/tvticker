@@ -210,9 +210,9 @@ public class TvTickerDBAdapter {
 								.getColumnIndexOrThrow(Mediainfo.ROW_ID));
 				Cursor channelCursor = fetchShowsInfoForCondition(channelWhereClause);
 				channelCursor.moveToFirst();
-				media.setChannel(channelCursor.getInt(0));
-				media.setShowTime(channelCursor.getString(1));
-				media.setShowEndTime(channelCursor.getString(2));
+				media.setChannel(channelCursor.getInt(channelCursor.getColumnIndex(ChannelMediaInfo.CHANNEL_ID)));
+				media.setShowTime(channelCursor.getString(channelCursor.getColumnIndex(ChannelMediaInfo.AIR_TIME)));
+				media.setShowEndTime(channelCursor.getString(channelCursor.getColumnIndex(ChannelMediaInfo.END_TIME)));
 				channelCursor.close();
 
 				mediaList.add(media);
@@ -388,6 +388,7 @@ public class TvTickerDBAdapter {
 				null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
+			Log.i("CUrsor", mCursor.toString() + mCursor.getCount());
 			channelName = mCursor.getString(mCursor
 					.getColumnIndexOrThrow(ChannelsInfo.CHANNEL_NAME));
 			mCursor.close();
