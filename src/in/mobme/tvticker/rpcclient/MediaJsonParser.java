@@ -15,7 +15,6 @@ public class MediaJsonParser {
 		media.setChannel(mediaObj.getInt(Constants.RPC.Media.CHANNEL_TAG));
 		media.setId(mediaObj.getLong(Constants.RPC.Media._ID));
 		media.setImdbLink(mediaObj.getString(Constants.RPC.Media.IMDB_INFO_TAG));
-		media.setImdbRating((float)mediaObj.getDouble(Constants.RPC.Media.IMDB_RATING_TAG));
 		media.setMediaDescription(mediaObj.getString(Constants.RPC.Media.DESCRIPTION_TAG));
 		media.setMediaThumb(mediaObj.getString(Constants.RPC.Media.THUMBNAIL_TAG));
 		media.setMediaTitle(mediaObj.getString(Constants.RPC.Media.TITLE_TAG));

@@ -164,7 +164,7 @@ public class Models {
 		final static String IMDB_TABLE_CREATE = "create table if not exists "
 				+ TABLE_NAME + "(" + ROW_ID
 				+ " integer primary key autoincrement, " + IMDB_RATING
-				+ " real, " + IMDB_LINK + " text  unique)";
+				+ " real, " + IMDB_LINK + " text  )";
 
 		/* imdb_table drop query */
 		final static String IMDB_TABLE_DROP = "DROP TABLE IF EXISTS "

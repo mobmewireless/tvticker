@@ -297,6 +297,7 @@ public class TvTickerDBAdapter {
 	private long insertMedia(Media media) {
 		long imdbId = insertImdbEntryFor(media.getImdbRating(),
 				media.getImdbLink());
+		Log.i("ImdbID",media.getImdbLink()+":"+imdbId);
 		initialValues.clear();
 		initialValues.put(Mediainfo.MEDIA_TITLE, media.getMediaTitle());
 		initialValues.put(Mediainfo.MEDIA_DESCRIPTION,
@@ -498,10 +499,13 @@ public class TvTickerDBAdapter {
 	 * @return Returns affected row id.
 	 */
 	private long insertImdbEntryFor(float rating, String reviewUrl) {
+		if(reviewUrl.toLowerCase() == "null")
+			return 0;
 		initialValues.clear();
 		initialValues.put(ImdbInfo.IMDB_RATING, rating);
 		initialValues.put(ImdbInfo.IMDB_LINK, reviewUrl);
-		return mDb.replace(ImdbInfo.TABLE_NAME, "empty", initialValues);
+		Log.i("imdbvalues",""+initialValues);
+		return mDb.insert(ImdbInfo.TABLE_NAME, null, initialValues);
 	}
 
 	/**
@@ -686,7 +690,16 @@ public class TvTickerDBAdapter {
 				.getColumnIndexOrThrow(Mediainfo.MEDIA_DURATION)));
 		media.setSeriesID(cursor.getInt(cursor
 				.getColumnIndexOrThrow(Mediainfo.SERIES_ID)));
-
+		int imdbId =cursor.getInt(cursor
+				.getColumnIndexOrThrow(Mediainfo.MEDIA_IMDB_ID));
+		if(imdbId==0)
+		{
+			Log.i("imdb is nill for ","movie id"+media.getMediaTitle());
+			media.setImdbRating(0.0F);
+			media.setImdbLink(null);
+			return media;	
+			
+		}
 		// get imdb details of this media from IMDBInfo table.
 		Cursor tmpCursor = getImdbDetailsFor(cursor.getInt(cursor
 				.getColumnIndexOrThrow(Mediainfo.MEDIA_IMDB_ID)));

@@ -37,6 +37,7 @@ public class Constants {
 			final static String THUMBNAIL_ID_TAG = "thumbnail_id";
 			public final static String THUMBNAIL_PREFIX ="http://admin.tvticker.in/image/";
 			public final static String THUMBNAIL_SUFFIX ="/profile";
+			public final static String IMDB_PREFIX  = "http://www.imdb.com/";
 
 		}
 
@@ -46,7 +47,7 @@ public class Constants {
 			final static String LIST_OF_CHANNELS = "channels";
 			final static String LIST_OF_CATEGORIES = "categories";
 			final static String UPDATE_TO_VERSION = "update_to_current_version_except_programs";
-			final static String UPDATE_MEDIA = "update_to_current_version_except_programs";
+			final static String UPDATE_MEDIA = "update_programs_to_current_version";
 			final static String CURRENT_DATA_VERSION = "update_programs_to_current_version";
 		}
 		
