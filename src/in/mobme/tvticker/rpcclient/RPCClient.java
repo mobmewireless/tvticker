@@ -107,11 +107,14 @@ public class RPCClient {
 		updateVersion(version, mockAdapter);
 		Log.i("categories", "" + categories);
 		updateCategories(categories, mockAdapter);
+	//Do this only for wifi available
+		{
 		updateResult = callClientJSONObject(
 				Constants.RPC.Services.UPDATE_MEDIA);
 		Log.i(Constants.RPC.Services.UPDATE_MEDIA,""+updateResult);
 		JSONArray programs = updateResult.getJSONArray("programs");
 		updateMedia(programs, mockAdapter);
+		}
 
 	}
 

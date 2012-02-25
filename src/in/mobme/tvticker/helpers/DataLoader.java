@@ -19,7 +19,7 @@ import org.json.JSONException;
 import android.content.Context;
 import android.util.Log;
 
-public class DataMocker {
+public class DataLoader {
 	Media media;
 	Context ctx = null;
 	TvTickerDBAdapter mockAdapter = null;
@@ -35,13 +35,13 @@ public class DataMocker {
 			"ENTERTAINMENT", "ANIME" };
 	final String[] SERIES = { "NO", "YES" };
 
-	public DataMocker(Context ctx) {
+	public DataLoader(Context ctx) {
 		this.ctx = ctx;
 		mockAdapter = new TvTickerDBAdapter(ctx);
 
 	}
 
-	public int startMocking() throws JSONException {
+	public int starUpdation() throws JSONException {
 	
 			rpc_client = new RPCClient();
 			try {
