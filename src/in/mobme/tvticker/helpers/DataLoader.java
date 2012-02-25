@@ -37,7 +37,7 @@ public class DataLoader {
 			Log.i("ping", "" + rpc_client.ping());
 			mockAdapter.open();
 			rpc_client.updateToLatestVersion(mockAdapter.getCurrentVersion(),
-					false);
+					true);
 			mockAdapter.close();
 		} catch (JSONRPCException e) {
 			// TODO Auto-generated catch block
