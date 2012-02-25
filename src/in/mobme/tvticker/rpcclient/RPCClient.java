@@ -8,12 +8,8 @@ import in.mobme.tvticker.database.TvTickerDBAdapter;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
 import org.alexd.jsonrpc.JSONRPCClient;
 import org.alexd.jsonrpc.JSONRPCException;
@@ -21,174 +17,135 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.util.Log;
 
 public class RPCClient {
 	private JSONRPCClient client;
 	private MediaJsonParser parser;
+	private TvTickerDBAdapter dataAdapter;
 
-	public RPCClient(String URI, int ConnTimeOut, int SoTimeOut) {
+	public RPCClient(String URI, int ConnTimeOut, int SoTimeOut,
+			Context ctx) {
 		client = JSONRPCClient.create(URI);
 		client.setConnectionTimeout(ConnTimeOut);
 		client.setSoTimeout(SoTimeOut);
-		Log.i(Constants.TAG, client.toString());
-		parser = new MediaJsonParser();
-		// hashed_key = getAuthenticationParameters();
+		initEssentials(ctx);
 	}
 
-	public RPCClient() {
-		int ConnTimeOut = Constants.RPC.CONNECTION_TIMEOUT;
-		int SoTimeOut = Constants.RPC.SO_TIMEOUT;
+	public RPCClient(Context ctx) {
 		client = JSONRPCClient.create(Constants.RPC.SERVICE_URI);
-		client.setConnectionTimeout(ConnTimeOut);
-		client.setSoTimeout(SoTimeOut);
-		Log.i(Constants.TAG, client.toString());
+		client.setConnectionTimeout(Constants.RPC.CONNECTION_TIMEOUT);
+		client.setSoTimeout(Constants.RPC.SO_TIMEOUT);
+		initEssentials(ctx);
+	}
+	
+	private void initEssentials(Context ctx){
 		parser = new MediaJsonParser();
+		this.dataAdapter = new TvTickerDBAdapter(ctx);
 		// hashed_key = getAuthenticationParameters();
 	}
 
+	
 	public boolean ping() throws JSONRPCException {
 		return callClientString(Constants.RPC.Services.PING).equals("pong") ? true
 				: false;
 	}
 
-	public ArrayList<Channels> getAllChannelList() throws JSONRPCException,
-			JSONException {
-		ArrayList<Channels> channelList = new ArrayList<Channels>();
-		JSONArray channels = callClientJSONArray(Constants.RPC.Services.LIST_OF_CHANNELS);
-		for (int i = 0; i < channels.length(); i++) {
-			JSONObject mediaObj = channels.getJSONObject(i).getJSONObject(
-					Constants.RPC.CHANNEL_TAG);
-			// straight to DB or list .. Pending
-			channelList.add(parser.parseJsonChannel(mediaObj));
-		}
-		return channelList;
-	}
-
-	public ArrayList<Categories> getAllCategoryList() throws JSONRPCException,
-			JSONException {
-		ArrayList<Categories> categoryList = new ArrayList<Categories>();
-		JSONArray categories = callClientJSONArray(Constants.RPC.Services.LIST_OF_CATEGORIES);
-		for (int i = 0; i < categories.length(); i++) {
-			JSONObject mediaObj = categories.getJSONObject(i).getJSONObject(
-					Constants.RPC.CATEGORY_TAG);
-			// straight to DB or list .. Pending
-			categoryList.add(parser.parseJsonCategory(mediaObj));
-		}
-		return categoryList;
-	}
-
-	public ArrayList<Media> getMediaListFor(String time, String frameType)
+	public void updateMediaListFor(String time, String frameType)
 			throws JSONRPCException, JSONException {
-		ArrayList<Media> mediaList = new ArrayList<Media>();
 		JSONArray pgms = callClientJSONArray(
 				Constants.RPC.Services.PROGRAMS_FOR_FRAME, time, frameType);
+		dataAdapter.open();
 		for (int i = 0; i < pgms.length(); i++) {
-			JSONObject mediaObj = pgms.getJSONObject(i).getJSONObject(
+			JSONObject jsonObject = pgms.getJSONObject(i).getJSONObject(
 					Constants.RPC.PROGRAM_TAG);
-			// straight to DB or list .. Pending
-			mediaList.add(parser.parseJsonMedia(mediaObj));
+			long _id = dataAdapter.createNewMediaInfo(parseMedia(jsonObject));
+			dataAdapter.setIsFavorite(_id, false);
 		}
-		return mediaList;
+		dataAdapter.open();
 	}
 
-	public void updateToLatestVersion(String version_string,
-			TvTickerDBAdapter mockAdapter) throws JSONRPCException,
-			JSONException {
-
+	public void updateToLatestVersion(String versionString, boolean isCachingEnabled)
+			throws JSONRPCException, JSONException {
 		JSONObject updateResult = callClientJSONObject(
-				Constants.RPC.Services.UPDATE_TO_VERSION, version_string);
-		JSONArray channels = updateResult.getJSONArray("channels");
-		JSONArray categories = updateResult.getJSONArray("categories");
-		
-		// JSONArray series = updateResult.getJSONArray("series");
-		JSONArray version = updateResult.getJSONArray("versions");
-		updateChannels(channels, mockAdapter);
-		updateVersion(version, mockAdapter);
-		Log.i("categories", "" + categories);
-		updateCategories(categories, mockAdapter);
-	//Do this only for wifi available
-		{
-		updateResult = callClientJSONObject(
-				Constants.RPC.Services.UPDATE_MEDIA);
-		Log.i(Constants.RPC.Services.UPDATE_MEDIA,""+updateResult);
-		JSONArray programs = updateResult.getJSONArray("programs");
-		updateMedia(programs, mockAdapter);
+				Constants.RPC.Services.UPDATE_TO_VERSION, versionString);
+		updateChannels(updateResult.getJSONArray("channels"));
+		updateCategories(updateResult.getJSONArray("categories"));
+		updateVersion(updateResult.getJSONArray("versions"));
+		if(isCachingEnabled){
+			cacheProgramsForDays(7);
 		}
-
 	}
 
-	public void updateMedia(JSONArray programs, TvTickerDBAdapter mockAdapter)
-			throws JSONException {
+	// Do this only if wifi is available
+	public void cacheProgramsForDays(int days) throws JSONException,
+			JSONRPCException {
+		JSONObject updateResult = callClientJSONObject(Constants.RPC.Services.UPDATE_MEDIA);
+		updateMedia(updateResult.getJSONArray("programs"));
+	}
+
+	public void updateMedia(JSONArray programs) throws JSONException {
+		dataAdapter.open();
 		for (int i = 0; i < programs.length(); i++) {
 			JSONObject jsonObject = programs.getJSONObject(i).getJSONObject(
 					Constants.RPC.PROGRAM_TAG);
-			
-			Media program = parser.parseJsonMedia(jsonObject);
-			String thumbnail = Constants.RPC.Media.THUMBNAIL_PREFIX
-					+ program.getThumbnailID()
-					+ Constants.RPC.Media.THUMBNAIL_SUFFIX;
-			program.setMediaThumb(thumbnail);
-			if(program.getImdbLink().toLowerCase() != "null"){
-			program.setImdbLink(program.getImdbLink());
-			program.setImdbRating((float)jsonObject.getDouble(Constants.RPC.Media.IMDB_RATING_TAG));
-			}
-			long _id = mockAdapter.createNewMediaInfo(program);
-			mockAdapter.setIsFavorite(_id, false);
+			long _id = dataAdapter.createNewMediaInfo(parseMedia(jsonObject));
+			dataAdapter.setIsFavorite(_id, false);
 		}
+		dataAdapter.close();
+	}
+	
+	//Parses media also checks and handle cases for IMDB entry is null.
+	private Media parseMedia(JSONObject jsonObject) throws JSONException{
+		Media program = parser.parseJsonMedia(jsonObject);
+		program.setMediaThumb(""+program.getThumbnailID());
+		if (program.getImdbLink().toLowerCase() != "null") {
+			program.setImdbLink(program.getImdbLink());
+			program.setImdbRating((float) jsonObject
+					.getDouble(Constants.RPC.Media.IMDB_RATING_TAG));
+		}
+		return program;
 	}
 
-	public void updateVersion(JSONArray version, TvTickerDBAdapter mockAdapter)
-			throws JSONException {
+	public void updateVersion(JSONArray version) throws JSONException {
 		if (version.length() > 0) {
+			Log.i("version", version.toString());
 			JSONObject jsonObject = version.getJSONObject(0).getJSONObject(
 					Constants.RPC.VERSION_TAG);
+			
 			String version_number = jsonObject.getString("number");
-			mockAdapter.insertNewVersion(version_number);
+			dataAdapter.open();
+			dataAdapter.insertNewVersion(version_number);
+			dataAdapter.close();
 		}
 	}
 
-	public void updateChannels(JSONArray channels, TvTickerDBAdapter mockAdapter)
-			throws JSONException {
-
+	public void updateChannels(JSONArray channels) throws JSONException {
+		dataAdapter.open();
 		for (int i = 0; i < channels.length(); i++) {
 			JSONObject jsonObject = channels.getJSONObject(i).getJSONObject(
 					Constants.RPC.CHANNEL_TAG);
 			Channels channel = parser.parseJsonChannel(jsonObject);
-			mockAdapter.updateOrInsertChannel(channel.get_id(),
+			dataAdapter.updateOrInsertChannel(channel.get_id(),
 					channel.getChannelTitle());
 		}
-
+		dataAdapter.close();
 	}
 
-	public void updateCategories(JSONArray categories,
-			TvTickerDBAdapter mockAdapter) throws JSONException {
-		ArrayList<Channels> channelList = new ArrayList<Channels>();
-
+	public void updateCategories(JSONArray categories) throws JSONException {
+		dataAdapter.open();
 		for (int i = 0; i < categories.length(); i++) {
 			JSONObject jsonObject = categories.getJSONObject(i).getJSONObject(
 					Constants.RPC.CATEGORY_TAG);
 			Categories category = parser.parseJsonCategory(jsonObject);
-			mockAdapter.updateOrInsertCategory(category.get_id(),
+			dataAdapter.updateOrInsertCategory(category.get_id(),
 					category.getCategoryName());
 		}
-
+		dataAdapter.close();
 	}
 
-	public String getCurrentVersion() throws JSONRPCException {
-		return client.callString(Constants.RPC.Services.CURRENT_DATA_VERSION);
-	}
-
-	public void updateTo(String version) throws JSONRPCException, JSONException {
-		JSONObject updateResult = callClientJSONObject(Constants.RPC.Services.UPDATE_TO_VERSION);
-		Log.i(Constants.TAG, updateResult.getString("channels"));
-		for (int i = 0; i < updateResult.length(); i++) {
-			// JSONObject mediaObj =
-			// updateResult.getJSONObject(i).getJSONObject("version");
-			// Log.i(Constants.TAG, mediaObj.toString());
-		}
-	}
-
+	
 	private String callClientString(String method, Object... params)
 			throws JSONRPCException {
 		ArrayList<Object> parameters = new ArrayList<Object>();
