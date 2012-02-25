@@ -32,7 +32,7 @@ public class Models {
 				+ TABLE_NAME
 				+ "("
 				+ ROW_ID
-				+ " integer primary key , "
+				+ " integer unique , "
 				+ VERSION_NAME + " text default '')";
 
 		/* version_table drop query */
@@ -85,7 +85,7 @@ public class Models {
 				+ TABLE_NAME
 				+ "("
 				+ ROW_ID
-				+ " integer primary key , "
+				+ " integer unique , "
 				+ IS_FAVORITE_CHANNEL
 				+ " integer default 0, "
 				+ CHANNEL_NAME
@@ -113,7 +113,7 @@ public class Models {
 				+ TABLE_NAME
 				+ "("
 				+ MEDIA_ID
-				+ " integer primary key, "
+				+ " integer unique, "
 				+ CHANNEL_ID
 				+ " integer, "
 				+ END_TIME
@@ -140,7 +140,7 @@ public class Models {
 		
 		/* category_table create query */
 		final static String CATEGORY_TABLE_CREATE = "create table if not exists "
-				+ TABLE_NAME + "(" + ROW_ID + " integer primary key , "
+				+ TABLE_NAME + "(" + ROW_ID + " integer unique , "
 
 				+ CATAGORY_TYPE + " text)";
 
@@ -210,7 +210,7 @@ public class Models {
 
 		/* series_table create query */
 		final static String SERIES_TABLE_CREATE = "create table if not exists "
-				+ TABLE_NAME + "(" + ROW_ID + " integer primary key , "
+				+ TABLE_NAME + "(" + ROW_ID + " integer unique , "
 				+ SERIES_NAME + " text)";
 
 		/* series_table drop query */

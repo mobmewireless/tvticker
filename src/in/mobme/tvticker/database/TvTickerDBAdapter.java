@@ -99,7 +99,6 @@ public class TvTickerDBAdapter {
 					.SanitizeJsonTime(media.getShowTime());
 			showTimeEnd = dateTimeHelper.SanitizeJsonTime(media
 					.getShowEndTime());
-			Log.i(Constants.TAG, showTimeStart + showTimeEnd);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -128,7 +127,6 @@ public class TvTickerDBAdapter {
 	public ArrayList<Media> fetchShowsforNowFrame() {
 		String[] timeFrame = dateTimeHelper
 				.getStringTimeFrameFor(DateTimeHelper.FRAME_NOW);
-		Log.i("now where clause", getWhereConstruct());
 		return fetchAllShowsFor(getWhereConstruct(), timeFrame);
 
 	}
@@ -142,7 +140,6 @@ public class TvTickerDBAdapter {
 	public ArrayList<Media> fetchShowsforLaterFrame() {
 		String[] timeFrame = dateTimeHelper
 				.getStringTimeFrameFor(DateTimeHelper.FRAME_LATER);
-		Log.i("later where clause", getWhereConstruct());
 		return fetchAllShowsFor(getWhereConstruct(), timeFrame);
 	}
 
@@ -297,8 +294,8 @@ public class TvTickerDBAdapter {
 	private long insertMedia(Media media) {
 		long imdbId = insertImdbEntryFor(media.getImdbRating(),
 				media.getImdbLink());
-		Log.i("ImdbID",media.getImdbLink()+":"+imdbId);
 		initialValues.clear();
+		initialValues.put(Mediainfo.ROW_ID, media.getId());
 		initialValues.put(Mediainfo.MEDIA_TITLE, media.getMediaTitle());
 		initialValues.put(Mediainfo.MEDIA_DESCRIPTION,
 				media.getMediaDescription());
@@ -504,7 +501,6 @@ public class TvTickerDBAdapter {
 		initialValues.clear();
 		initialValues.put(ImdbInfo.IMDB_RATING, rating);
 		initialValues.put(ImdbInfo.IMDB_LINK, reviewUrl);
-		Log.i("imdbvalues",""+initialValues);
 		return mDb.insert(ImdbInfo.TABLE_NAME, null, initialValues);
 	}
 
@@ -568,7 +564,6 @@ public class TvTickerDBAdapter {
 			FavouriteChannelModel model = (FavouriteChannelModel) iter.next();
 			updateValues.put(ChannelsInfo.IS_FAVORITE_CHANNEL, model.isSelected());
 			mDb.update(Models.ChannelsInfo.TABLE_NAME, updateValues, ChannelsInfo.ROW_ID +"="+ model.get_id(), null) ;
-			Log.i("SAving", model.getName() + "==> " + model.isSelected());
 		}
 
 	}
@@ -694,7 +689,6 @@ public class TvTickerDBAdapter {
 				.getColumnIndexOrThrow(Mediainfo.MEDIA_IMDB_ID));
 		if(imdbId==0)
 		{
-			Log.i("imdb is nill for ","movie id"+media.getMediaTitle());
 			media.setImdbRating(0.0F);
 			media.setImdbLink(null);
 			return media;	
