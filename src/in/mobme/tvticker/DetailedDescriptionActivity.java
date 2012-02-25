@@ -1,5 +1,6 @@
 package in.mobme.tvticker;
 
+import in.mobme.tvticker.alarm.NotificationObject;
 import in.mobme.tvticker.alarm.ShowAlarmService;
 import in.mobme.tvticker.customwidget.WebImageView;
 import in.mobme.tvticker.data_model.Media;
@@ -10,6 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -123,7 +125,8 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
-				SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+				//SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+				Intent myIntent = new Intent(DetailedDescriptionActivity.this, ShowAlarmService.class);
 				
 				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Date date = new Date(); 
@@ -132,27 +135,32 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 				} catch (ParseException e) {
 					Log.i("Error", "Date format exception");
 				}
-					
+				
 				Calendar calender = Calendar.getInstance();
 				calender.setTimeInMillis(date.getTime());
 				calender.add(Calendar.MINUTE, -15);
-					
-				String message = media.getMediaTitle() + " will soon start in " + channel;
-
-				NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-				Notification notification = new Notification(R.drawable.ic_launcher, message, calender.getTimeInMillis());
-			    
-				notification.defaults |= Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND;
-
-				notification.flags |= Notification.FLAG_AUTO_CANCEL;
 				
-				Intent notificationIntent = new Intent(DetailedDescriptionActivity.this, ShowAlarmService.class);
-				PendingIntent contentIntent = PendingIntent.getService(DetailedDescriptionActivity.this, 0, notificationIntent, 0);
-							
-				notification.setLatestEventInfo(getBaseContext(), "TV Ticker", message, contentIntent);
-				notificationManager.notify(1, notification);
-						
-				Toast.makeText(DetailedDescriptionActivity.this, "Reminder is set.", Toast.LENGTH_SHORT).show();
+				HashMap<String, Object> notificationData = new HashMap<String, Object>();
+				
+				notificationData.put("channel_name", channel);
+				notificationData.put("show_name", media.getMediaTitle());
+				notificationData.put("show_time", date);
+				
+				NotificationObject notification = new NotificationObject();
+				notification.setChannelName(channel);
+				notification.setShowName(media.getMediaTitle());
+				notification.setShowTime(date);
+				
+				String[] data = new String[] { channel, media.getMediaTitle(), date.toLocaleString() };
+				
+				myIntent.putExtra("notification_data", data);
+				
+				PendingIntent pendingIntent = PendingIntent.getService(DetailedDescriptionActivity.this, 0, myIntent, 0);
+				AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+				
+				alarmManager.set(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), pendingIntent);
+				
+				Toast.makeText(DetailedDescriptionActivity.this, "Reminder is set", Toast.LENGTH_SHORT).show();
 				
 			}
 		});
