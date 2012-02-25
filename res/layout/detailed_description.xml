@@ -1,116 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-    <!-- Movie thumb and description -->
+    <in.mobme.tvticker.customwidget.WebImageView
+        android:id="@+id/movie_thumb"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="#AA000000"
+        android:scaleType="center"
+        android:src="@drawable/captain_america" />
+
+<!--     <Button -->
+<!--         android:id="@+id/rating_non_interactive_button" -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:background="@drawable/star" -->
+<!--         android:clickable="false" -->
+<!--         android:paddingTop="6dp" -->
+<!--         android:text="@string/default_rating_text" /> -->
+
+    <!-- Time and Channel Overlay -->
 
     <RelativeLayout
         android:id="@+id/relativeLayoutMovieMeta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp" 
-        android:paddingLeft="5dp"
-        android:paddingBottom="3dp">
+        android:layout_alignBottom="@id/movie_thumb"
+        android:layout_gravity="center_vertical"
+        android:background="#AA000000"
+        android:padding="7dip" >
 
-        <in.mobme.tvticker.customwidget.WebImageView
-            android:id="@+id/movie_thumb"
+        <TextView
+            android:id="@+id/textViewChannel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:background="#00000000"
-            android:src="@android:drawable/gallery_thumb" />
+            android:text="@string/default_time_text"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFF" />
 
-        <LinearLayout
-            android:id="@+id/linearLayoutText"
+        <TextView
+            android:id="@+id/textViewTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/movie_thumb"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/textViewTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/default_channel_text"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <TextView
-                android:id="@+id/textViewChannel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:text="@string/default_time_text"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/relativeLayoutButtons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/linearLayoutText"
-            android:layout_alignBottom="@id/movie_thumb"
-            android:layout_toRightOf="@id/movie_thumb"
-            android:paddingLeft="5dp" >
-
-            <Button
-                android:id="@+id/button_go_imdb"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginTop="5dp"
-                android:background="@xml/custom_blue_button"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="@string/imdb_button_text"
-                android:textColor="@drawable/white"
-                android:layout_alignParentBottom="true" />
-
-            <Button
-                android:id="@+id/rating_non_interactive_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/ic_rating_star_big"
-                android:clickable="false"
-                android:paddingTop="6dp"
-                android:text="@string/default_rating_text" 
-                android:layout_alignParentBottom="true"/>
-        </RelativeLayout>
+            android:layout_alignParentRight="true"
+            android:text="@string/default_channel_text"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFF" />
     </RelativeLayout>
 
     <!-- Description -->
 
-    <RelativeLayout
-        android:id="@+id/relativeLayoutImdb"
+    <TextView
+        android:id="@+id/movie_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/relativeLayoutMovieMeta"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/ReminderPref_summary"
+        android:textSize="6.1pt" />
+
+    <!-- IMDB -->
+
+    <LinearLayout
+        android:id="@+id/relativeLayoutImdb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/movie_description"
         android:layout_marginTop="20dp"
-        android:background="@xml/rounded_border_white"
+        android:gravity="center_horizontal"
         android:paddingLeft="4dp"
         android:paddingRight="4dp" >
 
-        <TextView
-            android:id="@+id/movie_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/movie_thumb"
-            android:text=""
-            android:textSize="6.8pt" />
-    </RelativeLayout>
+        <Button
+            android:id="@+id/button_go_imdb"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="@xml/custom_blue_button"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/imdb_button_text"
+            android:textColor="@drawable/white" 
+            android:layout_marginRight="5dip"/>
 
-    <Button
-        android:id="@+id/button_set_reminder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/relativeLayoutImdb"
-        android:text="@string/set_reminder" />
+        <Button
+            android:id="@+id/button_set_reminder"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="@xml/custom_blue_button"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:drawableLeft="@drawable/ic_action_reminder"
+            android:text="@string/set_reminder"
+            android:textColor="@drawable/white" />
+    </LinearLayout>
 
 </RelativeLayout>
