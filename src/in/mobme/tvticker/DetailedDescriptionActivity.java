@@ -12,10 +12,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.Menu;
@@ -119,9 +123,8 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
-				Intent myIntent = new Intent(DetailedDescriptionActivity.this, ShowAlarmService.class);
+				SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 				
-				Log.i("Test", media.getShowTime());
 				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Date date = new Date(); 
 				try {
@@ -129,19 +132,28 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 				} catch (ParseException e) {
 					Log.i("Error", "Date format exception");
 				}
-				
+					
 				Calendar calender = Calendar.getInstance();
-				calender.setTimeInMillis(new Date().getTime());
-				calender.add(Calendar.SECOND, 15);
+				calender.setTimeInMillis(date.getTime());
+				calender.add(Calendar.MINUTE, -15);
+					
+				String message = media.getMediaTitle() + " will soon start in " + channel;
+
+				NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+				Notification notification = new Notification(R.drawable.ic_launcher, message, System.currentTimeMillis());
+			    
+				notification.defaults |= Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND;
+
+				notification.flags |= Notification.FLAG_AUTO_CANCEL;
 				
-				myIntent.putExtra("alert_display_text", new String[] { channel, media.getMediaTitle() });
+				Intent notificationIntent = new Intent(DetailedDescriptionActivity.this, ShowAlarmService.class);
+				PendingIntent contentIntent = PendingIntent.getService(DetailedDescriptionActivity.this, 0, notificationIntent, 0);
+							
+				notification.setLatestEventInfo(getBaseContext(), "TV Ticker", message, contentIntent);
+				notificationManager.notify(1, notification);
+						
+				Toast.makeText(DetailedDescriptionActivity.this, "Reminder is set.", Toast.LENGTH_SHORT).show();
 				
-				PendingIntent pendingIntent = PendingIntent.getService(DetailedDescriptionActivity.this, 0, myIntent, 0);
-				AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-				
-				alarmManager.set(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), pendingIntent);
-				
-				Toast.makeText(DetailedDescriptionActivity.this, "Alarm Set!", Toast.LENGTH_SHORT).show();
 			}
 		});
 
