@@ -5,6 +5,7 @@ import in.mobme.tvticker.alarm.ShowAlarmService;
 import in.mobme.tvticker.customwidget.WebImageView;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
+import in.mobme.tvticker.helpers.DataLoader;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -103,7 +104,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		// media object to UI components
 //		imdbRatingButton.setText(getFormattedImdbTextRatingFor(media
 //				.getImdbRating()));
-		movieThumb.setImageWithURL(this, media.getMediaThumb(), this
+		movieThumb.setImageWithURL(this, DataLoader.formattedThumbUrl(media.getMediaThumb()), this
 				.getResources().getDrawable(R.drawable.ic_placehoder));
 		movieDescription.setText(media.getMediaDescription());
 		movieTimeText.setText(media.getShowTime());
@@ -192,14 +193,6 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-//	// helper method to show toasts !
-//	private void showMsg(String msg) {
-//		Toast toast = Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT);
-//		toast.setGravity(Gravity.CENTER, toast.getXOffset() / 2,
-//				toast.getYOffset() / 2);
-//		toast.show();
-//	}
 
 	private void configureActionbarWith(ActionBar actionBar, String title,
 			String subTitle) {

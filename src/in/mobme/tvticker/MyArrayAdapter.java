@@ -3,6 +3,7 @@ package in.mobme.tvticker;
 import in.mobme.tvticker.customwidget.WebImageView;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
+import in.mobme.tvticker.helpers.DataLoader;
 import in.mobme.tvticker.helpers.DateTimeHelper;
 
 import java.text.ParseException;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,9 +57,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		// layout
 		ViewHolder holder;
 		TvTickerDBAdapter dataAdapter;
-		String title;
 		String category;
-		String imdbURL;
 		String channel;
 		// Recycle existing view if passed as parameter
 		// This will save memory and time on Android
@@ -92,7 +92,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 
 		holder.movieTitle.setText(media.getMediaTitle());
 		if (showThumb) {
-			holder.imageView.setImageWithURL(context, media.getMediaThumb(),
+			holder.imageView.setImageWithURL(context, DataLoader.formattedThumbUrl(media.getMediaThumb()),
 					placeHolder);
 		}
 		channel = dataAdapter.getChannelNameFor(media.getChannel());
@@ -100,6 +100,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		try {
+			Log.i("media time", media.getId() + " =>" + media.getShowTime() + ","+ media.getShowEndTime());
 			Date show_time_start = format.parse(media.getShowTime());
 			Date show_time_end = format.parse(media.getShowEndTime());
 			DateTimeHelper dateHelper = new DateTimeHelper();
@@ -124,5 +125,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 	private float sanitizeRatingValue(float floatValue) {
 		return (floatValue * 3) / 10;
 	}
+	
+	
 
 }
