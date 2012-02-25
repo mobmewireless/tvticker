@@ -1,15 +1,16 @@
 package in.mobme.tvticker;
 
+import in.mobme.tvticker.alarm.ShowAlarmService;
+import in.mobme.tvticker.customwidget.WebImageView;
+import in.mobme.tvticker.data_model.Media;
+import in.mobme.tvticker.database.TvTickerDBAdapter;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import in.mobme.tvticker.alarm.ShowAlarmService;
-import in.mobme.tvticker.customwidget.WebImageView;
-import in.mobme.tvticker.data_model.Media;
-import in.mobme.tvticker.database.TvTickerDBAdapter;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -20,7 +21,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -37,7 +37,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	private TextView movieTimeText = null;
 	private TextView movieChannelText = null;
 	private Button readReviewsButton = null;
-	private Button imdbRatingButton = null;
+//	private Button imdbRatingButton = null;
 	private Button setReminderButton = null;
 	private boolean fav_status = false;
 	private int cMenuDrawable;
@@ -72,11 +72,12 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		dataAdapter.open();
 		fav_status = dataAdapter.IsFavoriteEnabledFor(media.getId());
 		channel = dataAdapter.getChannelNameFor(media.getChannel());
-		subTitle = dataAdapter.getCategoryTypeFor(media.getCategoryType());
+		//subTitle = dataAdapter.getCategoryTypeFor(media.getCategoryType());
 		dataAdapter.close();
 		setContentView(R.layout.detailed_description);
 
 		title = media.getMediaTitle();
+		subTitle = getFormattedImdbTextRatingFor(media.getImdbRating());
 		imdbURL = media.getImdbLink();
 
 		// configure action bar - private method
@@ -90,12 +91,12 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		readReviewsButton = (Button) findViewById(R.id.button_go_imdb);
 		setReminderButton = (Button) findViewById(R.id.button_set_reminder);
 		
-		// non_interactive fields
-		imdbRatingButton = (Button) findViewById(R.id.rating_non_interactive_button);
+//		// non_interactive fields
+//		imdbRatingButton = (Button) findViewById(R.id.rating_non_interactive_button);
 
 		// media object to UI components
-		imdbRatingButton.setText(getFormattedImdbTextRatingFor(media
-				.getImdbRating()));
+//		imdbRatingButton.setText(getFormattedImdbTextRatingFor(media
+//				.getImdbRating()));
 		movieThumb.setImageWithURL(this, media.getMediaThumb(), this
 				.getResources().getDrawable(R.drawable.ic_placehoder));
 		movieDescription.setText(media.getMediaDescription());
@@ -172,13 +173,13 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	// helper method to show toasts !
-	private void showMsg(String msg) {
-		Toast toast = Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER, toast.getXOffset() / 2,
-				toast.getYOffset() / 2);
-		toast.show();
-	}
+//	// helper method to show toasts !
+//	private void showMsg(String msg) {
+//		Toast toast = Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT);
+//		toast.setGravity(Gravity.CENTER, toast.getXOffset() / 2,
+//				toast.getYOffset() / 2);
+//		toast.show();
+//	}
 
 	private void configureActionbarWith(ActionBar actionBar, String title,
 			String subTitle) {
@@ -196,7 +197,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 
 	// helpers for Imdb Rating bar
 	private String getFormattedImdbTextRatingFor(float rating) {
-		return "" + rating;
+		return "Imdb Rating: " + rating + "/10";
 	}
 
 }
