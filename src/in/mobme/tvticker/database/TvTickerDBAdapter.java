@@ -111,7 +111,8 @@ public class TvTickerDBAdapter {
 		initialValues.put(ChannelMediaInfo.CHANNEL_ID, media.getChannel());
 		initialValues.put(ChannelMediaInfo.AIR_TIME, showTimeStart);
 		initialValues.put(ChannelMediaInfo.END_TIME, showTimeEnd);
-		return mDb.insert(ChannelMediaInfo.TABLE_NAME, null, initialValues);
+		return mDb.replace(ChannelMediaInfo.TABLE_NAME, null, initialValues);
+		
 	}
 
 	// private where clause helper for now and later frames
@@ -305,7 +306,7 @@ public class TvTickerDBAdapter {
 		initialValues.put(Mediainfo.MEDIA_DURATION, media.getShowDuration());
 		initialValues.put(Mediainfo.SERIES_ID, media.getSeriesID());
 		initialValues.put(Mediainfo.MEDIA_IMDB_ID, imdbId);
-		return mDb.insert(Mediainfo.TABLE_NAME, null, initialValues);
+		return mDb.replace(Mediainfo.TABLE_NAME, null, initialValues);
 	}
 
 	/**
@@ -472,11 +473,21 @@ public class TvTickerDBAdapter {
 						.getColumnIndexOrThrow(Version.VERSION_NAME));
 
 		}
-		mCursor.close();
+		safelyCloseMCursor();
 		return version;
 
 	}
-
+	/**
+	 * Insert a new Version.
+	 * 
+	 * @return Returns affected row id.
+	 */
+	public long insertNewVersion(String version_number) {
+		initialValues.clear();
+		initialValues.put(Version.VERSION_NAME, version_number);
+		initialValues.put(Version.ROW_ID, 1);
+		return mDb.replace(Version.TABLE_NAME, null, initialValues);
+	}
 	/*************************
 	 * IMDB Table
 	 */
@@ -490,7 +501,7 @@ public class TvTickerDBAdapter {
 		initialValues.clear();
 		initialValues.put(ImdbInfo.IMDB_RATING, rating);
 		initialValues.put(ImdbInfo.IMDB_LINK, reviewUrl);
-		return mDb.insert(ImdbInfo.TABLE_NAME, null, initialValues);
+		return mDb.replace(ImdbInfo.TABLE_NAME, "empty", initialValues);
 	}
 
 	/**

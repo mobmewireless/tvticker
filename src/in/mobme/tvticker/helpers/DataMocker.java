@@ -49,13 +49,15 @@ public class DataMocker {
 				
 				mockAdapter.open();
 				
-				Log.i("update status",""+mockAdapter.updateOrInsertChannel(1, "star"));
+				//Log.i("update status",""+mockAdapter.updateOrInsertChannel(1, "star"));
 				
-				rpc_client.updateToLatestVersion(mockAdapter.getCurrentVersion());
+				rpc_client.updateToLatestVersion(mockAdapter.getCurrentVersion(),mockAdapter);
+				
 				//populateChannels();
 				//populateCategories();
 				// populateSeries();
 				//populateMainTable();
+				
 				mockAdapter.close();
 			} catch (JSONRPCException e) {
 				// TODO Auto-generated catch block
@@ -73,7 +75,7 @@ public class DataMocker {
 		try {
 			channels = rpc_client.getAllChannelList();
 			for (Channels channel : channels) {
-			//	mockAdapter.insertNewChannel(channel.getChannelTitle());
+				mockAdapter.updateOrInsertChannel(channel.get_id(),channel.getChannelTitle());
 			}
 		} catch (JSONRPCException e) {
 			// TODO Auto-generated catch block
@@ -118,7 +120,7 @@ public class DataMocker {
 
 			String now = (String) format.format(new Date());
 			media = rpc_client.getMediaListFor(now, "full");
-			rpc_client.updateToLatestVersion(mockAdapter.getCurrentVersion());
+			rpc_client.updateToLatestVersion(mockAdapter.getCurrentVersion(),mockAdapter);
 			
 
 			for (Media program : media) {

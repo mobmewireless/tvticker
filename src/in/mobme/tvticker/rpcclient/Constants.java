@@ -45,8 +45,9 @@ public class Constants {
 			final static String PROGRAMS_FOR_FRAME = "programs_for_current_frame";
 			final static String LIST_OF_CHANNELS = "channels";
 			final static String LIST_OF_CATEGORIES = "categories";
-			final static String UPDATE_TO_VERSION = "update_to_current_version";
-			final static String CURRENT_DATA_VERSION = "current_version";
+			final static String UPDATE_TO_VERSION = "update_to_current_version_except_programs";
+			final static String UPDATE_MEDIA = "update_to_current_version_except_programs";
+			final static String CURRENT_DATA_VERSION = "update_programs_to_current_version";
 		}
 		
 		public class FrameType{
