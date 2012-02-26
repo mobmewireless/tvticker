@@ -15,14 +15,10 @@ import java.util.Date;
 import java.util.HashMap;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.Menu;
@@ -44,7 +40,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	private TextView movieTimeText = null;
 	private TextView movieChannelText = null;
 	private Button readReviewsButton = null;
-//	private Button imdbRatingButton = null;
+	// private Button imdbRatingButton = null;
 	private Button setReminderButton = null;
 	private boolean fav_status = false;
 	private int cMenuDrawable;
@@ -79,7 +75,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		dataAdapter.open();
 		fav_status = dataAdapter.IsFavoriteEnabledFor(media.getId());
 		channel = dataAdapter.getChannelNameFor(media.getChannel());
-		//subTitle = dataAdapter.getCategoryTypeFor(media.getCategoryType());
+		// subTitle = dataAdapter.getCategoryTypeFor(media.getCategoryType());
 		dataAdapter.close();
 		setContentView(R.layout.detailed_description);
 
@@ -97,15 +93,17 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 
 		readReviewsButton = (Button) findViewById(R.id.button_go_imdb);
 		setReminderButton = (Button) findViewById(R.id.button_set_reminder);
-		
-//		// non_interactive fields
-//		imdbRatingButton = (Button) findViewById(R.id.rating_non_interactive_button);
+
+		// // non_interactive fields
+		// imdbRatingButton = (Button)
+		// findViewById(R.id.rating_non_interactive_button);
 
 		// media object to UI components
-//		imdbRatingButton.setText(getFormattedImdbTextRatingFor(media
-//				.getImdbRating()));
-		movieThumb.setImageWithURL(this, DataLoader.formattedThumbUrl(media.getMediaThumb()), this
-				.getResources().getDrawable(R.drawable.ic_placehoder));
+		// imdbRatingButton.setText(getFormattedImdbTextRatingFor(media
+		// .getImdbRating()));
+		movieThumb.setImageWithURL(this, DataLoader.formattedThumbUrl(media
+				.getMediaThumb()),
+				this.getResources().getDrawable(R.drawable.ic_placehoder));
 		movieDescription.setText(media.getMediaDescription());
 		movieTimeText.setText(media.getShowTime());
 		movieChannelText.setText(channel);
@@ -113,56 +111,68 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		// button click listeners
 		readReviewsButton.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				// ask permission from user before loading the url in browser,
-				// need to implement this
-				Uri uriUrl = Uri.parse(imdbURL);
-				Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
-				startActivity(launchBrowser);
+			public void onClick(View v) {			
+				if (imdbURL == null) {
+					Toast.makeText(getBaseContext(), "Reviews not available !", Toast.LENGTH_SHORT).show();
+				} else {
+					Log.i("Loading Browser", imdbURL);
+					Uri uriUrl = Uri.parse(getString(R.string.imdb_review_url,
+							new Object[] { imdbURL }));
+					Intent launchBrowser = new Intent(Intent.ACTION_VIEW,
+							uriUrl);
+					startActivity(launchBrowser);
+				}
 			}
 		});
-		
+
 		setReminderButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				//SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-				Intent myIntent = new Intent(DetailedDescriptionActivity.this, ShowAlarmService.class);
-				
-				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				Date date = new Date(); 
+				// SharedPreferences preferences =
+				// PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+				Intent myIntent = new Intent(DetailedDescriptionActivity.this,
+						ShowAlarmService.class);
+
+				DateFormat formatter = new SimpleDateFormat(
+						"yyyy-MM-dd HH:mm:ss");
+				Date date = new Date();
 				try {
 					date = (Date) formatter.parse(media.getShowTime());
 				} catch (ParseException e) {
 					Log.i("Error", "Date format exception");
 				}
-				
+
 				Calendar calender = Calendar.getInstance();
 				calender.setTimeInMillis(date.getTime());
 				calender.add(Calendar.MINUTE, -15);
-				
+
 				HashMap<String, Object> notificationData = new HashMap<String, Object>();
-				
+
 				notificationData.put("channel_name", channel);
 				notificationData.put("show_name", media.getMediaTitle());
 				notificationData.put("show_time", date);
-				
+
 				NotificationObject notification = new NotificationObject();
 				notification.setChannelName(channel);
 				notification.setShowName(media.getMediaTitle());
 				notification.setShowTime(date);
-				
-				String[] data = new String[] { channel, media.getMediaTitle(), date.toLocaleString() };
-				
+
+				String[] data = new String[] { channel, media.getMediaTitle(),
+						date.toLocaleString() };
+
 				myIntent.putExtra("notification_data", data);
-				
-				PendingIntent pendingIntent = PendingIntent.getService(DetailedDescriptionActivity.this, 0, myIntent, 0);
+
+				PendingIntent pendingIntent = PendingIntent.getService(
+						DetailedDescriptionActivity.this, 0, myIntent, 0);
 				AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-				
-				alarmManager.set(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), pendingIntent);
-				
-				Toast.makeText(DetailedDescriptionActivity.this, "Reminder is set", Toast.LENGTH_SHORT).show();
-				
+
+				alarmManager.set(AlarmManager.RTC_WAKEUP,
+						calender.getTimeInMillis(), pendingIntent);
+
+				Toast.makeText(DetailedDescriptionActivity.this,
+						"Reminder is set", Toast.LENGTH_SHORT).show();
+
 			}
 		});
 
@@ -189,7 +199,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 			ViewPagerAdapter.staticAdapterObj.refreshFavAdapter(media);
 			break;
 		case MENU_SHARE:
-			share("TvTicker", "I'm watching " + title + " on " + channel );
+			share("TvTicker", "I'm watching " + title + " on " + channel);
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -208,9 +218,12 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		startActivity(Intent.createChooser(intent, getString(R.string.share)));
 	}
 
-	// helpers for Imdb Rating bar
+	// helpers for Imdb Rating.
 	private String getFormattedImdbTextRatingFor(float rating) {
-		return "Imdb Rating: " + rating + "/10";
+		StringBuilder ratingString = new StringBuilder();
+		ratingString.append("Imdb Rating: ").append(
+				(rating == 0) ? "not available" : rating + "/10");
+		return ratingString.toString();
 	}
 
 }
