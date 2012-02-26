@@ -176,20 +176,15 @@ public class Models {
 		/* table name */
 		public final static String TABLE_NAME = "reminders_info";
 
-		/* columns */
-		public final static String ROW_ID = KEY_ROW_ID;
 		public final static String MEDIA_ID = KEY_MEDIA_ROW_ID;
 		public final static String REMINDER_ENABLED = "reminder_flag";
 		public final static String IS_FAVORITE_FLAG = "is_favorite";
 
 		/* reminders_table create query */
 		final static String REMINDER_TABLE_CREATE = "create table if not exists "
-				+ TABLE_NAME
-				+ "("
-				+ ROW_ID
-				+ " integer primary key autoincrement, "
+				+ TABLE_NAME + "("
 				+ MEDIA_ID
-				+ " integer, "
+				+ " integer primary key, "
 				+ REMINDER_ENABLED
 				+ " integer, "
 				+ IS_FAVORITE_FLAG + " integer)";

@@ -535,8 +535,9 @@ public class TvTickerDBAdapter {
 				sanitiseBooleanToInteger(isFavorite));
 		initialValues.put(Remindersinfo.IS_FAVORITE_FLAG,
 				sanitiseBooleanToInteger(isFavorite));
-		return mDb.insert(Remindersinfo.TABLE_NAME, null, initialValues);
+		return mDb.replace(Remindersinfo.TABLE_NAME, null, initialValues);
 	}
+	
 
 	/**
 	 * Enable/Disable Reminder for a particular media id.
@@ -548,7 +549,7 @@ public class TvTickerDBAdapter {
 		updateValues.put(Remindersinfo.REMINDER_ENABLED,
 				sanitiseBooleanToInteger(reminderEnabled));
 		return mDb.update(Remindersinfo.TABLE_NAME, updateValues,
-				Remindersinfo.ROW_ID + "=" + mediaId, null) > 0;
+				Remindersinfo.MEDIA_ID + "=" + mediaId, null) > 0;
 	}
 
 	/**
@@ -569,45 +570,15 @@ public class TvTickerDBAdapter {
 
 	}
 	
-	
-//	public void setFavoriteChannels(HashMap<Integer, Object> changes)
-//	{
-//	
-//		Map data = (HashMap<Integer, Object>)changes ;
-//		 Set set = data.entrySet();
-//		 Iterator iter = set.iterator();
-//		 while (iter.hasNext()) {
-//		      Map.Entry entry = (Map.Entry) iter.next();
-//		      Log.i("changes",entry.getKey() + " -- " + entry.getValue());
-//		      ContentValues args = new ContentValues();
-//		      int fav_value = (Integer) entry.getValue();
-//		        args.put("is_favorite", fav_value );
-//		       
-//		        mDb.update(Models.ChannelsInfo.TABLE_NAME, args, 
-//                        "_id=" + entry.getKey(), null) ;
-//		        
-//		    }
-//	}
 
 	/**
-	 * Removes isFavorite flag for the given media id.
-	 * 
-	 * @param mediaId
-	 * @return true if successful; false otherwise.
-	 */
-	public boolean removeIsFavFor(long mediaId) {
-		return mDb.delete(Remindersinfo.TABLE_NAME, Remindersinfo.MEDIA_ID
-				+ "=" + mediaId, null) > 0;
-	}
-
-	/**
-	 * Return a Cursor over the list of all shows in the ReminderInfo Table.
+	 * Return a Cursor over the list of all favourite shows in the ReminderInfo Table.
 	 * 
 	 * @return Cursor over all shows
 	 * */
 	public Cursor fetchAllFromReminderInfo() {
 		return mDb.query(Remindersinfo.TABLE_NAME,
-				new String[] { Remindersinfo.ROW_ID, Remindersinfo.MEDIA_ID,
+				new String[] { Remindersinfo.MEDIA_ID,
 						Remindersinfo.IS_FAVORITE_FLAG,
 						Remindersinfo.REMINDER_ENABLED }, null, null, null,
 				null, null);
@@ -622,7 +593,7 @@ public class TvTickerDBAdapter {
 	public boolean IsFavoriteEnabledFor(long this_mediaID) {
 		boolean isEnabled = false;
 		Cursor tmpCursor = mDb.query(true, Remindersinfo.TABLE_NAME,
-				new String[] { Remindersinfo.ROW_ID,
+				new String[] { Remindersinfo.MEDIA_ID,
 						Remindersinfo.IS_FAVORITE_FLAG },
 				Remindersinfo.MEDIA_ID + "=" + this_mediaID, null, null, null,
 				null, null);

@@ -43,7 +43,6 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	// private Button imdbRatingButton = null;
 	private Button setReminderButton = null;
 	private boolean fav_status = false;
-	private int cMenuDrawable;
 
 	private Media media = null;
 	TvTickerDBAdapter dataAdapter;
@@ -55,10 +54,8 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		Log.i(Constants.TAG, "" + fav_status);
-		cMenuDrawable = fav_status ? R.drawable.ic_action_fav_on
-				: R.drawable.ic_action_fav_off;
-		menu.add(0, MENU_ADD_TO_FAVORITES, 0, "fav").setIcon(cMenuDrawable)
+		menu.add(0, MENU_ADD_TO_FAVORITES, 0, "fav")
+				.setIcon(getFavoriteDrawable(fav_status))
 				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		menu.add(0, MENU_SHARE, 1, "share").setIcon(R.drawable.ic_action_share)
 				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -74,6 +71,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		dataAdapter = new TvTickerDBAdapter(this);
 		dataAdapter.open();
 		fav_status = dataAdapter.IsFavoriteEnabledFor(media.getId());
+		Log.i(Constants.TAG, "from create" + fav_status);
 		channel = dataAdapter.getChannelNameFor(media.getChannel());
 		// subTitle = dataAdapter.getCategoryTypeFor(media.getCategoryType());
 		dataAdapter.close();
@@ -111,9 +109,10 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		// button click listeners
 		readReviewsButton.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {			
+			public void onClick(View v) {
 				if (imdbURL == null) {
-					Toast.makeText(getBaseContext(), "Reviews not available !", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getBaseContext(), "Reviews not available !",
+							Toast.LENGTH_SHORT).show();
 				} else {
 					Log.i("Loading Browser", imdbURL);
 					Uri uriUrl = Uri.parse(getString(R.string.imdb_review_url,
@@ -178,6 +177,12 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 
 	}
 
+	//returns correct drawable for the menu icon based on status.
+	private int getFavoriteDrawable(boolean status) {
+		return status ? R.drawable.ic_action_fav_on
+				: R.drawable.ic_action_fav_off;
+	}
+
 	// Action bar menu item click listener.
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -186,15 +191,9 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 			// take curStatus from db, this is trivial !
 			dataAdapter.open();
 			fav_status = !dataAdapter.IsFavoriteEnabledFor(media.getId());
-			if (fav_status) {
-				cMenuDrawable = R.drawable.ic_action_fav_on;
-				dataAdapter.setIsFavorite(media.getId(), fav_status);
-			} else {
-				cMenuDrawable = R.drawable.ic_action_fav_off;
-				dataAdapter.removeIsFavFor(media.getId());
-			}
+			dataAdapter.setIsFavorite(media.getId(), fav_status);
 			dataAdapter.close();
-			item.setIcon(cMenuDrawable);
+			item.setIcon(getFavoriteDrawable(fav_status));
 			// not recommended !
 			ViewPagerAdapter.staticAdapterObj.refreshFavAdapter(media);
 			break;
