@@ -116,7 +116,8 @@ public class TvTickerDBAdapter {
 
 	// private where clause helper for now and later frames
 	private String getWhereConstruct() {
-		return ChannelMediaInfo.AIR_TIME + " between ? and ?";
+		//air_time_start between :air_time_start and :air_time_end and air_time_end > :end_time"
+		return ChannelMediaInfo.AIR_TIME + " between ? and ? and end_time > ? ";
 	}
 
 	/**
@@ -127,7 +128,7 @@ public class TvTickerDBAdapter {
 	public ArrayList<Media> fetchShowsforNowFrame() {
 		String[] timeFrame = dateTimeHelper
 				.getStringTimeFrameFor(DateTimeHelper.FRAME_NOW);
-		return fetchAllShowsFor(getWhereConstruct(), timeFrame);
+		return fetchAllShowsFor(getWhereConstruct( ), timeFrame);
 
 	}
 
@@ -388,7 +389,6 @@ public class TvTickerDBAdapter {
 				null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
-			Log.i("CUrsor", mCursor.toString() + mCursor.getCount());
 			channelName = mCursor.getString(mCursor
 					.getColumnIndexOrThrow(ChannelsInfo.CHANNEL_NAME));
 			mCursor.close();

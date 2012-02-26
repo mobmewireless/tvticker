@@ -34,7 +34,6 @@ public class DataLoader {
 
 		rpc_client = new RPCClient(ctx);
 		try {
-			Log.i("ping", "" + rpc_client.ping());
 			mockAdapter.open();
 			rpc_client.updateToLatestVersion(mockAdapter.getCurrentVersion(),
 					true);
