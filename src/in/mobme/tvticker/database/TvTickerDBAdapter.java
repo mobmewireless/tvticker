@@ -117,7 +117,7 @@ public class TvTickerDBAdapter {
 	// private where clause helper for now and later frames
 	private String getWhereConstruct() {
 		//air_time_start between :air_time_start and :air_time_end and air_time_end > :end_time"
-		return ChannelMediaInfo.AIR_TIME + " between ? and ? and end_time > ? ";
+		return ChannelMediaInfo.AIR_TIME + " between ? and ? and end_time > ? order by " + ChannelMediaInfo.AIR_TIME;
 	}
 
 	/**
