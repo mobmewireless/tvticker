@@ -388,7 +388,6 @@ public class TvTickerDBAdapter {
 				null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
-			Log.i("CUrsor", mCursor.toString() + mCursor.getCount());
 			channelName = mCursor.getString(mCursor
 					.getColumnIndexOrThrow(ChannelsInfo.CHANNEL_NAME));
 			mCursor.close();
