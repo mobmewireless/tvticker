@@ -13,7 +13,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,7 +99,6 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		try {
-			Log.i("media time", media.getId() + " =>" + media.getShowTime() + ","+ media.getShowEndTime());
 			Date show_time_start = format.parse(media.getShowTime());
 			Date show_time_end = format.parse(media.getShowEndTime());
 			DateTimeHelper dateHelper = new DateTimeHelper();
