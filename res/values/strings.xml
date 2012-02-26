@@ -32,6 +32,7 @@
     <string name="twitter_button_desc">Share to Twitter</string>
     <string name="throbber_desc">Loading Animation</string>
 	<string name="share">Share to</string>
+	<string name="imdb_review_url">http://www.imdb.com/title/%s/reviews</string>
     
     <!-- Shown above search results when we receive a search request. -->
     <plurals name="search_results">
