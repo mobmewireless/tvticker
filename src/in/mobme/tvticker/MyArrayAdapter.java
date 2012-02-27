@@ -114,8 +114,15 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		dataAdapter.close();
 		holder.channelID.setText(channel);
 		holder.categoryTag.setText(category);
-		holder.imdbRatingBar.setRating(sanitizeRatingValue(media
-				.getImdbRating()));
+		
+		// Set the rating only if available
+		float rating = media.getImdbRating();
+		if (rating == 0) {
+			holder.imdbRatingBar.setVisibility(View.INVISIBLE);
+		} else {
+			holder.imdbRatingBar.setVisibility(View.VISIBLE);
+			holder.imdbRatingBar.setRating(sanitizeRatingValue(rating));
+		}
 		return rowView;
 	}
 

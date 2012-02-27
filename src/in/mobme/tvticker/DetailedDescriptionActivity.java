@@ -185,8 +185,10 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	// helpers for Imdb Rating.
 	private String getFormattedImdbTextRatingFor(float rating) {
 		StringBuilder ratingString = new StringBuilder();
-		ratingString.append("Imdb Rating: ").append(
-				(rating == 0) ? "not available" : rating + "/10");
+		
+		if(rating != 0) {
+			ratingString.append("Imdb Rating: ").append(rating + "/10");
+		}
 		return ratingString.toString();
 	}
 
