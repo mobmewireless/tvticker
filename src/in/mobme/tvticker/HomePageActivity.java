@@ -2,6 +2,7 @@ package in.mobme.tvticker;
 
 import in.mobme.tvticker.customwidget.ViewPagerIndicator;
 import in.mobme.tvticker.customwidget.ViewPagerIndicator.PageInfoProvider;
+import in.mobme.tvticker.helpers.DataConnection;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -48,10 +49,12 @@ public class HomePageActivity extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		int startMode = getIntent().getExtras().getInt(Constants.MODE);
+		
 		getSupportActionBar().setTitle(
 				getResources().getString(R.string.home_page_title));
 		awesomeAdapter = new ViewPagerAdapter(R.layout.default_listview,
-				titles, this);
+				titles, this, isThumbNailEnabled(startMode));
 		awesomePager = (ViewPager) findViewById(R.id.awesomepager);
 		indicator = (ViewPagerIndicator) findViewById(R.id.indicator);
 
@@ -69,6 +72,14 @@ public class HomePageActivity extends FragmentActivity implements
 		indicator.setArrows(prev, next);
 		indicator.setOnClickListener(new OnIndicatorClickListener());
 
+	}
+	
+	public boolean isThumbNailEnabled(int mode){
+		boolean enabled = true;
+		if(mode == DataConnection.TYPE_OFFLINE || mode == DataConnection.TYPE_GPRS){
+			enabled = false;
+		}
+		return enabled;
 	}
 
 	// need to remember indicator position, if app is on pause

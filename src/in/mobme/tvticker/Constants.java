@@ -9,6 +9,7 @@ public class Constants {
 	public final static String FILTER_TAG = "in.mobme.tvticker.filter"; 	
 	public final static int CHANNEL_FILTER = 0;
 	public final static int CATEGORY_FILTER = 1;
+	public final static String MODE = "start_mode";
 
 	public final static String ALARM_INTENT_DATA_TAG = "in.mobme.tvticker.alarm_intent";
 	public final static String ALARM_INTENT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
