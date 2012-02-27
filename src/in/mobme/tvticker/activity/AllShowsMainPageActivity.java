@@ -1,7 +1,5 @@
 package in.mobme.tvticker.activity;
 
-import java.util.Date;
-
 import in.mobme.tvticker.Constants;
 import in.mobme.tvticker.R;
 import android.content.Intent;

@@ -9,16 +9,16 @@
 		<ListPreference android:title="First Reminder"
 			android:summary="Tap to set reminder" android:key="first_reminder_pref"
 			android:entries="@array/first_pref" android:entryValues="@array/first_pref_values"
-			android:defaultValue="1" />
+			android:defaultValue="30" />
 		<ListPreference android:title="Second Reminder"
 			android:summary="Tap to set reminders" android:key="second_reminder_pref"
 			android:defaultValue="0" android:entries="@array/second_pref"
 			android:entryValues="@array/second_pref_values" />
+		
+	</PreferenceCategory><PreferenceCategory android:title="Notification options">
+			<CheckBoxPreference android:title="Audio alert" android:key="enable_notification_sound" android:defaultValue="1" />
+			<CheckBoxPreference android:defaultValue="0" android:key="enable_notification_vibrate" android:title="Vibration alert" />
 	</PreferenceCategory>
 
-	<PreferenceCategory android:title="Reminded Shows">
-		<Preference android:title="Edit Shows" android:summary="Tap to set/edit my show reminders"
-			android:key="show_current_reminders" />
-	</PreferenceCategory>
 	
 </PreferenceScreen>

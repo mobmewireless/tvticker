@@ -13,7 +13,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class ShowNotificationService extends Service {
@@ -31,10 +33,10 @@ public class ShowNotificationService extends Service {
 		boolean showReminder = dbAdapter.IsFavoriteEnabledFor(mediaId);
 		dbAdapter.close();
 		
-		System.out.println(mediaId);
-		System.out.println(showReminder);
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean isRemindersEnabled = sharedPrefs.getBoolean(Constants.PREF_ENABLE_REMINDERS, true);
 		
-		if (showReminder) {
+		if (showReminder && isRemindersEnabled) {
 			String message = (String) data[1] + " starts soon on " + data[0];
 			
 			DateFormat formatter = new SimpleDateFormat(Constants.ALARM_INTENT_DATE_FORMAT);
@@ -48,7 +50,14 @@ public class ShowNotificationService extends Service {
 			NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 			Notification notification = new Notification(R.drawable.ic_launcher, message, date.getTime());
 			
-			notification.defaults |= Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS;
+			if (sharedPrefs.getBoolean(Constants.PREF_SOUND_ENABLED, true)) {
+				notification.defaults |= Notification.DEFAULT_SOUND;
+			}
+			
+			if (sharedPrefs.getBoolean(Constants.PREF_VIBRATION_ENABLED, false)) {
+				notification.defaults |= Notification.DEFAULT_VIBRATE;	
+			}
+			
 			notification.flags |= Notification.FLAG_AUTO_CANCEL;
 			
 			notification.setLatestEventInfo(getBaseContext(), "TV Ticker", message, PendingIntent.getActivity(getBaseContext(), 0, new Intent(), 0));

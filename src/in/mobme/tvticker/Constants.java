@@ -14,6 +14,12 @@ public class Constants {
 	public final static String ALARM_INTENT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	public static final String ALARM_INTENT_MEDIA_ID_TAG = "in.mobme.tvticker.alarm_intent_media_id";
 	
+	public static final String PREF_FIRST_REMINDER = "first_reminder_pref";
+	public static final String PREF_SECOND_REMINDER = "second_reminder_pref";
+	public static final String PREF_SOUND_ENABLED = "enable_notification_sound";
+	public static final String PREF_VIBRATION_ENABLED = "enable_notification_vibrate";
+	public static final String PREF_ENABLE_REMINDERS = "enable_reminders";
+	
 	public class ViewPager{
 		public final static String INDICATOR_POINTER = "indicator_pointer";
 		public final static int FAVORITES_POSITION = 0;

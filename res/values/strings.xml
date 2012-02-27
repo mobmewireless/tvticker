@@ -51,22 +51,22 @@
     <string-array name="first_pref">
         <item>OFF</item>
         <item>1 hour</item>
-        <item>30 min</item>
+        <item>30 minutes</item>
     </string-array>
     <string-array name="first_pref_values">
         <item>0</item>
-        <item>1</item>
-        <item>2</item>
+        <item>60</item>
+        <item>30</item>
     </string-array>
     <string-array name="second_pref">
         <item>OFF</item>
-        <item>15 min</item>
-        <item>5 min</item>
+        <item>15 minutes</item>
+        <item>5 minutes</item>
     </string-array>
     <string-array name="second_pref_values">
         <item>0</item>
-        <item>1</item>
-        <item>2</item>
+        <item>15</item>
+        <item>5</item>
     </string-array>
 
     <string name="browse_channels">All TV Channels &#187;</string>
