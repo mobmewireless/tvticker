@@ -66,16 +66,13 @@ public class RPCClient {
 		dataAdapter.close();
 	}
 
-	public void updateToLatestVersion(String versionString, boolean isCachingEnabled)
+	public void updateToLatestVersion(String versionString)
 			throws JSONRPCException, JSONException {
 		JSONObject updateResult = callClientJSONObject(
 				Constants.RPC.Services.UPDATE_TO_VERSION, versionString);
 		updateChannels(updateResult.getJSONArray("channels"));
 		updateCategories(updateResult.getJSONArray("categories"));
 		updateVersion(updateResult.getJSONArray("versions"));
-		if(isCachingEnabled){
-			cacheProgramsForDays(7);
-		}
 	}
 
 	// Do this only if wifi is available

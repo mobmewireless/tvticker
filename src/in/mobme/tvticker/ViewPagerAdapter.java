@@ -38,21 +38,20 @@ class ViewPagerAdapter extends PagerAdapter {
 	private ListView listView;
 	private Button browseAllShowsButton;
 	private TextView favFooterText = null;
-	// private View favListEmptyView;
+	private boolean thumbEnabled = false;
 	private Context context = null;
 	private LazyAdapter lazyAdapter = null;
 	private MyArrayAdapter favoritesAdapter = null;
 	private TvTickerDBAdapter tvDataAdapter = null;
 	public static ViewPagerAdapter staticAdapterObj;
 
-	public ViewPagerAdapter(int listViewIdentifier, String[] titles, Context ctx) {
+	public ViewPagerAdapter(int listViewIdentifier, String[] titles, Context ctx, boolean thumbEnabled) {
 		this.pageTitles = titles;
 		this.listViewId = listViewIdentifier;
 		this.context = ctx;
+		this.thumbEnabled = thumbEnabled;
 		this.tvDataAdapter = new TvTickerDBAdapter(context);
 		tvDataAdapter.open();
-		nowMediaList = tvDataAdapter.fetchShowsforNowFrame();
-		laterMediaList = tvDataAdapter.fetchShowsforLaterFrame();
 		favMediaList = getFavoriteMediaFrom(tvDataAdapter.fetchAllShowsInfo());
 		tvDataAdapter.close();
 		staticAdapterObj = this;
@@ -91,7 +90,7 @@ class ViewPagerAdapter extends PagerAdapter {
 		if (position == Constants.ViewPager.NOW_POSITION) {
 
 			lazyAdapter = new LazyAdapter((Activity) context, nowMediaList,
-					true);
+					thumbEnabled, Constants.ViewPager.NOW_POSITION, true);
 			listView.setAdapter(lazyAdapter);
 			Log.i("now size: ",""+nowMediaList.size());
 			listView.setOnItemClickListener(new NowMediaOnItemClickListener());
@@ -99,7 +98,7 @@ class ViewPagerAdapter extends PagerAdapter {
 		} else if (position == Constants.ViewPager.LATER_TODAY_POSITION) {
 
 			lazyAdapter = new LazyAdapter((Activity) context, laterMediaList,
-					true);
+					thumbEnabled,Constants.ViewPager.LATER_TODAY_POSITION, true);
 			Log.i("later size: ",""+laterMediaList.size());
 			listView.setAdapter(lazyAdapter);
 			listView.setOnItemClickListener(new LaterMediaOnItemClickListener());
@@ -107,7 +106,7 @@ class ViewPagerAdapter extends PagerAdapter {
 		} else if (position == Constants.ViewPager.FAVORITES_POSITION) {
 
 			favoritesAdapter = new MyArrayAdapter((Activity) context,
-					R.layout.rowlayout, favMediaList, true);
+					R.layout.rowlayout, favMediaList, thumbEnabled);
 			boolean isEmpty = favoritesAdapter.getCount() <= 0 ? true : false;
 			listView.addFooterView(getFooterView(isEmpty));
 			listView.setAdapter(favoritesAdapter);

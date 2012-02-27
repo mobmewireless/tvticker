@@ -1,11 +1,16 @@
 package in.mobme.tvticker;
 
 import in.mobme.tvticker.data_model.Media;
+import in.mobme.tvticker.database.TvTickerDBAdapter;
+import in.mobme.tvticker.rpcclient.RPCClient;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
-import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -20,21 +25,32 @@ public class LazyAdapter extends EndlessAdapter {
 	private RotateAnimation rotate = null;
 	private int pendingViewId;
 	private Activity context;
-	
+	private int position;
+	private RPCClient rpcClient;
+	private String timeNow;
+	private boolean refresh = true;
+	private TvTickerDBAdapter dataAdapter;
 
-	LazyAdapter(Activity ctx, List<Media> list2, boolean displayThumb) {
+	LazyAdapter(Activity ctx, List<Media> list2, boolean displayThumb, int pos,
+			boolean refresh) {
 		super(ctx, new MyArrayAdapter((Activity) ctx, R.layout.rowlayout,
 				list2, displayThumb), R.layout.pending);
 		context = ctx;
 		pendingViewId = R.layout.pending;
+		position = pos;
+		rpcClient = new RPCClient(ctx);
 		rotate = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF,
 				0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
 		rotate.setDuration(800);
 		rotate.setRepeatMode(Animation.RESTART);
 		rotate.setRepeatCount(Animation.INFINITE);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+		timeNow = (String) format.format(new Date());
+		this.refresh = refresh;
+		dataAdapter = new TvTickerDBAdapter(ctx);
 	}
 
-	//shows a loading animation until cache in background completes.
+	// shows a loading animation until cache in background completes.
 	@Override
 	protected View getPendingView(ViewGroup parent) {
 		View row = context.getLayoutInflater().inflate(pendingViewId, null);
@@ -43,24 +59,34 @@ public class LazyAdapter extends EndlessAdapter {
 		return (row);
 	}
 
-	//do network calls or time consuming process here.
+	// do network calls or time consuming process here.
 	@Override
 	protected boolean cacheInBackground() throws Exception {
-//		SystemClock.sleep(10000); // pretend to do work
-//		System.out.println(getWrappedAdapter().getCount());
-//		if (getWrappedAdapter().getCount() < 50) {
-//			return (true);
-//		}
-		throw new Exception("Gadzooks!");
+		
+		//should ignore if conn is offline
+		String frame = (position == Constants.ViewPager.NOW_POSITION) ? "now"
+				: "later";
+		if (refresh) {
+			refresh = false;
+			rpcClient.updateMediaListFor(timeNow, frame);
+			return (true);
+		}
+		return false;
 	}
 
-	//Apply obtained data to view here.
+	// Apply obtained data to view here.
 	@Override
 	protected void appendCachedData() {
-		if (getWrappedAdapter().getCount() < 50) {
-//			MyArrayAdapter a = (MyArrayAdapter) getWrappedAdapter();
-//			List<String> list = new ArrayList<String>();
-//			for (int i=0;i<25;i++) { a.add(""+list.size() + 1);}
+		ArrayList<Media> media = new ArrayList<Media>();
+		Log.i("LAZY", "" + getWrappedAdapter().getCount());
+		MyArrayAdapter a = (MyArrayAdapter) getWrappedAdapter();
+		dataAdapter.open();
+		if ((position == Constants.ViewPager.NOW_POSITION)) {
+			media = dataAdapter.fetchShowsforNowFrame();
+		} else {
+			media = dataAdapter.fetchShowsforLaterFrame();
 		}
+		dataAdapter.close();
+		a.addAll(media);
 	}
 }

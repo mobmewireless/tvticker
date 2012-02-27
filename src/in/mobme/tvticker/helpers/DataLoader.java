@@ -15,7 +15,7 @@ import android.util.Log;
 
 public class DataLoader {
 	Context ctx = null;
-	TvTickerDBAdapter mockAdapter = null;
+	TvTickerDBAdapter dataAdapter = null;
 	RPCClient rpc_client = null;
 	public static int CONNECTION_FAILED = -2;
 	public static int AUTHENTICATION_FAILED = -3;
@@ -26,20 +26,20 @@ public class DataLoader {
 
 	public DataLoader(Context ctx) {
 		this.ctx = ctx;
-		mockAdapter = new TvTickerDBAdapter(ctx);
+		dataAdapter = new TvTickerDBAdapter(ctx);
 
 	}
 
-	public int starUpdation() throws JSONException {
+	public int startUpdation() throws JSONException {
 
 		rpc_client = new RPCClient(ctx);
 		try {
-			mockAdapter.open();
-			rpc_client.updateToLatestVersion(mockAdapter.getCurrentVersion(),
-					true);
-			mockAdapter.close();
+			dataAdapter.open();
+			rpc_client.updateToLatestVersion(dataAdapter.getCurrentVersion());
+			//loading programs
+			//rpc_client.cacheProgramsForDays(7);
+			dataAdapter.close();
 		} catch (JSONRPCException e) {
-			// TODO Auto-generated catch block
 			Log.i("TVTICKER_DATAMOCKER", "json exception");
 			e.printStackTrace();
 			return STATUS;
@@ -56,13 +56,10 @@ public class DataLoader {
 					"yyyy-MM-dd HH:mm:ss z");
 			String now = (String) format.format(new Date());
 			rpc_client.updateMediaListFor(now, "full");
-			rpc_client.updateToLatestVersion(mockAdapter.getCurrentVersion(),
-					false);
+			rpc_client.updateToLatestVersion(dataAdapter.getCurrentVersion());
 		} catch (JSONRPCException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -73,4 +70,6 @@ public class DataLoader {
 		return Constants.RPC.Media.THUMBNAIL_PREFIX + thumbID
 				+ Constants.RPC.Media.THUMBNAIL_SUFFIX;
 	}
+	
+	
 }

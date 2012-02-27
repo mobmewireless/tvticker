@@ -8,6 +8,7 @@ import in.mobme.tvticker.helpers.DateTimeHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -130,7 +131,11 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 	private float sanitizeRatingValue(float floatValue) {
 		return (floatValue * 3) / 10;
 	}
-	
-	
+
+
+	@Override
+	public void addAll(Collection<? extends Media> collection) {
+		mediaList.addAll(collection);
+	}
 
 }
