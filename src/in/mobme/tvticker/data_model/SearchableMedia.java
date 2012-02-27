@@ -3,7 +3,7 @@ package in.mobme.tvticker.data_model;
 //Minimal Version of media class to help Searchable activity
 public class SearchableMedia {
 	
-	public final static int TYPE_MOVIE = 0;
+	public final static int TYPE_SHOW = 0;
 	public final static int TYPE_CHANNEL = 1;
 	
 	private int type;
