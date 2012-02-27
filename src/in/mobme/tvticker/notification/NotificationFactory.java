@@ -47,12 +47,11 @@ public class NotificationFactory {
 				
 		PendingIntent pendingIntent = PendingIntent.getService(parentActivity, 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) parentActivity.getSystemService(Context.ALARM_SERVICE);
-			
+		
 		alarmManager.set(AlarmManager.RTC_WAKEUP, alertTime, pendingIntent);
 		
-		Toast.makeText(parentActivity, "Set for " + alertTime, Toast.LENGTH_SHORT).show();
+		//Toast.makeText(parentActivity, "Set for " + new Date(alertTime).toLocaleString(), Toast.LENGTH_SHORT).show();
 		
 	}
-	
-	
+
 }
