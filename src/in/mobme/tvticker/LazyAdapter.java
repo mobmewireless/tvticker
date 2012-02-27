@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -78,7 +77,6 @@ public class LazyAdapter extends EndlessAdapter {
 	@Override
 	protected void appendCachedData() {
 		ArrayList<Media> media = new ArrayList<Media>();
-		Log.i("LAZY", "" + getWrappedAdapter().getCount());
 		MyArrayAdapter a = (MyArrayAdapter) getWrappedAdapter();
 		dataAdapter.open();
 		if ((position == Constants.ViewPager.NOW_POSITION)) {

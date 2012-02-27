@@ -180,6 +180,8 @@ public class TvTickerDBAdapter {
 		return fetchAllShowsFor(whereClause, null);
 	}
 
+	
+	
 	/**
 	 * Return all media from the ChannelMediaInfoTable which passes the given
 	 * whereClause.
