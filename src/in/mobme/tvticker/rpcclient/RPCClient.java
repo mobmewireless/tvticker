@@ -63,7 +63,7 @@ public class RPCClient {
 			long _id = dataAdapter.createNewMediaInfo(parseMedia(jsonObject));
 			dataAdapter.setIsFavorite(_id, false);
 		}
-		dataAdapter.open();
+		dataAdapter.close();
 	}
 
 	public void updateToLatestVersion(String versionString, boolean isCachingEnabled)
@@ -81,19 +81,25 @@ public class RPCClient {
 	// Do this only if wifi is available
 	public void cacheProgramsForDays(int days) throws JSONException,
 			JSONRPCException {
-		JSONObject updateResult = callClientJSONObject(Constants.RPC.Services.UPDATE_MEDIA);
+		dataAdapter.open();
+		String currentVersion = dataAdapter.getCurrentProgramVersion();
+		JSONObject updateResult = callClientJSONObject(Constants.RPC.Services.UPDATE_MEDIA,currentVersion,Constants.RPC.Services.CACHE_FOR_DAYS);
+		String latestVersion = updateResult.getString("version").toString();
+		Log.i("updatedresult",""+updateResult);
+		Log.i("version","jdfbsdfb"+updateResult.getString("version"));
+		
 		updateMedia(updateResult.getJSONArray("programs"));
+		dataAdapter.insertNewProgramVersion(latestVersion);
+		dataAdapter.close();
 	}
 
 	public void updateMedia(JSONArray programs) throws JSONException {
-		dataAdapter.open();
 		for (int i = 0; i < programs.length(); i++) {
 			JSONObject jsonObject = programs.getJSONObject(i).getJSONObject(
 					Constants.RPC.PROGRAM_TAG);
 			long _id = dataAdapter.createNewMediaInfo(parseMedia(jsonObject));
 			dataAdapter.setIsFavorite(_id, false);
 		}
-		dataAdapter.close();
 	}
 	
 	//Parses media also checks and handle cases for IMDB entry is null.

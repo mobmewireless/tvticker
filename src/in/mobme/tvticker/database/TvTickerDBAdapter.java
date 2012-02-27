@@ -513,7 +513,27 @@ public class TvTickerDBAdapter {
 		return version;
 
 	}
+	public String getCurrentProgramVersion() {
+		String version = "";
+		mCursor = mDb.query(true, Version.TABLE_NAME, new String[] {
+				Version.ROW_ID, Version.VERSION_NAME }, "_id = 2", null, null,
+				null, null, null);
+		if (mCursor != null) {
+			if (mCursor.moveToFirst())
+				version = mCursor.getString(mCursor
+						.getColumnIndexOrThrow(Version.VERSION_NAME));
 
+		}
+		safelyCloseMCursor();
+		return version;
+
+	}
+	public long insertNewProgramVersion(String version_number) {
+		initialValues.clear();
+		initialValues.put(Version.VERSION_NAME, version_number);
+		initialValues.put(Version.ROW_ID, 2);
+		return mDb.replace(Version.TABLE_NAME, null, initialValues);
+	}
 	/**
 	 * Insert a new Version.
 	 * 
