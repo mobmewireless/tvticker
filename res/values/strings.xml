@@ -74,6 +74,10 @@
     <string name="browse_categories">All Categories &#187;</string>
     <string name="api_url">http://192.168.1.143:3000/service</string>
     
+    <string name="favourite_instruction">Tip: favorite this show and we\'ll remind you when it\'s on TV.</string>
+    
     <string name="set_reminder">Set Reminder</string>
+    <string name="add_to_favourites">Add to favourites</string>
+    <string name="remove_favourites">Clear favourite</string>
 
 </resources>

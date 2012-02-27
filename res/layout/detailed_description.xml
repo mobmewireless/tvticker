@@ -88,15 +88,38 @@
             android:layout_marginRight="5dip"/>
 
         <Button
-            android:id="@+id/button_set_reminder"
+            android:id="@+id/button_set_favourite"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
+            
             android:background="@xml/custom_blue_button"
+            android:drawableLeft="@drawable/ic_action_fav_off"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:drawableLeft="@drawable/ic_action_reminder"
-            android:text="@string/set_reminder"
+            android:text="@string/add_to_favourites"
             android:textColor="@drawable/white" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/relativeLayoutImdb"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/instruction_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/favourite_instruction"
+            android:textSize="6.1pt" />
+        
+        
     </LinearLayout>
 
 </RelativeLayout>
