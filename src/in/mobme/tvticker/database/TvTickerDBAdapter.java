@@ -66,7 +66,6 @@ public class TvTickerDBAdapter {
 		updateValues = new ContentValues();
 		return this;
 	}
-
 	// clean everything !
 	public void close() {
 		initialValues.clear();
@@ -91,6 +90,18 @@ public class TvTickerDBAdapter {
 	 * @return Returns affected row id.
 	 */
 	public long createNewMediaInfo(Media media) {
+		
+		while(mDb.isDbLockedByOtherThreads()){
+			try {
+				Thread.sleep(1000);
+				Log.i("TAG", "sleep");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+			}
+		}
+		
 		long mediaId = insertMedia(media);
 		String showTimeStart = "";
 		String showTimeEnd = "";
