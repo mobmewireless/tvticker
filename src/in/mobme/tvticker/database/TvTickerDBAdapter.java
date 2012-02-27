@@ -740,11 +740,15 @@ public class TvTickerDBAdapter {
 		Cursor tmpCursor = getImdbDetailsFor(cursor.getInt(cursor
 				.getColumnIndexOrThrow(Mediainfo.MEDIA_IMDB_ID)));
 		tmpCursor.moveToFirst();
-		media.setImdbRating(tmpCursor.getFloat(tmpCursor
-				.getColumnIndexOrThrow(ImdbInfo.IMDB_RATING)));
-		media.setImdbLink(tmpCursor.getString(tmpCursor
-				.getColumnIndexOrThrow(ImdbInfo.IMDB_LINK)));
-		tmpCursor.close();
+		
+		if(tmpCursor.getCount() > 0) {
+			media.setImdbRating(tmpCursor.getFloat(tmpCursor
+					.getColumnIndexOrThrow(ImdbInfo.IMDB_RATING)));
+			media.setImdbLink(tmpCursor.getString(tmpCursor
+					.getColumnIndexOrThrow(ImdbInfo.IMDB_LINK)));
+			tmpCursor.close();
+		}
+		
 		return media;
 	}
 
