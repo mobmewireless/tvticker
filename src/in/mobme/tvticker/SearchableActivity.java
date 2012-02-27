@@ -50,7 +50,7 @@ public class SearchableActivity extends Activity {
 	private void doMySearch(String query) {
 		Log.i(Constants.TAG, "Query: " + query);
 		dbAdapter.open();
-		searchResult = dbAdapter.getMoviesLike(query);
+		searchResult = dbAdapter.getShowsLike(query);
 		dbAdapter.close();
 		if(searchResult == null){
 			mTextView.setText(getString(R.string.no_results,

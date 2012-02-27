@@ -57,7 +57,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         
-        <service android:name=".alarm.ShowAlarmService" />
+        <service android:name=".notification.ShowNotificationService" />
     </application>
 
 </manifest>

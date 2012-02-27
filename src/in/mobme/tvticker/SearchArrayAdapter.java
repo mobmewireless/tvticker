@@ -52,7 +52,7 @@ public class SearchArrayAdapter extends ArrayAdapter<SearchableMedia> {
 	}
 	
 	private String resolveMediaTypeFor(int type){
-		return (type == SearchableMedia.TYPE_MOVIE) ? "Movie" : "Channel"; 
+		return (type == SearchableMedia.TYPE_SHOW) ? "Show" : "Channel"; 
 	}
 
 }

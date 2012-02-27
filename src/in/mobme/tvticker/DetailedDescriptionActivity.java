@@ -1,18 +1,17 @@
 package in.mobme.tvticker;
 
-import in.mobme.tvticker.alarm.NotificationObject;
-import in.mobme.tvticker.alarm.ShowAlarmService;
 import in.mobme.tvticker.customwidget.WebImageView;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
 import in.mobme.tvticker.helpers.DataLoader;
+import in.mobme.tvticker.notification.NotificationFactory;
+import in.mobme.tvticker.notification.ShowNotificationService;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -128,53 +127,19 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 
 			@Override
 			public void onClick(View v) {
-				// SharedPreferences preferences =
-				// PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-				Intent myIntent = new Intent(DetailedDescriptionActivity.this,
-						ShowAlarmService.class);
-
-				DateFormat formatter = new SimpleDateFormat(
-						"yyyy-MM-dd HH:mm:ss");
-				Date date = new Date();
+				DateFormat formatter = new SimpleDateFormat(Constants.ALARM_INTENT_DATE_FORMAT);
+				Date date = new Date(); 
 				try {
 					date = (Date) formatter.parse(media.getShowTime());
 				} catch (ParseException e) {
 					Log.i("Error", "Date format exception");
 				}
-
-				Calendar calender = Calendar.getInstance();
-				calender.setTimeInMillis(date.getTime());
-				calender.add(Calendar.MINUTE, -15);
-
-				HashMap<String, Object> notificationData = new HashMap<String, Object>();
-
-				notificationData.put("channel_name", channel);
-				notificationData.put("show_name", media.getMediaTitle());
-				notificationData.put("show_time", date);
-
-				NotificationObject notification = new NotificationObject();
-				notification.setChannelName(channel);
-				notification.setShowName(media.getMediaTitle());
-				notification.setShowTime(date);
-
-				String[] data = new String[] { channel, media.getMediaTitle(),
-						date.toLocaleString() };
-
-				myIntent.putExtra("notification_data", data);
-
-				PendingIntent pendingIntent = PendingIntent.getService(
-						DetailedDescriptionActivity.this, 0, myIntent, 0);
-				AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-				alarmManager.set(AlarmManager.RTC_WAKEUP,
-						calender.getTimeInMillis(), pendingIntent);
-
-				Toast.makeText(DetailedDescriptionActivity.this,
-						"Reminder is set", Toast.LENGTH_SHORT).show();
-
+				
+				String[] data = new String[] { channel, media.getMediaTitle(), formatter.format(date) };
+								
+				NotificationFactory.createNotification(DetailedDescriptionActivity.this, date, data, media.getId());
 			}
 		});
-
 	}
 
 	//returns correct drawable for the menu icon based on status.

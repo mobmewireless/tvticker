@@ -276,7 +276,7 @@ public class TvTickerDBAdapter {
 	 * 
 	 * @return List of all media title matching.
 	 * */
-	public ArrayList<SearchableMedia> getMoviesLike(String pattern) {
+	public ArrayList<SearchableMedia> getShowsLike(String pattern) {
 		SearchableMedia searcchableMedia;
 		ArrayList<SearchableMedia> matchedList = new ArrayList<SearchableMedia>();
 		Cursor tmpCursor = mDb.query(Mediainfo.TABLE_NAME, new String[] {
@@ -294,7 +294,7 @@ public class TvTickerDBAdapter {
 						.getColumnIndexOrThrow(Mediainfo.ROW_ID)));
 				searcchableMedia.setMedia_title(tmpCursor.getString(tmpCursor
 						.getColumnIndexOrThrow(Mediainfo.MEDIA_TITLE)));
-				searcchableMedia.setType(SearchableMedia.TYPE_MOVIE);
+				searcchableMedia.setType(SearchableMedia.TYPE_SHOW);
 				matchedList.add(searcchableMedia);
 				tmpCursor.moveToNext();
 			}
@@ -490,7 +490,7 @@ public class TvTickerDBAdapter {
 					.getColumnIndexOrThrow(CategoriesInfo.CATAGORY_TYPE));
 			mCursor.close();
 		}
-		return categoryType;
+		return categoryType.substring(0, categoryType.indexOf(':'));
 	}
 
 	/**

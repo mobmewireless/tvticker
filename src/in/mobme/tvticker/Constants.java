@@ -10,6 +10,10 @@ public class Constants {
 	public final static int CHANNEL_FILTER = 0;
 	public final static int CATEGORY_FILTER = 1;
 
+	public final static String ALARM_INTENT_DATA_TAG = "in.mobme.tvticker.alarm_intent";
+	public final static String ALARM_INTENT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	public static final String ALARM_INTENT_MEDIA_ID_TAG = "in.mobme.tvticker.alarm_intent_media_id";
+	
 	public class ViewPager{
 		public final static String INDICATOR_POINTER = "indicator_pointer";
 		public final static int FAVORITES_POSITION = 0;
