@@ -490,7 +490,7 @@ public class TvTickerDBAdapter {
 					.getColumnIndexOrThrow(CategoriesInfo.CATAGORY_TYPE));
 			mCursor.close();
 		}
-		return categoryType;
+		return categoryType.substring(0, categoryType.indexOf(':'));
 	}
 
 	/**
