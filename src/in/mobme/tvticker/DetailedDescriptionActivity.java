@@ -1,6 +1,5 @@
 package in.mobme.tvticker;
 
-import in.mobme.tvticker.alarm.NotificationObject;
 import in.mobme.tvticker.alarm.ShowAlarmService;
 import in.mobme.tvticker.customwidget.WebImageView;
 import in.mobme.tvticker.data_model.Media;
@@ -11,17 +10,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.Menu;
@@ -125,10 +119,9 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
-				//SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 				Intent myIntent = new Intent(DetailedDescriptionActivity.this, ShowAlarmService.class);
 				
-				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				DateFormat formatter = new SimpleDateFormat(Constants.ALARM_INTENT_DATE_FORMAT);
 				Date date = new Date(); 
 				try {
 					date = (Date) formatter.parse(media.getShowTime());
@@ -140,22 +133,11 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 				calender.setTimeInMillis(date.getTime());
 				calender.add(Calendar.MINUTE, -15);
 				
-				HashMap<String, Object> notificationData = new HashMap<String, Object>();
+				String[] data = new String[] { channel, media.getMediaTitle(), formatter.format(date) };
 				
-				notificationData.put("channel_name", channel);
-				notificationData.put("show_name", media.getMediaTitle());
-				notificationData.put("show_time", date);
+				myIntent.putExtra(Constants.ALARM_INTENT_DATA_TAG, data);
 				
-				NotificationObject notification = new NotificationObject();
-				notification.setChannelName(channel);
-				notification.setShowName(media.getMediaTitle());
-				notification.setShowTime(date);
-				
-				String[] data = new String[] { channel, media.getMediaTitle(), date.toLocaleString() };
-				
-				myIntent.putExtra("notification_data", data);
-				
-				PendingIntent pendingIntent = PendingIntent.getService(DetailedDescriptionActivity.this, 0, myIntent, 0);
+				PendingIntent pendingIntent = PendingIntent.getService(DetailedDescriptionActivity.this, 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 				AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 				
 				alarmManager.set(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), pendingIntent);
