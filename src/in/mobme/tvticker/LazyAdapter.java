@@ -1,9 +1,11 @@
 package in.mobme.tvticker;
 
 import in.mobme.tvticker.data_model.Media;
+import in.mobme.tvticker.database.TvTickerDBAdapter;
 import in.mobme.tvticker.rpcclient.RPCClient;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,8 +28,11 @@ public class LazyAdapter extends EndlessAdapter {
 	private int position;
 	private RPCClient rpcClient;
 	private String timeNow;
+	private boolean refresh = true;
+	private TvTickerDBAdapter dataAdapter;
 
-	LazyAdapter(Activity ctx, List<Media> list2, boolean displayThumb, int pos) {
+	LazyAdapter(Activity ctx, List<Media> list2, boolean displayThumb, int pos,
+			boolean refresh) {
 		super(ctx, new MyArrayAdapter((Activity) ctx, R.layout.rowlayout,
 				list2, displayThumb), R.layout.pending);
 		context = ctx;
@@ -41,6 +46,8 @@ public class LazyAdapter extends EndlessAdapter {
 		rotate.setRepeatCount(Animation.INFINITE);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 		timeNow = (String) format.format(new Date());
+		this.refresh = refresh;
+		dataAdapter = new TvTickerDBAdapter(ctx);
 	}
 
 	// shows a loading animation until cache in background completes.
@@ -55,21 +62,31 @@ public class LazyAdapter extends EndlessAdapter {
 	// do network calls or time consuming process here.
 	@Override
 	protected boolean cacheInBackground() throws Exception {
+		
+		//should ignore if conn is offline
 		String frame = (position == Constants.ViewPager.NOW_POSITION) ? "now"
 				: "later";
-		rpcClient.updateMediaListFor(timeNow, frame);
-		return (true);
-
+		if (refresh) {
+			refresh = false;
+			rpcClient.updateMediaListFor(timeNow, frame);
+			return (true);
+		}
+		return false;
 	}
 
 	// Apply obtained data to view here.
 	@Override
 	protected void appendCachedData() {
-		Log.i("LAZY", ""+getWrappedAdapter().getCount());
-		if (getWrappedAdapter().getCount() < 50) {
-			// MyArrayAdapter a = (MyArrayAdapter) getWrappedAdapter();
-			// List<String> list = new ArrayList<String>();
-			// for (int i=0;i<25;i++) { a.add(""+list.size() + 1);}
+		ArrayList<Media> media = new ArrayList<Media>();
+		Log.i("LAZY", "" + getWrappedAdapter().getCount());
+		MyArrayAdapter a = (MyArrayAdapter) getWrappedAdapter();
+		dataAdapter.open();
+		if ((position == Constants.ViewPager.NOW_POSITION)) {
+			media = dataAdapter.fetchShowsforNowFrame();
+		} else {
+			media = dataAdapter.fetchShowsforLaterFrame();
 		}
+		dataAdapter.close();
+		a.addAll(media);
 	}
 }
