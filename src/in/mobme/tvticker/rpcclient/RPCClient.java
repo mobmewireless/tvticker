@@ -85,9 +85,6 @@ public class RPCClient {
 		String currentVersion = dataAdapter.getCurrentProgramVersion();
 		JSONObject updateResult = callClientJSONObject(Constants.RPC.Services.UPDATE_MEDIA,currentVersion,Constants.RPC.Services.CACHE_FOR_DAYS);
 		String latestVersion = updateResult.getString("version").toString();
-		Log.i("updatedresult",""+updateResult);
-		Log.i("version","jdfbsdfb"+updateResult.getString("version"));
-		
 		updateMedia(updateResult.getJSONArray("programs"));
 		dataAdapter.insertNewProgramVersion(latestVersion);
 		dataAdapter.close();
@@ -116,7 +113,6 @@ public class RPCClient {
 
 	public void updateVersion(JSONArray version) throws JSONException {
 		if (version.length() > 0) {
-			Log.i("version", version.toString());
 			JSONObject jsonObject = version.getJSONObject(0).getJSONObject(
 					Constants.RPC.VERSION_TAG);
 			
