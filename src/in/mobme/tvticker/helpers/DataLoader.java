@@ -33,17 +33,18 @@ public class DataLoader {
 	public int startUpdation() throws JSONException {
 
 		rpc_client = new RPCClient(ctx);
+		dataAdapter.open();
+		String version = dataAdapter.getCurrentVersion();
+		dataAdapter.close();
 		try {
-			dataAdapter.open();
-			rpc_client.updateToLatestVersion(dataAdapter.getCurrentVersion());
+			rpc_client.updateToLatestVersion(version);
 			//loading programs
 			//rpc_client.cacheProgramsForDays(7);
-			dataAdapter.close();
 		} catch (JSONRPCException e) {
 			Log.i("TVTICKER_DATAMOCKER", "json exception");
 			e.printStackTrace();
 			return STATUS;
-		}
+		} 
 
 		return 0;
 	}
