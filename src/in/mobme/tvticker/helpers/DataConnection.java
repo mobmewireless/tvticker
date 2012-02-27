@@ -7,12 +7,12 @@ import android.telephony.TelephonyManager;
 
 public class DataConnection {
 
-	final static int TYPE_OFFLINE = TelephonyManager.NETWORK_TYPE_UNKNOWN;
-	final static int TYPE_GPRS = TelephonyManager.NETWORK_TYPE_GPRS;
-	final static int TYPE_3G = TelephonyManager.NETWORK_TYPE_UMTS;
-	final static int TYPE_HSDPA = TelephonyManager.NETWORK_TYPE_HSDPA;
-	final static int TYPE_EDGE = TelephonyManager.NETWORK_TYPE_EDGE;
-	final static int TYPE_WIFI = ConnectivityManager.TYPE_WIFI * 100;
+	public final static int TYPE_OFFLINE = TelephonyManager.NETWORK_TYPE_UNKNOWN;
+	public final static int TYPE_GPRS = TelephonyManager.NETWORK_TYPE_GPRS;
+	public final static int TYPE_3G = TelephonyManager.NETWORK_TYPE_UMTS;
+	public final static int TYPE_HSDPA = TelephonyManager.NETWORK_TYPE_HSDPA;
+	public final static int TYPE_EDGE = TelephonyManager.NETWORK_TYPE_EDGE;
+	public final static int TYPE_WIFI = ConnectivityManager.TYPE_WIFI * 100;
 
 	private ConnectivityManager cManager;
 
