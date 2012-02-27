@@ -32,7 +32,7 @@ public class Models {
 				+ TABLE_NAME
 				+ "("
 				+ ROW_ID
-				+ " integer primary key , "
+				+ " integer unique , "
 				+ VERSION_NAME + " text default '')";
 
 		/* version_table drop query */
@@ -85,7 +85,7 @@ public class Models {
 				+ TABLE_NAME
 				+ "("
 				+ ROW_ID
-				+ " integer primary key , "
+				+ " integer unique , "
 				+ IS_FAVORITE_CHANNEL
 				+ " integer default 0, "
 				+ CHANNEL_NAME
@@ -113,7 +113,7 @@ public class Models {
 				+ TABLE_NAME
 				+ "("
 				+ MEDIA_ID
-				+ " integer primary key, "
+				+ " integer unique, "
 				+ CHANNEL_ID
 				+ " integer, "
 				+ END_TIME
@@ -140,7 +140,7 @@ public class Models {
 		
 		/* category_table create query */
 		final static String CATEGORY_TABLE_CREATE = "create table if not exists "
-				+ TABLE_NAME + "(" + ROW_ID + " integer primary key , "
+				+ TABLE_NAME + "(" + ROW_ID + " integer unique , "
 
 				+ CATAGORY_TYPE + " text)";
 
@@ -176,20 +176,15 @@ public class Models {
 		/* table name */
 		public final static String TABLE_NAME = "reminders_info";
 
-		/* columns */
-		public final static String ROW_ID = KEY_ROW_ID;
 		public final static String MEDIA_ID = KEY_MEDIA_ROW_ID;
 		public final static String REMINDER_ENABLED = "reminder_flag";
 		public final static String IS_FAVORITE_FLAG = "is_favorite";
 
 		/* reminders_table create query */
 		final static String REMINDER_TABLE_CREATE = "create table if not exists "
-				+ TABLE_NAME
-				+ "("
-				+ ROW_ID
-				+ " integer primary key autoincrement, "
+				+ TABLE_NAME + "("
 				+ MEDIA_ID
-				+ " integer, "
+				+ " integer primary key, "
 				+ REMINDER_ENABLED
 				+ " integer, "
 				+ IS_FAVORITE_FLAG + " integer)";
@@ -210,7 +205,7 @@ public class Models {
 
 		/* series_table create query */
 		final static String SERIES_TABLE_CREATE = "create table if not exists "
-				+ TABLE_NAME + "(" + ROW_ID + " integer primary key , "
+				+ TABLE_NAME + "(" + ROW_ID + " integer unique , "
 				+ SERIES_NAME + " text)";
 
 		/* series_table drop query */

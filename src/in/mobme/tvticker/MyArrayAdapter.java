@@ -3,6 +3,7 @@ package in.mobme.tvticker;
 import in.mobme.tvticker.customwidget.WebImageView;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
+import in.mobme.tvticker.helpers.DataLoader;
 import in.mobme.tvticker.helpers.DateTimeHelper;
 
 import java.text.ParseException;
@@ -55,9 +56,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		// layout
 		ViewHolder holder;
 		TvTickerDBAdapter dataAdapter;
-		String title;
 		String category;
-		String imdbURL;
 		String channel;
 		// Recycle existing view if passed as parameter
 		// This will save memory and time on Android
@@ -92,7 +91,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 
 		holder.movieTitle.setText(media.getMediaTitle());
 		if (showThumb) {
-			holder.imageView.setImageWithURL(context, media.getMediaThumb(),
+			holder.imageView.setImageWithURL(context, DataLoader.formattedThumbUrl(media.getMediaThumb()),
 					placeHolder);
 		}
 		channel = dataAdapter.getChannelNameFor(media.getChannel());
@@ -124,5 +123,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 	private float sanitizeRatingValue(float floatValue) {
 		return (floatValue * 3) / 10;
 	}
+	
+	
 
 }
