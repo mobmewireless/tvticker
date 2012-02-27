@@ -1,10 +1,11 @@
 package in.mobme.tvticker;
 
-import in.mobme.tvticker.alarm.ShowAlarmService;
 import in.mobme.tvticker.customwidget.WebImageView;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
 import in.mobme.tvticker.helpers.DataLoader;
+import in.mobme.tvticker.notification.NotificationFactory;
+import in.mobme.tvticker.notification.ShowNotificationService;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -126,8 +127,6 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 
 			@Override
 			public void onClick(View v) {
-				Intent myIntent = new Intent(DetailedDescriptionActivity.this, ShowAlarmService.class);
-				
 				DateFormat formatter = new SimpleDateFormat(Constants.ALARM_INTENT_DATE_FORMAT);
 				Date date = new Date(); 
 				try {
@@ -136,21 +135,9 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 					Log.i("Error", "Date format exception");
 				}
 				
-				Calendar calender = Calendar.getInstance();
-				calender.setTimeInMillis(date.getTime());
-				calender.add(Calendar.MINUTE, -15);
-				
 				String[] data = new String[] { channel, media.getMediaTitle(), formatter.format(date) };
-				
-				myIntent.putExtra(Constants.ALARM_INTENT_DATA_TAG, data);
-				
-				PendingIntent pendingIntent = PendingIntent.getService(DetailedDescriptionActivity.this, 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-				AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-				
-				alarmManager.set(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), pendingIntent);
-				
-				Toast.makeText(DetailedDescriptionActivity.this, "Reminder is set", Toast.LENGTH_SHORT).show();
-				
+								
+				NotificationFactory.createNotification(DetailedDescriptionActivity.this, date, data, media.getId());
 			}
 		});
 	}

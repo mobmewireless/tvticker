@@ -1,4 +1,4 @@
-package in.mobme.tvticker.alarm;
+package in.mobme.tvticker.notification;
 
 import java.util.Date;
 
