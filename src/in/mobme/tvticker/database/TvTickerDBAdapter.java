@@ -66,6 +66,7 @@ public class TvTickerDBAdapter {
 		updateValues = new ContentValues();
 		return this;
 	}
+
 	// clean everything !
 	public void close() {
 		initialValues.clear();
@@ -80,6 +81,18 @@ public class TvTickerDBAdapter {
 		}
 	}
 
+	private void checkForDBLockRelease(int waitTime){
+		while (mDb.isDbLockedByOtherThreads()) {
+			try {
+				Thread.sleep(waitTime);
+				Log.i("TvTicker DbAdapter", "Waiting for DB lock to be released");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+			}
+		}
+	}
 	/**************************
 	 * Channel Media table
 	 */
@@ -90,18 +103,7 @@ public class TvTickerDBAdapter {
 	 * @return Returns affected row id.
 	 */
 	public long createNewMediaInfo(Media media) {
-		
-		while(mDb.isDbLockedByOtherThreads()){
-			try {
-				Thread.sleep(1000);
-				Log.i("TAG", "sleep");
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				
-			}
-		}
-		
+		checkForDBLockRelease(200);
 		long mediaId = insertMedia(media);
 		String showTimeStart = "";
 		String showTimeEnd = "";
@@ -131,18 +133,23 @@ public class TvTickerDBAdapter {
 		// air_time_start between :air_time_start and :air_time_end and
 		// air_time_end > :end_time"
 		ArrayList<Long> favChannelIds = fetchFavChannelIds();
-		
-		Log.i("query",ChannelMediaInfo.AIR_TIME
-					+ " between ? and ? and "+ChannelMediaInfo.END_TIME+" > ? and "+ChannelMediaInfo.CHANNEL_ID+" in("+TextUtils.join(", ", favChannelIds)+") order by "
-					+ ChannelMediaInfo.AIR_TIME);
-		if(favChannelIds.size()==0)
-		return ChannelMediaInfo.AIR_TIME
-				+ " between ? and ? and end_time > ? order by "
-				+ ChannelMediaInfo.AIR_TIME;
-		else{
-				
+
+		Log.i("query",
+				ChannelMediaInfo.AIR_TIME + " between ? and ? and "
+						+ ChannelMediaInfo.END_TIME + " > ? and "
+						+ ChannelMediaInfo.CHANNEL_ID + " in("
+						+ TextUtils.join(", ", favChannelIds) + ") order by "
+						+ ChannelMediaInfo.AIR_TIME);
+		if (favChannelIds.size() == 0)
 			return ChannelMediaInfo.AIR_TIME
-					+ " between ? and ? and "+ChannelMediaInfo.END_TIME+" > ? and "+ChannelMediaInfo.CHANNEL_ID+" in("+TextUtils.join(", ", favChannelIds)+") order by "
+					+ " between ? and ? and end_time > ? order by "
+					+ ChannelMediaInfo.AIR_TIME;
+		else {
+
+			return ChannelMediaInfo.AIR_TIME + " between ? and ? and "
+					+ ChannelMediaInfo.END_TIME + " > ? and "
+					+ ChannelMediaInfo.CHANNEL_ID + " in("
+					+ TextUtils.join(", ", favChannelIds) + ") order by "
 					+ ChannelMediaInfo.AIR_TIME;
 		}
 	}
@@ -191,8 +198,6 @@ public class TvTickerDBAdapter {
 		return fetchAllShowsFor(whereClause, null);
 	}
 
-	
-	
 	/**
 	 * Return all media from the ChannelMediaInfoTable which passes the given
 	 * whereClause.
@@ -405,23 +410,24 @@ public class TvTickerDBAdapter {
 				null);
 	}
 
-	public ArrayList< Long > fetchFavChannelIds() {
-	
-		mCursor = mDb.query(ChannelsInfo.TABLE_NAME, new String[] {
-				ChannelsInfo.ROW_ID}
-				, ChannelsInfo.IS_FAVORITE_CHANNEL + "= 1", null, null,
-				null, null);
-		ArrayList< Long > ids = new ArrayList<Long>();
+	public ArrayList<Long> fetchFavChannelIds() {
+
+		mCursor = mDb.query(ChannelsInfo.TABLE_NAME,
+				new String[] { ChannelsInfo.ROW_ID },
+				ChannelsInfo.IS_FAVORITE_CHANNEL + "= 1", null, null, null,
+				null);
+		ArrayList<Long> ids = new ArrayList<Long>();
 		if (mCursor != null) {
 			mCursor.moveToFirst();
-			while(!mCursor.isAfterLast()){
-			ids.add(mCursor.getLong(mCursor.getColumnIndexOrThrow(ChannelsInfo.ROW_ID)));
-			mCursor.moveToNext();
+			while (!mCursor.isAfterLast()) {
+				ids.add(mCursor.getLong(mCursor
+						.getColumnIndexOrThrow(ChannelsInfo.ROW_ID)));
+				mCursor.moveToNext();
 			}
 			mCursor.close();
 		}
 		return ids;
-		 
+
 	}
 
 	/**
@@ -526,6 +532,7 @@ public class TvTickerDBAdapter {
 		return version;
 
 	}
+
 	public String getCurrentProgramVersion() {
 		String version = "";
 		mCursor = mDb.query(true, Version.TABLE_NAME, new String[] {
@@ -541,12 +548,14 @@ public class TvTickerDBAdapter {
 		return version;
 
 	}
+
 	public long insertNewProgramVersion(String version_number) {
 		initialValues.clear();
 		initialValues.put(Version.VERSION_NAME, version_number);
 		initialValues.put(Version.ROW_ID, 2);
 		return mDb.replace(Version.TABLE_NAME, null, initialValues);
 	}
+
 	/**
 	 * Insert a new Version.
 	 * 
@@ -600,7 +609,7 @@ public class TvTickerDBAdapter {
 	 * @return Returns true or false, status of update
 	 * */
 	public long setIsFavorite(long mediaId, boolean isFavorite) {
-
+		checkForDBLockRelease(200);
 		initialValues.clear();
 		initialValues.put(Remindersinfo.MEDIA_ID, mediaId);
 		initialValues.put(Remindersinfo.REMINDER_ENABLED,
@@ -730,25 +739,25 @@ public class TvTickerDBAdapter {
 				.getColumnIndexOrThrow(Mediainfo.SERIES_ID)));
 		int imdbId = cursor.getInt(cursor
 				.getColumnIndexOrThrow(Mediainfo.MEDIA_IMDB_ID));
-		if (imdbId == 0) {
+		if (imdbId <= 0) {
 			media.setImdbRating(0.0F);
 			media.setImdbLink(null);
 			return media;
+		} else {
+			// get imdb details of this media from IMDBInfo table.
+	
+			Cursor tmpCursor = getImdbDetailsFor(cursor.getInt(cursor
+					.getColumnIndexOrThrow(Mediainfo.MEDIA_IMDB_ID)));
+			tmpCursor.moveToFirst();
 
+			if (tmpCursor.getCount() > 0) {
+				media.setImdbRating(tmpCursor.getFloat(tmpCursor
+						.getColumnIndexOrThrow(ImdbInfo.IMDB_RATING)));
+				media.setImdbLink(tmpCursor.getString(tmpCursor
+						.getColumnIndexOrThrow(ImdbInfo.IMDB_LINK)));
+				tmpCursor.close();
+			}
 		}
-		// get imdb details of this media from IMDBInfo table.
-		Cursor tmpCursor = getImdbDetailsFor(cursor.getInt(cursor
-				.getColumnIndexOrThrow(Mediainfo.MEDIA_IMDB_ID)));
-		tmpCursor.moveToFirst();
-		
-		if(tmpCursor.getCount() > 0) {
-			media.setImdbRating(tmpCursor.getFloat(tmpCursor
-					.getColumnIndexOrThrow(ImdbInfo.IMDB_RATING)));
-			media.setImdbLink(tmpCursor.getString(tmpCursor
-					.getColumnIndexOrThrow(ImdbInfo.IMDB_LINK)));
-			tmpCursor.close();
-		}
-		
 		return media;
 	}
 

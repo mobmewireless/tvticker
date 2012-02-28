@@ -60,8 +60,14 @@ public class RPCClient {
 		for (int i = 0; i < pgms.length(); i++) {
 			JSONObject jsonObject = pgms.getJSONObject(i).getJSONObject(
 					Constants.RPC.PROGRAM_TAG);
+			// Expecting a db lock
+			try{
 			long _id = dataAdapter.createNewMediaInfo(parseMedia(jsonObject));
 			dataAdapter.setIsFavorite(_id, false);
+			}catch(Exception e ){
+				Log.i("TvTicker UpdateMediaList","Error inserting data to tables.");
+				e.printStackTrace();
+			}
 		}
 		dataAdapter.close();
 	}

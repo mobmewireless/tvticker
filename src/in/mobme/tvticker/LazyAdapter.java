@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -61,14 +62,16 @@ public class LazyAdapter extends EndlessAdapter {
 	// do network calls or time consuming process here.
 	@Override
 	protected boolean cacheInBackground() throws Exception {
-		
-		//should ignore if conn is offline
+		// should ignore if conn is offline
 		String frame = (position == Constants.ViewPager.NOW_POSITION) ? "now"
 				: "later";
 		if (refresh) {
 			refresh = false;
-			rpcClient.updateMediaListFor(timeNow, frame);
-			return (true);
+			try {
+				rpcClient.updateMediaListFor(timeNow, frame);
+			} catch (Exception e) {
+				Log.i("Tvticker LazyAdapter", "Network issue !{" + e.getMessage() + " }");
+			}
 		}
 		return false;
 	}
