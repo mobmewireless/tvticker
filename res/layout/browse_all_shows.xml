@@ -8,15 +8,19 @@
     <Button
         android:id="@+id/browse_channels_button"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_gravity="center"
-        android:text="@string/browse_channels" />
+        android:background="@xml/custom_blue_button"
+        android:text="@string/browse_channels"
+        android:textColor="@drawable/white" />
 
     <Button
         android:id="@+id/browse_categories_button"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_gravity="center"
-        android:text="@string/browse_categories" />
+        android:background="@xml/custom_blue_button"
+        android:text="@string/browse_categories"
+        android:textColor="@drawable/white" />
 
 </LinearLayout>
