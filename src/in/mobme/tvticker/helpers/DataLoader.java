@@ -22,6 +22,8 @@ public class DataLoader {
 	public static int STATUS = -1;
 
 	final String TAG = "TVTICKER_DATAMOCKER";
+	public static final int TYPE_LARGE = 10;
+	public static final int TYPE_SMALL = 20;
 
 
 	public DataLoader(Context ctx) {
@@ -67,9 +69,9 @@ public class DataLoader {
 		Log.i(TAG, "Done");
 	}
 	
-	public static String formattedThumbUrl(String thumbID) {
+	public static String formattedThumbUrl(String thumbID, int size) {
 		return Constants.RPC.Media.THUMBNAIL_PREFIX + thumbID
-				+ Constants.RPC.Media.THUMBNAIL_SUFFIX;
+				+ (size == TYPE_LARGE ? Constants.RPC.Media.THUMBNAIL_LARGE : Constants.RPC.Media.THUMBNAIL_SMALL);
 	}
 	
 	

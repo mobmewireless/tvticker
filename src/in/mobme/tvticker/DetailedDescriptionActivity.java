@@ -91,7 +91,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		updateFavouritesButton();
 
 		movieThumb.setImageWithURL(this, DataLoader.formattedThumbUrl(media
-				.getMediaThumb()),
+				.getMediaThumb(), DataLoader.TYPE_LARGE),
 				this.getResources().getDrawable(R.drawable.ic_placehoder));
 		movieDescription.setText(media.getMediaDescription());
 		movieTimeText.setText(media.getShowTime());

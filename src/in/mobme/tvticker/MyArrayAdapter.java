@@ -92,7 +92,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 
 		holder.movieTitle.setText(media.getMediaTitle());
 		if (showThumb) {
-			holder.imageView.setImageWithURL(context, DataLoader.formattedThumbUrl(media.getMediaThumb()),
+			holder.imageView.setImageWithURL(context, DataLoader.formattedThumbUrl(media.getMediaThumb(), DataLoader.TYPE_SMALL),
 					placeHolder);
 		}
 		channel = dataAdapter.getChannelNameFor(media.getChannel());
