@@ -3,7 +3,7 @@
 	android:orientation="horizontal" android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<in.mobme.tvticker.customwidget.WebImageView
+	<in.mobme.tvticker.customwidget.WebImageView android:scaleType="fitCenter"
 		android:layout_width="45dp" android:layout_height="72dp" android:id="@+id/left_icon"
 		android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
 		android:background="#00000000" android:visibility="gone"/>
