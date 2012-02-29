@@ -50,6 +50,7 @@ public class Constants {
 			public final static String UPDATE_TO_VERSION = "update_to_current_version_except_programs";
 			public final static String UPDATE_MEDIA = "update_programs_to_current_version";
 			public final static String CURRENT_DATA_VERSION = "update_programs_to_current_version";
+			public final static String CURRENT_VERSION = "current_version";
 			public final static int CACHE_FOR_DAYS =7;
 		}
 		
