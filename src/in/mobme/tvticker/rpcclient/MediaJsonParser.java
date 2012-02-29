@@ -7,8 +7,6 @@ import in.mobme.tvticker.data_model.Media;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 public class MediaJsonParser {
 	
 	public Media parseJsonMedia(JSONObject mediaObj) throws JSONException{

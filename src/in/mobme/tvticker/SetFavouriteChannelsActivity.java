@@ -4,7 +4,6 @@ import in.mobme.tvticker.database.Models.ChannelsInfo;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -14,7 +13,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class SetFavouriteChannelsActivity extends Activity {
-	private HashMap<Integer, Object> changes = new HashMap<Integer, Object>();
 	TvTickerDBAdapter dbAdapter = null;
 	ListView listView;
 	List<FavouriteChannelModel> list = new ArrayList<FavouriteChannelModel>();

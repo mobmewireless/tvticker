@@ -59,12 +59,6 @@ class ViewPagerAdapter extends PagerAdapter {
 		return pageTitles.length;
 	}
 
-	private List<Media> getFavoriteMediaFrom(List<Media> list) {
-		List<Media> fav_list = new ArrayList<Media>();
-		// should get the list from database .. PENDING
-		return fav_list;
-	}
-
 	/**
 	 * Create the page for the given position. The adapter is responsible for
 	 * adding the view to the container given here, although it only must ensure

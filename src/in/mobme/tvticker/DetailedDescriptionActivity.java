@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
@@ -28,7 +27,6 @@ import android.widget.Toast;
 
 public class DetailedDescriptionActivity extends FragmentActivity {
 
-	private final int MENU_ADD_TO_FAVORITES = 1;
 	private final int MENU_SHARE = 2;
 
 	private WebImageView movieThumb = null;
@@ -158,12 +156,6 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 			setFavouriteButton.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_action_fav_off), null, null, null);
 			setFavouriteButton.setText(R.string.add_to_favourites);
 		}		
-	}
-
-	private Drawable getFavouritesDrawable(int resId) {
-		Drawable img = getResources().getDrawable((resId));
-		img.setBounds(0, 0, 18, 18);
-		return img;
 	}
 	
 	// Action bar menu item click listener.

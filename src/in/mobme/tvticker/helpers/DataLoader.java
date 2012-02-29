@@ -4,9 +4,6 @@ import in.mobme.tvticker.database.TvTickerDBAdapter;
 import in.mobme.tvticker.rpcclient.Constants;
 import in.mobme.tvticker.rpcclient.RPCClient;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.alexd.jsonrpc.JSONRPCException;
 import org.json.JSONException;
 

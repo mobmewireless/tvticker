@@ -1,25 +1,15 @@
 package in.mobme.tvticker.helpers;
 
-import in.mobme.tvticker.rpcclient.Constants;
-
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
 import android.text.format.DateFormat;
-import android.util.Log;
-
-import com.ocpsoft.pretty.time.BasicTimeFormat;
-import com.ocpsoft.pretty.time.Duration;
 import com.ocpsoft.pretty.time.PrettyTime;
-import com.ocpsoft.pretty.time.TimeFormat;
-import com.ocpsoft.pretty.time.TimeUnit;
 
 public class DateTimeHelper {
 	public final static String jsonDateFormat = "yyyy-MM-dd'T'HH:mm:ss";
@@ -45,7 +35,6 @@ public class DateTimeHelper {
 		String message = "";
 		PrettyTime p = new PrettyTime(); // refer :
 		// http://ocpsoft.com/prettytime/#docs
-		int style = 0;
 		Date now = new Date();
 		if (now.after(show_time_start) && now.before(show_time_end)) {
 			 p = new PrettyTime(now);
