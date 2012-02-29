@@ -4,7 +4,8 @@
     android:layout_height="fill_parent" >
 
     <in.mobme.tvticker.customwidget.WebImageView
-        android:scaleType="fitXY"
+        android:scaleType="fitCenter"
+        android:minHeight="200dp"
         android:id="@+id/movie_thumb"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
