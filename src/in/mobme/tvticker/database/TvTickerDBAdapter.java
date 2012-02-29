@@ -31,10 +31,9 @@ public class TvTickerDBAdapter {
 	private TvTickerDBHelper mDbHelper;
 	private SQLiteDatabase mDb;
 	private final Context mCtx;
-	ContentValues initialValues = null;
-	ContentValues updateValues = null;
 	Cursor mCursor = null;
 	DateTimeHelper dateTimeHelper = null;
+	private final int DEFAULT_WAIT_TIME = 1000;
 
 	/**
 	 * Constructor - takes the context to allow the database to be
@@ -62,14 +61,11 @@ public class TvTickerDBAdapter {
 		mDbHelper = new TvTickerDBHelper(mCtx);
 		mDb = mDbHelper.getWritableDatabase();
 		dateTimeHelper = new DateTimeHelper();
-		initialValues = new ContentValues();
-		updateValues = new ContentValues();
 		return this;
 	}
 
 	// clean everything !
 	public void close() {
-		initialValues.clear();
 		safelyCloseMCursor();
 		mDbHelper.close();
 	}
@@ -103,7 +99,7 @@ public class TvTickerDBAdapter {
 	 * @return Returns affected row id.
 	 */
 	public long createNewMediaInfo(Media media) {
-		checkForDBLockRelease(200);
+		checkForDBLockRelease(DEFAULT_WAIT_TIME);
 		long mediaId = insertMedia(media);
 		String showTimeStart = "";
 		String showTimeEnd = "";
@@ -119,7 +115,7 @@ public class TvTickerDBAdapter {
 			Log.e(Constants.TAG, e.toString());
 		}
 
-		initialValues.clear();
+		ContentValues initialValues = new ContentValues();
 		initialValues.put(ChannelMediaInfo.MEDIA_ID, mediaId);
 		initialValues.put(ChannelMediaInfo.CHANNEL_ID, media.getChannel());
 		initialValues.put(ChannelMediaInfo.AIR_TIME, showTimeStart);
@@ -330,7 +326,7 @@ public class TvTickerDBAdapter {
 	private long insertMedia(Media media) {
 		long imdbId = insertImdbEntryFor(media.getImdbRating(),
 				media.getImdbLink());
-		initialValues.clear();
+		ContentValues initialValues = new ContentValues();
 		initialValues.put(Mediainfo.ROW_ID, media.getId());
 		initialValues.put(Mediainfo.MEDIA_TITLE, media.getMediaTitle());
 		initialValues.put(Mediainfo.MEDIA_DESCRIPTION,
@@ -379,7 +375,7 @@ public class TvTickerDBAdapter {
 	 * @return Returns affected row id.
 	 */
 	public long insertNewChannel(long remote_channel_id, String channelName) {
-		initialValues.clear();
+		ContentValues initialValues = new ContentValues();
 		initialValues.put(ChannelsInfo.CHANNEL_NAME, channelName);
 		initialValues.put(ChannelsInfo.ROW_ID, remote_channel_id);
 
@@ -392,7 +388,7 @@ public class TvTickerDBAdapter {
 	 * @return Returns affected row id.
 	 */
 	public long updateOrInsertChannel(long remote_channel_id, String name) {
-		initialValues.clear();
+		ContentValues initialValues = new ContentValues();
 		initialValues.put(ChannelsInfo.CHANNEL_NAME, name);
 		initialValues.put(ChannelsInfo.ROW_ID, remote_channel_id);
 		return mDb.replace(ChannelsInfo.TABLE_NAME, "empty", initialValues);
@@ -461,7 +457,7 @@ public class TvTickerDBAdapter {
 	 * @return Returns affected row id.
 	 */
 	public long insertNewCategory(long remote_category_id, String category) {
-		initialValues.clear();
+		ContentValues initialValues = new ContentValues();
 		initialValues.put(CategoriesInfo.CATAGORY_TYPE, category);
 		initialValues.put(CategoriesInfo.ROW_ID, remote_category_id);
 		return mDb.insert(CategoriesInfo.TABLE_NAME, null, initialValues);
@@ -473,7 +469,7 @@ public class TvTickerDBAdapter {
 	 * @return Returns affected row id.
 	 */
 	public long updateOrInsertCategory(long remote_category_id, String name) {
-		initialValues.clear();
+		ContentValues initialValues = new ContentValues();
 		initialValues.put(CategoriesInfo.CATAGORY_TYPE, name);
 		initialValues.put(CategoriesInfo.ROW_ID, remote_category_id);
 		return mDb.replace(CategoriesInfo.TABLE_NAME, "empty", initialValues);
@@ -550,7 +546,7 @@ public class TvTickerDBAdapter {
 	}
 
 	public long insertNewProgramVersion(String version_number) {
-		initialValues.clear();
+		ContentValues initialValues = new ContentValues();
 		initialValues.put(Version.VERSION_NAME, version_number);
 		initialValues.put(Version.ROW_ID, 2);
 		return mDb.replace(Version.TABLE_NAME, null, initialValues);
@@ -562,7 +558,7 @@ public class TvTickerDBAdapter {
 	 * @return Returns affected row id.
 	 */
 	public long insertNewVersion(String version_number) {
-		initialValues.clear();
+		ContentValues initialValues = new ContentValues();
 		initialValues.put(Version.VERSION_NAME, version_number);
 		initialValues.put(Version.ROW_ID, 1);
 		return mDb.replace(Version.TABLE_NAME, null, initialValues);
@@ -580,7 +576,7 @@ public class TvTickerDBAdapter {
 	private long insertImdbEntryFor(float rating, String reviewUrl) {
 		if (reviewUrl.toLowerCase() == "null")
 			return 0;
-		initialValues.clear();
+		ContentValues initialValues = new ContentValues();
 		initialValues.put(ImdbInfo.IMDB_RATING, rating);
 		initialValues.put(ImdbInfo.IMDB_LINK, reviewUrl);
 		return mDb.insert(ImdbInfo.TABLE_NAME, null, initialValues);
@@ -609,8 +605,8 @@ public class TvTickerDBAdapter {
 	 * @return Returns true or false, status of update
 	 * */
 	public long setIsFavorite(long mediaId, boolean isFavorite) {
-		checkForDBLockRelease(200);
-		initialValues.clear();
+		checkForDBLockRelease(DEFAULT_WAIT_TIME);
+		ContentValues initialValues = new ContentValues();
 		initialValues.put(Remindersinfo.MEDIA_ID, mediaId);
 		initialValues.put(Remindersinfo.REMINDER_ENABLED,
 				sanitiseBooleanToInteger(isFavorite));
@@ -625,7 +621,7 @@ public class TvTickerDBAdapter {
 	 * @return Returns true or false, status of update
 	 * */
 	public boolean toggleReminderFor(long mediaId, boolean reminderEnabled) {
-		updateValues.clear();
+		ContentValues updateValues = new ContentValues();
 		updateValues.put(Remindersinfo.REMINDER_ENABLED,
 				sanitiseBooleanToInteger(reminderEnabled));
 		return mDb.update(Remindersinfo.TABLE_NAME, updateValues,
@@ -640,7 +636,7 @@ public class TvTickerDBAdapter {
 	 */
 
 	public void setFavoriteChannels(List<FavouriteChannelModel> list) {
-		updateValues.clear();
+		ContentValues updateValues = new ContentValues();
 		Iterator<FavouriteChannelModel> iter = list.iterator();
 		while (iter.hasNext()) {
 			FavouriteChannelModel model = (FavouriteChannelModel) iter.next();
