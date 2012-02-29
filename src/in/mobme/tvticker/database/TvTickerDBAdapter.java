@@ -77,7 +77,7 @@ public class TvTickerDBAdapter {
 		}
 	}
 
-	private void checkForDBLockRelease(int waitTime){
+	public void checkForDBLockRelease(int waitTime){
 		while (mDb.isDbLockedByOtherThreads()) {
 			try {
 				Thread.sleep(waitTime);

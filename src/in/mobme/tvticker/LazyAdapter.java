@@ -70,7 +70,8 @@ public class LazyAdapter extends EndlessAdapter {
 			try {
 				rpcClient.updateMediaListFor(timeNow, frame);
 			} catch (Exception e) {
-				Log.i("Tvticker LazyAdapter", "Network issue !{" + e.getMessage() + " }");
+				Log.i("Tvticker LazyAdapter",
+						"Network issue !{" + e.getMessage() + " }");
 			}
 		}
 		return false;
@@ -81,10 +82,14 @@ public class LazyAdapter extends EndlessAdapter {
 	protected void appendCachedData() {
 		ArrayList<Media> media = new ArrayList<Media>();
 		MyArrayAdapter a = (MyArrayAdapter) getWrappedAdapter();
-		if ((position == Constants.ViewPager.NOW_POSITION)) {
-			media = dataAdapter.fetchShowsforNowFrame();
-		} else {
-			media = dataAdapter.fetchShowsforLaterFrame();
+		try {
+			if ((position == Constants.ViewPager.NOW_POSITION)) {
+				media = dataAdapter.fetchShowsforNowFrame();
+			} else {
+				media = dataAdapter.fetchShowsforLaterFrame();
+			}
+		} catch (Exception e) {
+			Log.i("Lazy Adapter", "Error appending data, reason :" + e.getMessage());
 		}
 		a.addAll(media);
 	}
