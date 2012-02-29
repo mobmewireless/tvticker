@@ -76,15 +76,6 @@ public class DateTimeHelper {
 		calendar.add(Calendar.HOUR_OF_DAY, airtimeend);
 		String airTimeEnd = (String) DateFormat.format(FRAME_TIME_FORMAT,
 				calendar.getTime());
-//		calendar.setTime(new Date());
-//		calendar.add(Calendar.HOUR_OF_DAY, airtimestart);
-//		String endTimeStart = (String) DateFormat.format(FRAME_TIME_FORMAT,
-//				calendar.getTime());
-//		calendar.add(Calendar.HOUR_OF_DAY, airtimeend);
-//		String endTimeEnd = (String) DateFormat.format(FRAME_TIME_FORMAT,
-//				calendar.getTime());
-		
-		
 		
 		return Arrays.asList(new String[] { airTimeStart, airTimeEnd,endTime });
 	}
