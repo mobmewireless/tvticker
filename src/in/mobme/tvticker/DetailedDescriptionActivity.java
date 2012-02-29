@@ -122,7 +122,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 					// Adding to favourites
 					dataAdapter.setIsFavorite(media.getId(), true);
 					isFavourited = true;
-					
+
 					// Adding a reminder.
 					DateFormat formatter = new SimpleDateFormat(Constants.ALARM_INTENT_DATE_FORMAT);
 					Date date = new Date(); 

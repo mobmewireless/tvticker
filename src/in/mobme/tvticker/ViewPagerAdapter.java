@@ -95,7 +95,7 @@ class ViewPagerAdapter extends PagerAdapter {
 			listView.setOnItemClickListener(new LaterMediaOnItemClickListener());
 
 		} else if (position == Constants.ViewPager.FAVORITES_POSITION) {
-
+			favMediaList = tvDataAdapter.fetchFavorites();
 			favoritesAdapter = new MyArrayAdapter((Activity) context,
 					R.layout.rowlayout, favMediaList, thumbEnabled);
 			boolean isEmpty = favoritesAdapter.getCount() <= 0 ? true : false;

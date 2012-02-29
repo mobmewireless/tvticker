@@ -121,6 +121,7 @@ public class TvTickerDBAdapter {
 		initialValues.put(ChannelMediaInfo.AIR_TIME, showTimeStart);
 		initialValues.put(ChannelMediaInfo.END_TIME, showTimeEnd);
 		return mDb.replace(ChannelMediaInfo.TABLE_NAME, null, initialValues);
+		
 
 	}
 
@@ -649,7 +650,7 @@ public class TvTickerDBAdapter {
 	}
 
 	/**
-	 * Return a Cursor over the list of all favourite shows in the ReminderInfo
+	 * Return a Cursor over the list of all favorite shows in the ReminderInfo
 	 * Table.
 	 * 
 	 * @return Cursor over all shows
@@ -658,6 +659,11 @@ public class TvTickerDBAdapter {
 		return mDb.query(Remindersinfo.TABLE_NAME, new String[] {
 				Remindersinfo.MEDIA_ID, Remindersinfo.IS_FAVORITE_FLAG,
 				Remindersinfo.REMINDER_ENABLED }, null, null, null, null, null);
+	}
+	public Cursor fetchFavsFromReminderInfo() {
+		return mDb.query(Remindersinfo.TABLE_NAME, new String[] {
+				Remindersinfo.MEDIA_ID, Remindersinfo.IS_FAVORITE_FLAG,
+				Remindersinfo.REMINDER_ENABLED }, Remindersinfo.IS_FAVORITE_FLAG+"= 1", null, null, null, null);
 	}
 
 	/**
@@ -685,6 +691,24 @@ public class TvTickerDBAdapter {
 		tmpCursor.close();
 		return isEnabled;
 	}
+	/**
+	 * Fetches all favorite media.
+	 * 
+	 */
+	public ArrayList<Media> fetchFavorites(){
+		ArrayList<Media> favMediaList = new ArrayList<Media>();
+		Cursor tmpCursor = fetchFavsFromReminderInfo();
+		if (tmpCursor != null) {
+			tmpCursor.moveToFirst();
+			while (!tmpCursor.isAfterLast()) {
+				Media media = fetchShowsInfoFor(tmpCursor.getLong(tmpCursor.getColumnIndexOrThrow(Remindersinfo.MEDIA_ID)));
+				favMediaList.add(media);
+				tmpCursor.moveToNext();
+			}
+		}
+		tmpCursor.close();
+		return favMediaList;
+	}
 
 	/**************************
 	 * Private Helpers
@@ -697,6 +721,9 @@ public class TvTickerDBAdapter {
 	 *            from channel_info table
 	 * @return Media Object
 	 */
+	
+	
+
 	private Media unWrapShowDataFrom(Cursor tmpCursor) {
 		Media media;
 		long media_id = tmpCursor.getLong(tmpCursor
@@ -712,6 +739,7 @@ public class TvTickerDBAdapter {
 		return media;
 	}
 
+	
 	/**
 	 * Get Media Object from the given cursor.
 	 * 

@@ -184,7 +184,7 @@ public class Models {
 		final static String REMINDER_TABLE_CREATE = "create table if not exists "
 				+ TABLE_NAME + "("
 				+ MEDIA_ID
-				+ " integer primary key, "
+				+ " integer unique , "
 				+ REMINDER_ENABLED
 				+ " integer, "
 				+ IS_FAVORITE_FLAG + " integer)";

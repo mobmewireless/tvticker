@@ -57,8 +57,8 @@ public class RPCClient {
 					Constants.RPC.PROGRAM_TAG);
 			// Expecting a db lock
 			try{
-				long _id = dataAdapter.createNewMediaInfo(parseMedia(jsonObject));
-				dataAdapter.setIsFavorite(_id, false);
+
+			long _id = dataAdapter.createNewMediaInfo( parseMedia(jsonObject));
 			}catch(Exception e ){
 				Log.i("TvTicker UpdateMediaList","Error inserting data to tables.");
 				e.printStackTrace();
@@ -92,7 +92,7 @@ public class RPCClient {
 			JSONObject jsonObject = programs.getJSONObject(i).getJSONObject(
 					Constants.RPC.PROGRAM_TAG);
 			long _id = dataAdapter.createNewMediaInfo(parseMedia(jsonObject));
-			dataAdapter.setIsFavorite(_id, false);
+			//dataAdapter.setIsFavorite(_id, false);
 		}
 	}
 	
