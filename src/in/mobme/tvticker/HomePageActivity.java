@@ -2,6 +2,7 @@ package in.mobme.tvticker;
 
 import in.mobme.tvticker.customwidget.ViewPagerIndicator;
 import in.mobme.tvticker.customwidget.ViewPagerIndicator.PageInfoProvider;
+import in.mobme.tvticker.database.TvTickerDBAdapter;
 import in.mobme.tvticker.helpers.DataConnection;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -21,6 +22,7 @@ public class HomePageActivity extends FragmentActivity implements
 	private ViewPager awesomePager;
 	private ViewPagerAdapter awesomeAdapter;
 	private ViewPagerIndicator indicator = null;
+	private TvTickerDBAdapter adapter = null;
 	private int indicator_position = Constants.ViewPager.NOW_POSITION;
 	private static final String[] titles = new String[] {
 			Constants.ViewPager.FAVORITES_LABEL, 
@@ -50,11 +52,12 @@ public class HomePageActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		int startMode = getIntent().getExtras().getInt(Constants.MODE);
-		
+		adapter = new TvTickerDBAdapter(this);
 		getSupportActionBar().setTitle(
 				getResources().getString(R.string.home_page_title));
+		adapter.open();
 		awesomeAdapter = new ViewPagerAdapter(R.layout.default_listview,
-				titles, this, isThumbNailEnabled(startMode));
+				titles, this, isThumbNailEnabled(startMode), adapter);
 		awesomePager = (ViewPager) findViewById(R.id.awesomepager);
 		indicator = (ViewPagerIndicator) findViewById(R.id.indicator);
 
@@ -159,5 +162,13 @@ public class HomePageActivity extends FragmentActivity implements
 	public String getTitle(int pos) {
 		return titles[pos];
 	}
+
+	@Override
+	protected void onDestroy() {
+		adapter.close();
+		super.onDestroy();
+	}
+	
+	
 
 }

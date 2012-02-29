@@ -32,13 +32,14 @@ public class LazyAdapter extends EndlessAdapter {
 	private TvTickerDBAdapter dataAdapter;
 
 	LazyAdapter(Activity ctx, List<Media> list2, boolean displayThumb, int pos,
-			boolean refresh) {
+			boolean refresh, TvTickerDBAdapter adapter) {
 		super(ctx, new MyArrayAdapter((Activity) ctx, R.layout.rowlayout,
 				list2, displayThumb), R.layout.pending);
 		context = ctx;
 		pendingViewId = R.layout.pending;
 		position = pos;
-		rpcClient = new RPCClient(ctx);
+		this.dataAdapter = adapter;
+		rpcClient = new RPCClient(dataAdapter);
 		rotate = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF,
 				0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
 		rotate.setDuration(800);
@@ -47,7 +48,6 @@ public class LazyAdapter extends EndlessAdapter {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 		timeNow = (String) format.format(new Date());
 		this.refresh = refresh;
-		dataAdapter = new TvTickerDBAdapter(ctx);
 	}
 
 	// shows a loading animation until cache in background completes.
@@ -81,13 +81,11 @@ public class LazyAdapter extends EndlessAdapter {
 	protected void appendCachedData() {
 		ArrayList<Media> media = new ArrayList<Media>();
 		MyArrayAdapter a = (MyArrayAdapter) getWrappedAdapter();
-		dataAdapter.open();
 		if ((position == Constants.ViewPager.NOW_POSITION)) {
 			media = dataAdapter.fetchShowsforNowFrame();
 		} else {
 			media = dataAdapter.fetchShowsforLaterFrame();
 		}
-		dataAdapter.close();
 		a.addAll(media);
 	}
 }

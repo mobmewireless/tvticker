@@ -34,10 +34,11 @@ public class DataLoader {
 
 	public int startUpdation() throws JSONException {
 
-		rpc_client = new RPCClient(ctx);
 		dataAdapter.open();
+		rpc_client = new RPCClient(dataAdapter);
+		
 		String version = dataAdapter.getCurrentVersion();
-		dataAdapter.close();
+		
 		try {
 			rpc_client.updateToLatestVersion(version);
 			//loading programs
@@ -46,27 +47,11 @@ public class DataLoader {
 			Log.i("TVTICKER_DATAMOCKER", "json exception");
 			e.printStackTrace();
 			return STATUS;
-		} 
-
-		return 0;
-	}
-
-	private void populateMainTable() {
-		Log.i(TAG, "Populating Main table..");
-
-		try {
-			SimpleDateFormat format = new SimpleDateFormat(
-					"yyyy-MM-dd HH:mm:ss z");
-			String now = (String) format.format(new Date());
-			rpc_client.updateMediaListFor(now, "full");
-			rpc_client.updateToLatestVersion(dataAdapter.getCurrentVersion());
-		} catch (JSONRPCException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
+		} finally{
+			dataAdapter.close();
 		}
 
-		Log.i(TAG, "Done");
+		return 0;
 	}
 	
 	public static String formattedThumbUrl(String thumbID, int size) {

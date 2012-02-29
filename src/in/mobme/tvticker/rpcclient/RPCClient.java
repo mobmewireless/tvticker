@@ -26,26 +26,21 @@ public class RPCClient {
 	private TvTickerDBAdapter dataAdapter;
 
 	public RPCClient(String URI, int ConnTimeOut, int SoTimeOut,
-			Context ctx) {
+			Context ctx, TvTickerDBAdapter adapter) {
 		client = JSONRPCClient.create(URI);
 		client.setConnectionTimeout(ConnTimeOut);
 		client.setSoTimeout(SoTimeOut);
-		initEssentials(ctx);
+		this.dataAdapter = adapter;
+		parser = new MediaJsonParser();
 	}
 
-	public RPCClient(Context ctx) {
+	public RPCClient(TvTickerDBAdapter adapter) {
 		client = JSONRPCClient.create(Constants.RPC.SERVICE_URI);
 		client.setConnectionTimeout(Constants.RPC.CONNECTION_TIMEOUT);
 		client.setSoTimeout(Constants.RPC.SO_TIMEOUT);
-		initEssentials(ctx);
-	}
-	
-	private void initEssentials(Context ctx){
+		this.dataAdapter = adapter;
 		parser = new MediaJsonParser();
-		this.dataAdapter = new TvTickerDBAdapter(ctx);
-		// hashed_key = getAuthenticationParameters();
 	}
-
 	
 	public boolean ping() throws JSONRPCException {
 		return callClientString(Constants.RPC.Services.PING).equals("pong") ? true
@@ -56,7 +51,7 @@ public class RPCClient {
 			throws JSONRPCException, JSONException {
 		JSONArray pgms = callClientJSONArray(
 				Constants.RPC.Services.PROGRAMS_FOR_FRAME, time, frameType);
-		dataAdapter.open();
+		
 		for (int i = 0; i < pgms.length(); i++) {
 			JSONObject jsonObject = pgms.getJSONObject(i).getJSONObject(
 					Constants.RPC.PROGRAM_TAG);
@@ -69,7 +64,6 @@ public class RPCClient {
 				e.printStackTrace();
 			}
 		}
-		dataAdapter.close();
 	}
 
 	public void updateToLatestVersion(String versionString)
@@ -84,13 +78,13 @@ public class RPCClient {
 	// Do this only if wifi is available
 	public void cacheProgramsForDays(int days) throws JSONException,
 			JSONRPCException {
-		dataAdapter.open();
+		
 		String currentVersion = dataAdapter.getCurrentProgramVersion();
 		JSONObject updateResult = callClientJSONObject(Constants.RPC.Services.UPDATE_MEDIA,currentVersion,Constants.RPC.Services.CACHE_FOR_DAYS);
 		String latestVersion = updateResult.getString("version").toString();
 		updateMedia(updateResult.getJSONArray("programs"));
 		dataAdapter.insertNewProgramVersion(latestVersion);
-		dataAdapter.close();
+		
 	}
 
 	public void updateMedia(JSONArray programs) throws JSONException {
@@ -120,14 +114,14 @@ public class RPCClient {
 					Constants.RPC.VERSION_TAG);
 			
 			String version_number = jsonObject.getString("number");
-			dataAdapter.open();
+			
 			dataAdapter.insertNewVersion(version_number);
-			dataAdapter.close();
+			
 		}
 	}
 
 	public void updateChannels(JSONArray channels) throws JSONException {
-		dataAdapter.open();
+		
 		for (int i = 0; i < channels.length(); i++) {
 			JSONObject jsonObject = channels.getJSONObject(i).getJSONObject(
 					Constants.RPC.CHANNEL_TAG);
@@ -135,11 +129,11 @@ public class RPCClient {
 			dataAdapter.updateOrInsertChannel(channel.get_id(),
 					channel.getChannelTitle());
 		}
-		dataAdapter.close();
+		
 	}
 
 	public void updateCategories(JSONArray categories) throws JSONException {
-		dataAdapter.open();
+		
 		for (int i = 0; i < categories.length(); i++) {
 			JSONObject jsonObject = categories.getJSONObject(i).getJSONObject(
 					Constants.RPC.CATEGORY_TAG);
@@ -147,7 +141,7 @@ public class RPCClient {
 			dataAdapter.updateOrInsertCategory(category.get_id(),
 					category.getCategoryName());
 		}
-		dataAdapter.close();
+		
 	}
 
 	

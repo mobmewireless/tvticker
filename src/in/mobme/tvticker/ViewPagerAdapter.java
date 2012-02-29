@@ -45,15 +45,12 @@ class ViewPagerAdapter extends PagerAdapter {
 	private TvTickerDBAdapter tvDataAdapter = null;
 	public static ViewPagerAdapter staticAdapterObj;
 
-	public ViewPagerAdapter(int listViewIdentifier, String[] titles, Context ctx, boolean thumbEnabled) {
+	public ViewPagerAdapter(int listViewIdentifier, String[] titles, Context ctx, boolean thumbEnabled,TvTickerDBAdapter adapter) {
 		this.pageTitles = titles;
 		this.listViewId = listViewIdentifier;
 		this.context = ctx;
 		this.thumbEnabled = thumbEnabled;
-		this.tvDataAdapter = new TvTickerDBAdapter(context);
-		tvDataAdapter.open();
-		favMediaList = getFavoriteMediaFrom(tvDataAdapter.fetchAllShowsInfo());
-		tvDataAdapter.close();
+		this.tvDataAdapter = adapter;
 		staticAdapterObj = this;
 	}
 
@@ -90,7 +87,7 @@ class ViewPagerAdapter extends PagerAdapter {
 		if (position == Constants.ViewPager.NOW_POSITION) {
 
 			lazyAdapter = new LazyAdapter((Activity) context, nowMediaList,
-					thumbEnabled, Constants.ViewPager.NOW_POSITION, true);
+					thumbEnabled, Constants.ViewPager.NOW_POSITION, true, tvDataAdapter);
 			listView.setAdapter(lazyAdapter);
 			Log.i("now size: ",""+nowMediaList.size());
 			listView.setOnItemClickListener(new NowMediaOnItemClickListener());
@@ -98,7 +95,7 @@ class ViewPagerAdapter extends PagerAdapter {
 		} else if (position == Constants.ViewPager.LATER_TODAY_POSITION) {
 
 			lazyAdapter = new LazyAdapter((Activity) context, laterMediaList,
-					thumbEnabled,Constants.ViewPager.LATER_TODAY_POSITION, true);
+					thumbEnabled,Constants.ViewPager.LATER_TODAY_POSITION, true, tvDataAdapter);
 			Log.i("later size: ",""+laterMediaList.size());
 			listView.setAdapter(lazyAdapter);
 			listView.setOnItemClickListener(new LaterMediaOnItemClickListener());
