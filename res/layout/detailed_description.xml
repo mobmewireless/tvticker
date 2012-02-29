@@ -4,12 +4,12 @@
     android:layout_height="fill_parent" >
 
     <in.mobme.tvticker.customwidget.WebImageView
+        android:scaleType="fitXY"
         android:id="@+id/movie_thumb"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:background="#000000"
-        android:scaleType="center"
         android:src="@drawable/captain_america" />
 
 <!--     <Button -->
