@@ -1,9 +1,12 @@
 package in.mobme.tvticker;
 
+import in.mobme.tvticker.R;
+import in.mobme.tvticker.adapter.ViewPagerAdapter;
 import in.mobme.tvticker.customwidget.WebImageView;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
 import in.mobme.tvticker.helpers.DataLoader;
+import in.mobme.tvticker.helpers.DateTimeHelper;
 import in.mobme.tvticker.notification.NotificationFactory;
 
 import java.text.DateFormat;
@@ -39,7 +42,9 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 	private boolean isFavourited = false;
 	
 	private Media media = null;
-	TvTickerDBAdapter dataAdapter;
+	private TvTickerDBAdapter dataAdapter;
+	private DateTimeHelper dTHepler;
+	private final String SHOW_TIME_FORMAT = "kk:mm";
 
 	String title;
 	String subTitle;
@@ -63,6 +68,7 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 		media = (Media) this.getIntent().getExtras()
 				.getSerializable(Constants.MEDIA_OBJECT);
 		dataAdapter = new TvTickerDBAdapter(this);
+		dTHepler = new DateTimeHelper();
 		dataAdapter.open();
 		isFavourited = dataAdapter.IsFavoriteEnabledFor(media.getId());
 
@@ -92,7 +98,16 @@ public class DetailedDescriptionActivity extends FragmentActivity {
 				.getMediaThumb(), DataLoader.TYPE_LARGE),
 				this.getResources().getDrawable(R.drawable.ic_placehoder));
 		movieDescription.setText(media.getMediaDescription());
-		movieTimeText.setText(media.getShowTime());
+		StringBuilder formattedShowTime = new StringBuilder();
+		try {
+			formattedShowTime.append(dTHepler.sanitizeTimeTo(media.getShowTime(), DateTimeHelper.FRAME_TIME_FORMAT, SHOW_TIME_FORMAT));
+			formattedShowTime.append(" - ");
+			formattedShowTime.append(dTHepler.sanitizeTimeTo(media.getShowEndTime(), DateTimeHelper.FRAME_TIME_FORMAT, SHOW_TIME_FORMAT));
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		movieTimeText.setText(formattedShowTime);
 		movieChannelText.setText(channel);
 
 		// button click listeners
