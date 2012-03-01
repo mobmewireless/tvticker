@@ -21,6 +21,7 @@
     <string name="default_header_text">HeaderText</string>
     <string name="default_loader_text">Loading Programs..</string>
     <string name="default_show_time_text">show_timing</string>
+    <string name="status_header">status_header</string>
     <string name="default_category_tag_text">category_tag</string>
     <string name="default_channel_id_text">Channel_ID</string>
     <string name="default_movie_text">movie_name</string>

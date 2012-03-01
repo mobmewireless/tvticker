@@ -83,6 +83,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 		listView = (ListView) layoutInflater.inflate(listViewId, null);
 
 		if (position == Constants.ViewPager.NOW_POSITION) {
+			nowMediaList.clear();
 			lazyAdapter = new LazyAdapter((Activity) context, nowMediaList,
 					thumbEnabled, Constants.ViewPager.NOW_POSITION, true,
 					tvDataAdapter);
@@ -90,6 +91,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 			listView.setOnItemClickListener(new NowMediaOnItemClickListener());
 
 		} else if (position == Constants.ViewPager.LATER_TODAY_POSITION) {
+			laterMediaList.clear();
 			lazyAdapter = new LazyAdapter((Activity) context, laterMediaList,
 					thumbEnabled, Constants.ViewPager.LATER_TODAY_POSITION,
 					true, tvDataAdapter);
@@ -97,6 +99,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 			listView.setOnItemClickListener(new LaterMediaOnItemClickListener());
 
 		} else if (position == Constants.ViewPager.FAVORITES_POSITION) {
+			favMediaList.clear();
 			favMediaList = tvDataAdapter.fetchFavorites();
 			favoritesAdapter = new MyArrayAdapter((Activity) context,
 					R.layout.rowlayout, favMediaList, thumbEnabled);

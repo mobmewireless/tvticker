@@ -68,10 +68,10 @@
                 android:text="@string/default_category_tag_text"
                 android:textSize="6pt" />
 
-            <!-- <TextView android:layout_height="wrap_content" -->
-            <!-- android:layout_width="wrap_content" android:text="@string/default_show_time_text" -->
-            <!-- android:id="@+id/show_time" android:textSize="6pt" -->
-            <!-- android:layout_alignParentRight="true" /> -->
+            <TextView android:layout_height="wrap_content"
+            android:layout_width="wrap_content" android:text="@string/status_header"
+            android:id="@+id/status_header" android:textSize="6pt"
+            android:layout_alignParentRight="true" />
 
         </RelativeLayout>
 
@@ -80,7 +80,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/linearLayout2"
-            android:layout_marginTop="2dp" >
+            android:layout_marginTop="2dp"
+            >
 
             <RatingBar
                 android:id="@+id/imdb_rating_bar_main"

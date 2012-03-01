@@ -37,7 +37,6 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		this.context = context;
 		this.mediaList = list2;
 		this.rowLayoutId = textViewResourceId;
-		Log.i("layout id",""+rowLayoutId);
 		placeHolder = context.getResources().getDrawable(
 				R.drawable.ic_placehoder);
 		this.showThumb = displayThumb;
@@ -52,6 +51,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		protected TextView categoryTag;
 		protected RatingBar imdbRatingBar;
 		protected TextView show_timing;
+		protected TextView status_header;
 	}
 
 	@Override
@@ -86,6 +86,8 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 					.findViewById(R.id.imdb_rating_bar_main);
 			holder.show_timing = (TextView) rowView
 					.findViewById(R.id.show_time);
+			holder.status_header = (TextView) rowView
+					.findViewById(R.id.status_header);
 			rowView.setTag(holder);
 		} else {
 			holder = (ViewHolder) rowView.getTag();
@@ -106,8 +108,12 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 			Date show_time_start = format.parse(media.getShowTime());
 			Date show_time_end = format.parse(media.getShowEndTime());
 			DateTimeHelper dateHelper = new DateTimeHelper();
-			holder.show_timing.setText(dateHelper.getFormattedMessage(
-					show_time_start, show_time_end));
+			String[] messageAndFormat = dateHelper.getFormattedMessage(
+					show_time_start, show_time_end);
+			holder.show_timing.setTypeface(null, Integer.parseInt(messageAndFormat[1]));
+			holder.status_header.setTypeface(null, Integer.parseInt(messageAndFormat[1]));
+			holder.show_timing.setText(messageAndFormat[0]);
+			holder.status_header.setText(messageAndFormat[2]);
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

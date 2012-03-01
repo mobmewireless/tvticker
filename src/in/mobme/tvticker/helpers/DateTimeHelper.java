@@ -31,60 +31,73 @@ public class DateTimeHelper {
 				.getTimeZone().getID()));
 		return format.format(date);
 	}
-	
-	public String sanitizeTimeTo(String time, String currentFormat, String expectedFormat) throws ParseException{
+
+	public String sanitizeTimeTo(String time, String currentFormat,
+			String expectedFormat) throws ParseException {
 		SimpleDateFormat format = new SimpleDateFormat(currentFormat);
 		Date date = format.parse(time);
 		format = new SimpleDateFormat(expectedFormat);
 		return format.format(date);
 	}
-	
 
-	public String getFormattedMessage(Date show_time_start, Date show_time_end) {
+	public String[] getFormattedMessage(Date show_time_start, Date show_time_end) {
 		String message = "";
+		String header = "";
 		PrettyTime p = new PrettyTime(); // refer :
 		// http://ocpsoft.com/prettytime/#docs
+		String style = "0";
 		Date now = new Date();
 		if (now.after(show_time_start) && now.before(show_time_end)) {
-			 p = new PrettyTime(now);
+			p = new PrettyTime(now);
+			header = "now running";
 			message = p.format(show_time_end).replaceAll("from now", "left");
+		} else if (now.after(show_time_end)) {
+			header = "Completed";
+			message = p.format(show_time_end);
 		} else if (now.before(show_time_start)) {
+			header = "coming later";
 			message = p.format(show_time_start);
-		} else if (now.after(show_time_start)) {
-			message = p.format(show_time_end).replaceAll("from now", "left");
-		} else {
+		} 
+		 else {
 			message = "Unknown";
 		}
-		return message;
+		if (message.toLowerCase().contains("moments from now")){
+			style = "1";
+			header = "coming next";
+		}
+		return new String[] { message, style, header };
 	}
 
 	public String[] getStringTimeFrameFor(int frameType) {
 		List<String> timeFrames = null;
 		switch (frameType) {
 		case FRAME_NOW:
-			timeFrames = calculateTimeFrame(-1, 1,1);
-			//Collections.reverse(timeFrames);
+			timeFrames = calculateTimeFrame(-1, 2, -1);
+			// Collections.reverse(timeFrames);
 			break;
 		case FRAME_LATER:
-			timeFrames = calculateTimeFrame(1,0, 2);
+			timeFrames = calculateTimeFrame(1, 2, -2);
 			break;
 		}
 		return (String[]) timeFrames.toArray();
 	}
-	
-	private List<String> calculateTimeFrame(int airtimestart,int endtime, int airtimeend) {
+
+	private List<String> calculateTimeFrame(int airtimestart,
+			int airtimeend, int endtime) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.HOUR_OF_DAY, airtimestart);
 		String airTimeStart = (String) DateFormat.format(FRAME_TIME_FORMAT,
 				calendar.getTime());
-		calendar.add(Calendar.HOUR_OF_DAY, endtime);
-		String endTime = (String) DateFormat.format(FRAME_TIME_FORMAT,
-				calendar.getTime());
+		
 		calendar.add(Calendar.HOUR_OF_DAY, airtimeend);
 		String airTimeEnd = (String) DateFormat.format(FRAME_TIME_FORMAT,
 				calendar.getTime());
-		
-		return Arrays.asList(new String[] { airTimeStart, airTimeEnd,endTime });
+		calendar.add(Calendar.HOUR_OF_DAY, endtime);
+		String endTime = (String) DateFormat.format(FRAME_TIME_FORMAT,
+				calendar.getTime());
+			Log.i("time frame", airTimeStart+" "+ airTimeEnd+" "+ endTime);
+		return Arrays
+				.asList(new String[] { airTimeStart, airTimeEnd, endTime });
 	}
 
 }
