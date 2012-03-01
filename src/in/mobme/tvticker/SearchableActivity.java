@@ -1,5 +1,7 @@
 package in.mobme.tvticker;
 
+import in.mobme.tvticker.R;
+import in.mobme.tvticker.adapter.SearchArrayAdapter;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.data_model.SearchableMedia;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
@@ -13,9 +15,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class SearchableActivity extends Activity {
 

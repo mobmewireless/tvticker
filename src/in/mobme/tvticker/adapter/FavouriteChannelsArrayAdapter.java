@@ -1,4 +1,7 @@
-package in.mobme.tvticker;
+package in.mobme.tvticker.adapter;
+
+import in.mobme.tvticker.R;
+import in.mobme.tvticker.data_model.FavouriteChannelModel;
 
 import java.util.List;
 

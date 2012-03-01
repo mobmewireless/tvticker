@@ -1,5 +1,6 @@
 package in.mobme.tvticker;
 
+import in.mobme.tvticker.R;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;

@@ -1,5 +1,8 @@
 package in.mobme.tvticker;
 
+import in.mobme.tvticker.R;
+import in.mobme.tvticker.adapter.FavouriteChannelsArrayAdapter;
+import in.mobme.tvticker.data_model.FavouriteChannelModel;
 import in.mobme.tvticker.database.Models.ChannelsInfo;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
 

@@ -1,5 +1,7 @@
-package in.mobme.tvticker;
+package in.mobme.tvticker.adapter;
 
+import in.mobme.tvticker.Constants;
+import in.mobme.tvticker.R;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
 import in.mobme.tvticker.rpcclient.RPCClient;

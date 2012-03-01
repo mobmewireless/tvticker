@@ -1,4 +1,4 @@
-package in.mobme.tvticker;
+package in.mobme.tvticker.data_model;
 
 public class FavouriteChannelModel {
 	private long _id;

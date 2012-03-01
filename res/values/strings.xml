@@ -34,6 +34,7 @@
 	<string name="share">Share to</string>
 	<string name="imdb_review_url">http://www.imdb.com/title/%s/reviews</string>
 	<string name="progressText">Loading</string>
+	<string name="list_empty_text">No data available</string>
     
     <!-- Shown above search results when we receive a search request. -->
     <plurals name="search_results">
@@ -72,7 +73,7 @@
 
     <string name="browse_channels">All TV Channels &#187;</string>
     <string name="browse_categories">All Categories &#187;</string>
-    <string name="api_url">http://192.168.1.143:3000/service</string>
+
     
     <string name="favourite_instruction">Tip: favorite this show and we\'ll remind you when it\'s on TV.</string>
     

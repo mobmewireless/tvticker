@@ -1,6 +1,9 @@
-package in.mobme.tvticker;
+package in.mobme.tvticker.adapter;
 
-import in.mobme.tvticker.activity.AllShowsMainPageActivity;
+import in.mobme.tvticker.AllShowsMainPageActivity;
+import in.mobme.tvticker.Constants;
+import in.mobme.tvticker.DetailedDescriptionActivity;
+import in.mobme.tvticker.R;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
 
@@ -24,7 +27,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-class ViewPagerAdapter extends PagerAdapter {
+public class ViewPagerAdapter extends PagerAdapter {
 
 	// private String EMPTY[] = {};
 
@@ -45,7 +48,8 @@ class ViewPagerAdapter extends PagerAdapter {
 	private TvTickerDBAdapter tvDataAdapter = null;
 	public static ViewPagerAdapter staticAdapterObj;
 
-	public ViewPagerAdapter(int listViewIdentifier, String[] titles, Context ctx, boolean thumbEnabled,TvTickerDBAdapter adapter) {
+	public ViewPagerAdapter(int listViewIdentifier, String[] titles,
+			Context ctx, boolean thumbEnabled, TvTickerDBAdapter adapter) {
 		this.pageTitles = titles;
 		this.listViewId = listViewIdentifier;
 		this.context = ctx;
@@ -80,15 +84,15 @@ class ViewPagerAdapter extends PagerAdapter {
 
 		if (position == Constants.ViewPager.NOW_POSITION) {
 			lazyAdapter = new LazyAdapter((Activity) context, nowMediaList,
-					thumbEnabled, Constants.ViewPager.NOW_POSITION, true, tvDataAdapter);
+					thumbEnabled, Constants.ViewPager.NOW_POSITION, true,
+					tvDataAdapter);
 			listView.setAdapter(lazyAdapter);
-			Log.i("now size: ",""+nowMediaList.size());
 			listView.setOnItemClickListener(new NowMediaOnItemClickListener());
 
 		} else if (position == Constants.ViewPager.LATER_TODAY_POSITION) {
 			lazyAdapter = new LazyAdapter((Activity) context, laterMediaList,
-					thumbEnabled,Constants.ViewPager.LATER_TODAY_POSITION, true, tvDataAdapter);
-			Log.i("later size: ",""+laterMediaList.size());
+					thumbEnabled, Constants.ViewPager.LATER_TODAY_POSITION,
+					true, tvDataAdapter);
 			listView.setAdapter(lazyAdapter);
 			listView.setOnItemClickListener(new LaterMediaOnItemClickListener());
 
@@ -143,13 +147,7 @@ class ViewPagerAdapter extends PagerAdapter {
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view,
 				int position, long arg3) {
-			Media selectedMedia = nowMediaList.get(position);
-			Intent detailedViewIntent = new Intent(context,
-					DetailedDescriptionActivity.class);
-			Bundle b = new Bundle();
-			b.putSerializable(Constants.MEDIA_OBJECT, selectedMedia);
-			detailedViewIntent.putExtras(b);
-			context.startActivity(detailedViewIntent);
+			startActivityForMedia(nowMediaList.get(position));
 		}
 	}
 
@@ -159,13 +157,7 @@ class ViewPagerAdapter extends PagerAdapter {
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view,
 				int position, long arg3) {
-			Media selectedMedia = laterMediaList.get(position);
-			Intent detailedViewIntent = new Intent(context,
-					DetailedDescriptionActivity.class);
-			Bundle b = new Bundle();
-			b.putSerializable(Constants.MEDIA_OBJECT, selectedMedia);
-			detailedViewIntent.putExtras(b);
-			context.startActivity(detailedViewIntent);
+			startActivityForMedia(laterMediaList.get(position));
 		}
 	}
 
@@ -175,14 +167,18 @@ class ViewPagerAdapter extends PagerAdapter {
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view,
 				int position, long arg3) {
-			Media selectedMedia = favMediaList.get(position);
-			Intent detailedViewIntent = new Intent(context,
-					DetailedDescriptionActivity.class);
-			Bundle b = new Bundle();
-			b.putSerializable(Constants.MEDIA_OBJECT, selectedMedia);
-			detailedViewIntent.putExtras(b);
-			context.startActivity(detailedViewIntent);
+			startActivityForMedia(favMediaList.get(position));
 		}
+	}
+
+	// helper
+	private void startActivityForMedia(Media selectedMedia) {
+		Intent detailedViewIntent = new Intent(context,
+				DetailedDescriptionActivity.class);
+		Bundle b = new Bundle();
+		b.putSerializable(Constants.MEDIA_OBJECT, selectedMedia);
+		detailedViewIntent.putExtras(b);
+		context.startActivity(detailedViewIntent);
 	}
 
 	/**

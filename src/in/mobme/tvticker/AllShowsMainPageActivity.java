@@ -1,6 +1,5 @@
-package in.mobme.tvticker.activity;
+package in.mobme.tvticker;
 
-import in.mobme.tvticker.Constants;
 import in.mobme.tvticker.R;
 import android.content.Intent;
 import android.os.Bundle;

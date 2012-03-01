@@ -1,5 +1,6 @@
-package in.mobme.tvticker;
+package in.mobme.tvticker.adapter;
 
+import in.mobme.tvticker.R;
 import in.mobme.tvticker.data_model.SearchableMedia;
 
 import java.util.List;

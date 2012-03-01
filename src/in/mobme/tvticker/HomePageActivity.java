@@ -1,5 +1,7 @@
 package in.mobme.tvticker;
 
+import in.mobme.tvticker.R;
+import in.mobme.tvticker.adapter.ViewPagerAdapter;
 import in.mobme.tvticker.customwidget.ViewPagerIndicator;
 import in.mobme.tvticker.customwidget.ViewPagerIndicator.PageInfoProvider;
 import in.mobme.tvticker.database.TvTickerDBAdapter;

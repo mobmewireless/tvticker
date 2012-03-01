@@ -1,7 +1,7 @@
 package in.mobme.tvticker.helpers;
 
+import in.mobme.tvticker.Constants;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
-import in.mobme.tvticker.rpcclient.Constants;
 import in.mobme.tvticker.rpcclient.RPCClient;
 
 import org.alexd.jsonrpc.JSONRPCException;

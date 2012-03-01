@@ -1,5 +1,6 @@
 package in.mobme.tvticker;
 
+import in.mobme.tvticker.R;
 import in.mobme.tvticker.helpers.DataConnection;
 import in.mobme.tvticker.helpers.DataLoader;
 

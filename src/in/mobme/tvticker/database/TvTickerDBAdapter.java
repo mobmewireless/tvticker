@@ -1,7 +1,7 @@
 package in.mobme.tvticker.database;
 
 import in.mobme.tvticker.Constants;
-import in.mobme.tvticker.FavouriteChannelModel;
+import in.mobme.tvticker.data_model.FavouriteChannelModel;
 import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.data_model.SearchableMedia;
 import in.mobme.tvticker.database.Models.CategoriesInfo;
