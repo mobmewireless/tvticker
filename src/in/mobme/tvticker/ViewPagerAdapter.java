@@ -79,7 +79,6 @@ class ViewPagerAdapter extends PagerAdapter {
 		listView = (ListView) layoutInflater.inflate(listViewId, null);
 
 		if (position == Constants.ViewPager.NOW_POSITION) {
-
 			lazyAdapter = new LazyAdapter((Activity) context, nowMediaList,
 					thumbEnabled, Constants.ViewPager.NOW_POSITION, true, tvDataAdapter);
 			listView.setAdapter(lazyAdapter);
@@ -87,7 +86,6 @@ class ViewPagerAdapter extends PagerAdapter {
 			listView.setOnItemClickListener(new NowMediaOnItemClickListener());
 
 		} else if (position == Constants.ViewPager.LATER_TODAY_POSITION) {
-
 			lazyAdapter = new LazyAdapter((Activity) context, laterMediaList,
 					thumbEnabled,Constants.ViewPager.LATER_TODAY_POSITION, true, tvDataAdapter);
 			Log.i("later size: ",""+laterMediaList.size());

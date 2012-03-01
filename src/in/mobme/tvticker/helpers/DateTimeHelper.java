@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 import android.text.format.DateFormat;
+import android.util.Log;
+
 import com.ocpsoft.pretty.time.PrettyTime;
 
 public class DateTimeHelper {

@@ -14,6 +14,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		this.context = context;
 		this.mediaList = list2;
 		this.rowLayoutId = textViewResourceId;
+		Log.i("layout id",""+rowLayoutId);
 		placeHolder = context.getResources().getDrawable(
 				R.drawable.ic_placehoder);
 		this.showThumb = displayThumb;
