@@ -29,9 +29,16 @@ public class DateTimeHelper {
 		format = new SimpleDateFormat(dateFormatDb);
 		format.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance()
 				.getTimeZone().getID()));
-		Calendar.getInstance().getTimeZone();
 		return format.format(date);
 	}
+	
+	public String sanitizeTimeTo(String time, String currentFormat, String expectedFormat) throws ParseException{
+		SimpleDateFormat format = new SimpleDateFormat(currentFormat);
+		Date date = format.parse(time);
+		format = new SimpleDateFormat(expectedFormat);
+		return format.format(date);
+	}
+	
 
 	public String getFormattedMessage(Date show_time_start, Date show_time_end) {
 		String message = "";
@@ -51,9 +58,6 @@ public class DateTimeHelper {
 		return message;
 	}
 
-
-  
-  
 	public String[] getStringTimeFrameFor(int frameType) {
 		List<String> timeFrames = null;
 		switch (frameType) {
@@ -67,6 +71,7 @@ public class DateTimeHelper {
 		}
 		return (String[]) timeFrames.toArray();
 	}
+	
 	private List<String> calculateTimeFrame(int airtimestart,int endtime, int airtimeend) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.HOUR_OF_DAY, airtimestart);
