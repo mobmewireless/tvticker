@@ -57,11 +57,10 @@ public class DateTimeHelper {
 		} else if (now.before(show_time_start)) {
 			header = "coming later";
 			message = p.format(show_time_start);
-		} 
-		 else {
+		} else {
 			message = "Unknown";
 		}
-		if (message.toLowerCase().contains("moments from now")){
+		if (message.toLowerCase().contains("moments from now")) {
 			style = "1";
 			header = "coming next";
 		}
@@ -82,20 +81,28 @@ public class DateTimeHelper {
 		return (String[]) timeFrames.toArray();
 	}
 
-	private List<String> calculateTimeFrame(int airtimestart,
-			int airtimeend, int endtime) {
+	public int offsetTime() {
+		Calendar calendar = Calendar.getInstance();
+		int unroundedMinutes = calendar.get(Calendar.MINUTE);
+		int mod = unroundedMinutes % 15;
+		return (mod < 8) ? -mod : (15-mod);
+		
+	}
+
+	private List<String> calculateTimeFrame(int airtimestart, int airtimeend,
+			int endtime) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.HOUR_OF_DAY, airtimestart);
 		String airTimeStart = (String) DateFormat.format(FRAME_TIME_FORMAT,
 				calendar.getTime());
-		
+
 		calendar.add(Calendar.HOUR_OF_DAY, airtimeend);
 		String airTimeEnd = (String) DateFormat.format(FRAME_TIME_FORMAT,
 				calendar.getTime());
 		calendar.add(Calendar.HOUR_OF_DAY, endtime);
 		String endTime = (String) DateFormat.format(FRAME_TIME_FORMAT,
 				calendar.getTime());
-			Log.i("time frame", airTimeStart+" "+ airTimeEnd+" "+ endTime);
+		Log.i("time frame", airTimeStart + " " + airTimeEnd + " " + endTime);
 		return Arrays
 				.asList(new String[] { airTimeStart, airTimeEnd, endTime });
 	}
