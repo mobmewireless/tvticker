@@ -87,9 +87,9 @@ public class Models {
 				+ ROW_ID
 				+ " integer unique , "
 				+ IS_FAVORITE_CHANNEL
-				+ " integer default 0, "
+				+ " integer default 1, "
 				+ CHANNEL_NAME
-				+ " text)";
+				+ " text )";
 
 		/* channel_table drop query */
 		final static String CHANNEL_TABLE_DROP = "DROP TABLE IF EXISTS "
