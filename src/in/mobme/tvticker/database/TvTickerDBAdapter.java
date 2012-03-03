@@ -14,12 +14,9 @@ import in.mobme.tvticker.database.Models.Version;
 import in.mobme.tvticker.helpers.DateTimeHelper;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -487,7 +484,7 @@ public class TvTickerDBAdapter {
 		return mDb.query(ChannelsInfo.TABLE_NAME, new String[] {
 				ChannelsInfo.ROW_ID, ChannelsInfo.CHANNEL_NAME,
 				ChannelsInfo.IS_FAVORITE_CHANNEL }, null, null, null, null,
-				null);
+				ChannelsInfo.CHANNEL_NAME + " collate nocase");
 	}
 
 	public ArrayList<Long> fetchFavChannelIds() {
@@ -568,7 +565,7 @@ public class TvTickerDBAdapter {
 	public Cursor fetchAllCategories() {
 		return mDb.query(CategoriesInfo.TABLE_NAME, new String[] {
 				CategoriesInfo.ROW_ID, CategoriesInfo.CATAGORY_TYPE }, null,
-				null, null, null, null);
+				null, null, null, CategoriesInfo.CATAGORY_TYPE + " collate nocase");
 
 	}
 
@@ -702,34 +699,41 @@ public class TvTickerDBAdapter {
 	/**
 	 * Enable/Disable Reminder for a particular media id.
 	 * 
+	 * @return
+	 * 
 	 * @return Returns true or false, status of update
 	 * */
-	public boolean toggleReminderFor(long mediaId, boolean reminderEnabled) {
+	public long toggleReminderFor(long mediaId, boolean reminderEnabled) {
 		ContentValues updateValues = new ContentValues();
 		updateValues.put(Remindersinfo.REMINDER_ENABLED,
 				sanitiseBooleanToInteger(reminderEnabled));
-		return mDb.update(Remindersinfo.TABLE_NAME, updateValues,
-				Remindersinfo.MEDIA_ID + "=" + mediaId, null) > 0;
+		updateValues.put(Remindersinfo.MEDIA_ID,
+				mediaId);
+		return mDb.replace(Remindersinfo.TABLE_NAME, null, updateValues);
 	}
 
 	/**
 	 * Updates a channel to favourite or not
 	 * 
-	 * 
 	 * @return true if updated, false otherwise.
 	 */
 
-	public void setFavoriteChannels(List<FavouriteChannelModel> list) {
+	public void setFavoriteChannel(FavouriteChannelModel model) {
 		ContentValues updateValues = new ContentValues();
-		Iterator<FavouriteChannelModel> iter = list.iterator();
-		while (iter.hasNext()) {
-			FavouriteChannelModel model = (FavouriteChannelModel) iter.next();
-			updateValues.put(ChannelsInfo.IS_FAVORITE_CHANNEL,
-					model.isSelected());
-			mDb.update(Models.ChannelsInfo.TABLE_NAME, updateValues,
-					ChannelsInfo.ROW_ID + "=" + model.get_id(), null);
-		}
-
+		updateValues.put(ChannelsInfo.ROW_ID, model.get_id());
+		updateValues.put(ChannelsInfo.CHANNEL_NAME, model.getName());
+		updateValues.put(ChannelsInfo.IS_FAVORITE_CHANNEL, model.isSelected());
+		mDb.replace(ChannelsInfo.TABLE_NAME, null, updateValues);
+	}
+	
+	
+	/**
+	 * Updates all channels to favourite or not
+	 */
+	public void setAllChannelsAsFavorites(boolean istrue){
+		ContentValues updateValues = new ContentValues();
+		updateValues.put(ChannelsInfo.IS_FAVORITE_CHANNEL, istrue);
+		mDb.update(ChannelsInfo.TABLE_NAME, updateValues, null, null);
 	}
 
 	/**
