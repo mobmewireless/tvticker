@@ -26,8 +26,8 @@ public class RPCClient {
 	private MediaJsonParser parser;
 	private TvTickerDBAdapter dataAdapter;
 
-	public RPCClient(String URI, int ConnTimeOut, int SoTimeOut,
-			Context ctx, TvTickerDBAdapter adapter) {
+	public RPCClient(String URI, int ConnTimeOut, int SoTimeOut, Context ctx,
+			TvTickerDBAdapter adapter) {
 		client = JSONRPCClient.create(URI);
 		client.setConnectionTimeout(ConnTimeOut);
 		client.setSoTimeout(SoTimeOut);
@@ -42,7 +42,7 @@ public class RPCClient {
 		this.dataAdapter = adapter;
 		parser = new MediaJsonParser();
 	}
-	
+
 	public boolean ping() throws JSONRPCException {
 		return callClientString(Constants.RPC.Services.PING).equals("pong") ? true
 				: false;
@@ -52,16 +52,16 @@ public class RPCClient {
 			throws JSONRPCException, JSONException {
 		JSONArray pgms = callClientJSONArray(
 				Constants.RPC.Services.PROGRAMS_FOR_FRAME, time, frameType);
-		
+
 		for (int i = 0; i < pgms.length(); i++) {
 			JSONObject jsonObject = pgms.getJSONObject(i).getJSONObject(
 					Constants.RPC.PROGRAM_TAG);
 			// Expecting a db lock
-			try{
-
-			long _id = dataAdapter.createNewMediaInfo( parseMedia(jsonObject));
-			}catch(Exception e ){
-				Log.i("TvTicker UpdateMediaList","Error inserting data to tables.");
+			try {
+				dataAdapter.createNewMediaInfo(parseMedia(jsonObject));
+			} catch (Exception e) {
+				Log.i("TvTicker UpdateMediaList",
+						"Error inserting data to tables.");
 				e.printStackTrace();
 			}
 		}
@@ -79,28 +79,29 @@ public class RPCClient {
 	// Do this only if wifi is available
 	public void cacheProgramsForDays(int days) throws JSONException,
 			JSONRPCException {
-		
+
 		String currentVersion = dataAdapter.getCurrentProgramVersion();
-		JSONObject updateResult = callClientJSONObject(Constants.RPC.Services.UPDATE_MEDIA,currentVersion,Constants.RPC.Services.CACHE_FOR_DAYS);
+		JSONObject updateResult = callClientJSONObject(
+				Constants.RPC.Services.UPDATE_MEDIA, currentVersion,
+				Constants.RPC.Services.CACHE_FOR_DAYS);
 		String latestVersion = updateResult.getString("version").toString();
 		updateMedia(updateResult.getJSONArray("programs"));
 		dataAdapter.insertNewProgramVersion(latestVersion);
-		
+
 	}
 
 	public void updateMedia(JSONArray programs) throws JSONException {
 		for (int i = 0; i < programs.length(); i++) {
 			JSONObject jsonObject = programs.getJSONObject(i).getJSONObject(
 					Constants.RPC.PROGRAM_TAG);
-			long _id = dataAdapter.createNewMediaInfo(parseMedia(jsonObject));
-			//dataAdapter.setIsFavorite(_id, false);
+			dataAdapter.createNewMediaInfo(parseMedia(jsonObject));
 		}
 	}
-	
-	//Parses media also checks and handle cases for IMDB entry is null.
-	private Media parseMedia(JSONObject jsonObject) throws JSONException{
+
+	// Parses media also checks and handle cases for IMDB entry is null.
+	private Media parseMedia(JSONObject jsonObject) throws JSONException {
 		Media program = parser.parseJsonMedia(jsonObject);
-		program.setMediaThumb(""+program.getThumbnailID());
+		program.setMediaThumb("" + program.getThumbnailID());
 		if (program.getImdbLink().toLowerCase() != "null") {
 			program.setImdbLink(program.getImdbLink());
 			program.setImdbRating((float) jsonObject
@@ -113,16 +114,16 @@ public class RPCClient {
 		if (version.length() > 0) {
 			JSONObject jsonObject = version.getJSONObject(0).getJSONObject(
 					Constants.RPC.VERSION_TAG);
-			
+
 			String version_number = jsonObject.getString("number");
-			
+
 			dataAdapter.insertNewVersion(version_number);
-			
+
 		}
 	}
 
 	public void updateChannels(JSONArray channels) throws JSONException {
-		
+
 		for (int i = 0; i < channels.length(); i++) {
 			JSONObject jsonObject = channels.getJSONObject(i).getJSONObject(
 					Constants.RPC.CHANNEL_TAG);
@@ -130,11 +131,11 @@ public class RPCClient {
 			dataAdapter.updateOrInsertChannel(channel.get_id(),
 					channel.getChannelTitle());
 		}
-		
+
 	}
 
 	public void updateCategories(JSONArray categories) throws JSONException {
-		
+
 		for (int i = 0; i < categories.length(); i++) {
 			JSONObject jsonObject = categories.getJSONObject(i).getJSONObject(
 					Constants.RPC.CATEGORY_TAG);
@@ -142,10 +143,9 @@ public class RPCClient {
 			dataAdapter.updateOrInsertCategory(category.get_id(),
 					category.getCategoryName());
 		}
-		
+
 	}
 
-	
 	private String callClientString(String method, Object... params)
 			throws JSONRPCException {
 		ArrayList<Object> parameters = new ArrayList<Object>();
