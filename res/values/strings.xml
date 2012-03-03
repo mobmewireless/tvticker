@@ -3,6 +3,7 @@
 
     <string name="app_name">TVTicker</string>
     <string name="home_page_title">TICKER</string>
+    <string name="fav_channel_page_title">All Channels</string>
     <string name="browse_all_shows_title">Browse All Shows</string>
     <string name="imdb_button_text">Read Reviews</string>
     <string name="search_hint">Search TvTicker</string>

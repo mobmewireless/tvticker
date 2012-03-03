@@ -17,7 +17,7 @@
         android:paddingLeft="20dip"
         android:paddingRight="20dip"
         android:paddingTop="10dip"
-        android:text="Some text here"
+        android:text=""
         android:textSize="18sp" />
 
 </RelativeLayout>
