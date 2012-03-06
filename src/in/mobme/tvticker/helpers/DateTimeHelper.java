@@ -1,5 +1,7 @@
 package in.mobme.tvticker.helpers;
 
+import in.mobme.tvticker.R;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -8,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import android.graphics.Color;
 import android.text.format.DateFormat;
 import android.util.Log;
 
@@ -40,33 +43,39 @@ public class DateTimeHelper {
 		return format.format(date);
 	}
 
-	public String[] getFormattedMessage(Date show_time_start, Date show_time_end) {
-		String message = "";
-		String header = "";
+	public TVMessage getFormattedMessage(Date show_time_start, Date show_time_end) {
+		TVMessage message = new TVMessage();
 		PrettyTime p = new PrettyTime(); // refer :
-		// http://ocpsoft.com/prettytime/#docs
-		String style = "0";
 		Date now = new Date();
 		if (now.after(show_time_start) && now.before(show_time_end)) {
 			p = new PrettyTime(now);
-			header = "now running";
-			message = p.format(show_time_end).replaceAll("from now", "left");
+			message.status = "now running";
+			message.style = 1;
+			message.message = p.format(show_time_end).replaceAll("from now", "left");
+			message.color = R.string.black;
 		} else if (now.after(show_time_end)) {
-			header = "Completed";
-			message = p.format(show_time_end);
+			message.status = "Completed";
+			message.message = p.format(show_time_end);
+			message.color = R.string.black;
 		} else if (now.before(show_time_start)) {
-			header = "coming later";
-			message = p.format(show_time_start);
+			message.status = "coming later";
+			message.message = p.format(show_time_start);
+			message.color = R.string.parrot_green;
 		} else {
-			message = "Unknown";
+			message.status = "Unknown";
+			message.message = "Unknown";
 		}
-		if (message.toLowerCase().contains("moments from now")) {
-			style = "1";
-			header = "coming next";
+		
+		if (message.message.toLowerCase().contains("moments from now")) {
+			message.style = 1;
+			message.status = "coming next";
+			message.color = R.string.deep_red;
 		}
-		return new String[] { message, style, header };
+		return message;
 	}
 
+	
+	
 	public String[] getStringTimeFrameFor(int frameType) {
 		List<String> timeFrames = null;
 		switch (frameType) {
@@ -85,8 +94,8 @@ public class DateTimeHelper {
 		Calendar calendar = Calendar.getInstance();
 		int unroundedMinutes = calendar.get(Calendar.MINUTE);
 		int mod = unroundedMinutes % 15;
-		return (mod < 8) ? -mod : (15-mod);
-		
+		return (mod < 8) ? -mod : (15 - mod);
+
 	}
 
 	private List<String> calculateTimeFrame(int airtimestart, int airtimeend,
