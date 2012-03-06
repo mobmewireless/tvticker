@@ -6,5 +6,8 @@
     <color name="dark_gray">#606060</color>
     <color name="white">#FFF</color>
     <color name="pale_gray">#BBB</color>
+    <color name="deep_red">#e02500</color>
+    <color name="parrot_green">#60a901</color>
+    <color name="black">#000000</color>
 
 </resources>
