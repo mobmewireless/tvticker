@@ -85,7 +85,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="@string/imdb_button_text"
-            android:textColor="@drawable/white" 
+            android:textColor="@color/white" 
             android:layout_marginRight="5dip"/>
 
         <Button
@@ -98,7 +98,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="@string/add_to_favourites"
-            android:textColor="@drawable/white" />
+            android:textColor="@color/white" />
 
     </LinearLayout>
 

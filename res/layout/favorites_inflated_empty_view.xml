@@ -24,6 +24,6 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:text="@string/default_browse_shows_text"
-        android:textColor="@drawable/white" />
+        android:textColor="@color/white" />
 
 </LinearLayout>

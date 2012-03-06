@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:background="@xml/custom_blue_button"
         android:text="@string/browse_channels"
-        android:textColor="@drawable/white" />
+        android:textColor="@color/white" />
 
     <Button
         android:id="@+id/browse_categories_button"
@@ -21,6 +21,6 @@
         android:layout_gravity="center"
         android:background="@xml/custom_blue_button"
         android:text="@string/browse_categories"
-        android:textColor="@drawable/white" />
+        android:textColor="@color/white" />
 
 </LinearLayout>
