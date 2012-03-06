@@ -11,7 +11,6 @@ public class TVMessage {
 	public static final int HIGHEST_PRIORITY_COLOR = Color.RED;
 	
 	String message;
-	String status;
 	int style = 0;
 	int color;
 
@@ -21,14 +20,6 @@ public class TVMessage {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 	public int getStyle() {
