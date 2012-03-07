@@ -6,6 +6,7 @@ import in.mobme.tvticker.data_model.Media;
 import in.mobme.tvticker.database.TvTickerDBAdapter;
 import in.mobme.tvticker.helpers.DataLoader;
 import in.mobme.tvticker.helpers.DateTimeHelper;
+import in.mobme.tvticker.helpers.TVMessage;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,7 +16,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +51,6 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 		protected TextView categoryTag;
 		protected RatingBar imdbRatingBar;
 		protected TextView show_timing;
-		protected TextView status_header;
 	}
 
 	@Override
@@ -86,8 +85,6 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 					.findViewById(R.id.imdb_rating_bar_main);
 			holder.show_timing = (TextView) rowView
 					.findViewById(R.id.show_time);
-			holder.status_header = (TextView) rowView
-					.findViewById(R.id.status_header);
 			rowView.setTag(holder);
 		} else {
 			holder = (ViewHolder) rowView.getTag();
@@ -97,7 +94,7 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 
 		holder.movieTitle.setText(media.getMediaTitle());
 		if (showThumb) {
-			holder.imageView.setImageWithURL(context, DataLoader.formattedThumbUrl(media.getMediaThumb(), DataLoader.TYPE_SMALL),
+			holder.imageView.setImageWithURL(context, DataLoader.formattedThumbUrl(media.getMediaThumb(), DataLoader.TYPE_LARGE),
 					placeHolder);
 		}
 		channel = dataAdapter.getChannelNameFor(media.getChannel());
@@ -108,12 +105,11 @@ public class MyArrayAdapter extends ArrayAdapter<Media> {
 			Date show_time_start = format.parse(media.getShowTime());
 			Date show_time_end = format.parse(media.getShowEndTime());
 			DateTimeHelper dateHelper = new DateTimeHelper();
-			String[] messageAndFormat = dateHelper.getFormattedMessage(
+			TVMessage messageAndFormat = dateHelper.getFormattedMessage(
 					show_time_start, show_time_end);
-			holder.show_timing.setTypeface(null, Integer.parseInt(messageAndFormat[1]));
-			holder.status_header.setTypeface(null, Integer.parseInt(messageAndFormat[1]));
-			holder.show_timing.setText(messageAndFormat[0]);
-			holder.status_header.setText(messageAndFormat[2]);
+			holder.show_timing.setTypeface(null, messageAndFormat.getStyle());
+			holder.show_timing.setText(messageAndFormat.getMessage());
+			//holder.show_timing.setBackgroundResource(messageAndFormat.getColor());
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

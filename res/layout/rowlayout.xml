@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:layout_height="match_parent" >
 
     <in.mobme.tvticker.customwidget.WebImageView
         android:id="@+id/left_icon"
-        android:layout_width="45dp"
-        android:layout_height="72dp"
+        android:layout_width="52dp"
+        android:layout_height="78dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="#00000000"
-        android:scaleType="fitCenter"
-        android:visibility="gone" />
+        android:scaleType="fitCenter" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout1"
@@ -25,7 +23,7 @@
         android:paddingBottom="3dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:paddingTop="10dp" >
+        android:paddingTop="5dp" >
 
         <RelativeLayout
             android:id="@+id/linearLayout1"
@@ -34,7 +32,7 @@
 
             <TextView
                 android:id="@+id/label"
-                android:layout_width="160dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:ellipsize="marquee"
@@ -42,22 +40,13 @@
                 android:text="@string/default_movie_text"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/channel_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/default_channel_id_text"
-                android:textSize="6pt" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/linearLayout1"
-            android:layout_marginTop="2dp" >
+            android:layout_below="@id/linearLayout1" >
 
             <TextView
                 android:id="@+id/category_tag"
@@ -68,11 +57,15 @@
                 android:text="@string/default_category_tag_text"
                 android:textSize="6pt" />
 
-            <TextView android:layout_height="wrap_content"
-            android:layout_width="wrap_content" android:text="@string/status_header"
-            android:id="@+id/status_header" android:textSize="6pt"
-            android:layout_alignParentRight="true" />
-
+           <TextView
+                android:id="@+id/channel_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/default_channel_id_text"
+                android:textSize="6pt"
+                android:textStyle="bold" 
+                android:layout_marginTop="2dp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -80,8 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/linearLayout2"
-            android:layout_marginTop="2dp"
-            >
+            android:layout_marginTop="2dp" >
 
             <RatingBar
                 android:id="@+id/imdb_rating_bar_main"
